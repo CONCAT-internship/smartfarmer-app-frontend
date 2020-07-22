@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "327764593197",
+    "firebase_url": "https://superfarmers.firebaseio.com",
+    "project_id": "superfarmers",
+    "storage_bucket": "superfarmers.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327764593197:android:b7131bfadaafda189606a4",
+        "android_client_info": {
+          "package_name": "com.concat.smartfarm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "327764593197-2ntnvv1rkj1t37i3obch9gu4fh36hpg0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYm2F1Y5OWB-on3lpIqDU9Vfj7BGOconU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "327764593197-2ntnvv1rkj1t37i3obch9gu4fh36hpg0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "327764593197-4prtukvgg6cvjo6idgpc5ouadcqp86fa.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.concat.smartfarm"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
