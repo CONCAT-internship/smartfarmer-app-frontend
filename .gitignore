@@ -22,6 +22,8 @@ venv.bak/
 *.pyc
 *.swp
 .DS_Store
+.GoogleService-Info.plist
+.google-services.json
 .atom/
 .buildlog/
 .history
