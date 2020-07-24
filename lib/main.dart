@@ -2,16 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smartfarm/firebase/db_data/mine_sensor_data.dart';
 import 'package:smartfarm/screen/info_page.dart';
 import 'package:smartfarm/screen/auth_page.dart';
+import 'package:smartfarm/screen/sensor_list_page.dart';
 
 import 'package:smartfarm/utils/progress_indicator.dart';
 import 'screen/info_page.dart';
 
-//void main() => runApp(ChangeNotifierProvider<MySensorData>(
-//    create: (context) => MySensorData(), child: MyApp()));
-
-void main() => runApp(MyApp());
+void main() => runApp(ChangeNotifierProvider<MineSensorData>(
+    create: (context) => MineSensorData(), child: MyApp()));
 
 bool login_Checker = true;
 

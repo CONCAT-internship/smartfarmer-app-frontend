@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartfarm/components/graph.dart';
+import 'package:smartfarm/forms/graph.dart';
 import 'package:smartfarm/constants/smartfarmer_constants.dart';
 import 'package:smartfarm/sensor_data/json_tester.dart';
 

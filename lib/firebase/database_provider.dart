@@ -1,20 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:smartfarm/constants/db_key.dart';
+import 'package:smartfarm/firebase/db_data/sensor_data.dart';
+import 'package:smartfarm/firebase/db_data/transfomer.dart';
 
 DatabaseProvider databaseProvider = DatabaseProvider();
 
-class DatabaseProvider {
-  Future<void> send() {
-    return Firestore.instance
-        .collection('Farmer')
-        .document()
-        .setData({'email': 'test@naver.com', 'sensor_uuid': '00441122'});
+class DatabaseProvider with Transfomer {
+  final Firestore _firestore = Firestore.instance;
+
+  Stream<SensorData> linkSensorData(String sensorKey) {
+    return _firestore
+        .collection(COLLECTION_NAME)
+        .document(sensorKey)
+        .snapshots()
+        .transform(transSensorData);
   }
 
-  Future<dynamic> recv() {
-    Firestore.instance
-        .collection('Farmer')
-        .document('1')
-        .get()
-        .then((DocumentSnapshot recv_data) => print(recv_data.data));
+  Stream<List<SensorData>> linkSensorUUID() {
+    return _firestore
+        .collection(COLLECTION_NAME)
+        .snapshots()
+        .transform(transSensorUUID);
   }
 }

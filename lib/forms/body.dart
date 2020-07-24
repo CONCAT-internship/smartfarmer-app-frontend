@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smartfarm/components/graph_box.dart';
-import 'package:smartfarm/components/header.dart';
+import 'package:smartfarm/forms/graph_box.dart';
+import 'package:smartfarm/forms/header.dart';
 
 class Body extends StatelessWidget {
   @override
