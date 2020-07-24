@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:smartfarm/components/body.dart';
+import 'package:smartfarm/forms/body.dart';
 import 'package:smartfarm/constants/smartfarmer_constants.dart';
 import 'package:smartfarm/firebase/database_provider.dart';
 
@@ -28,7 +28,7 @@ class _InfoPageState extends State<InfoPage> {
                 IconButton(
                   icon: Icon(Icons.home),
                   onPressed: () {
-                    databaseProvider.send().then((_) => print("data send"));
+                    //databaseProvider.send().then((_) => print("data send"));
                   },
                   color: blueGradient1,
                   iconSize: 32.0,
@@ -37,7 +37,7 @@ class _InfoPageState extends State<InfoPage> {
                 IconButton(
                   icon: Icon(Icons.settings),
                   onPressed: () {
-                    databaseProvider.recv();
+                    //databaseProvider.recv();
                   },
                   color: Colors.grey,
                   iconSize: 32.0,

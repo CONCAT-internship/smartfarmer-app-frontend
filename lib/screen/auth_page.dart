@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smartfarm/components/sign_in.dart';
-import 'package:smartfarm/components/sign_up.dart';
+import 'package:smartfarm/forms/sign_in.dart';
+import 'package:smartfarm/forms/sign_up.dart';
 
 class AuthPage extends StatefulWidget {
   @override

@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:smartfarm/components/sign_up.dart';
+import 'package:smartfarm/forms/sign_up.dart';
 import 'package:smartfarm/utils/snack_bar.dart';
 
 import '../constants/smartfarmer_constants.dart';
