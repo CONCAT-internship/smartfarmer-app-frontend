@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:smartfarm/constants/smartfarmer_constants.dart';
 import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
 
+import 'info_page.dart';
+
 class FarmListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -97,7 +99,14 @@ class FarmListPage extends StatelessWidget {
                                         Row(
                                           children: <Widget>[
                                             GestureDetector(
-
+                                              onTap: (){
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => InfoPage(),
+                                                  ),
+                                                );
+                                              },
                                               child: Text(
                                                 "밭으로 이동",
                                                 style: TextStyle(

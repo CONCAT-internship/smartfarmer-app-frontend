@@ -1,11 +1,22 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:smartfarm/forms/graph.dart';
 import 'package:smartfarm/constants/smartfarmer_constants.dart';
 import 'package:smartfarm/sensor_data/json_tester.dart';
+import 'package:smartfarm/sensor_data/sensor.dart';
 
 class Graph_Box extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    String sampleData =
+        '{"uuid": "adsfasdf", "temperature": 33, "humidity": 77}';
+
+    Map<String, dynamic> sensorMap = jsonDecode(sampleData);
+
+    var sensorData = Sensor.fromJson(sensorMap);
+    var jsonData = sensorData.toJson();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -57,6 +68,9 @@ class Graph_Box extends StatelessWidget {
                 ),
                 //Graph(),
                 //JsonTester(),
+                Text(
+                  'uuid: ${sensorData.uuid} \n temp: ${sensorData.temp} \n humidity: ${sensorData.humidity} \n $jsonData',
+                ),
               ],
             ),
           ),

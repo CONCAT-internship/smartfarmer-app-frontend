@@ -7,6 +7,7 @@ import 'package:smartfarm/screen/auth_page.dart';
 import 'package:smartfarm/screen/info_page.dart';
 import 'package:smartfarm/screen/sensor_list_page.dart';
 import 'package:smartfarm/screen/sign_in.dart';
+import 'package:smartfarm/sensor_data/json_tester.dart';
 import 'package:smartfarm/utils/progress_indicator.dart';
 import 'screen/info_page.dart';
 
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
               });
               return Progress_Indicator();
             case MineFarmerStatus.exist:
+              //return SensorListPage();
               return SensorListPage();
             default:
               return AuthPage();
