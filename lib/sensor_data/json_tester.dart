@@ -21,17 +21,18 @@ class JsonTester extends StatelessWidget {
 ////      }
 ////    }
     String sampleData =
-        '{"uuid": "adsfasdf", "temperature": "33", "humidity": "77"}';
+        '{"uuid": "adsfasdf", "temperature": 33, "humidity": 77}';
 
     Map<String, dynamic> sensorMap = jsonDecode(sampleData);
 
     var sensorData = Sensor.fromJson(sensorMap);
     var jsonData = sensorData.toJson();
-
-    return Text(
-      'uuid: ${sensorData.uuid} \n temp: ${sensorData.temp} \n humidity: ${sensorData.humidity} \n $jsonData',
-      textScaleFactor: 2,
-
+    return Scaffold(
+      body: SafeArea(
+        child: Text(
+          'uuid: ${sensorData.uuid} \n temp: ${sensorData.temp} \n humidity: ${sensorData.humidity} \n $jsonData',
+          textScaleFactor: 2,),
+      ),
     );
   }
 }

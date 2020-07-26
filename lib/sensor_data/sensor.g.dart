@@ -8,7 +8,7 @@ part of 'sensor.dart';
 
 Sensor _$SensorFromJson(Map<String, dynamic> json) {
   return Sensor(
-    (json['uuid'] as num)?.toDouble(),
+    json['uuid'] as String,
     (json['temperature'] as num)?.toDouble(),
     (json['humidity'] as num)?.toDouble(),
     (json['pH'] as num)?.toDouble(),

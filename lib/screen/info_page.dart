@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
 import 'package:smartfarm/forms/body.dart';
 import 'package:smartfarm/constants/smartfarmer_constants.dart';
 import 'package:smartfarm/firebase/database_provider.dart';
@@ -51,6 +53,7 @@ class _InfoPageState extends State<InfoPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
+          Provider.of<MineFarmerData>(context, listen: false).logoutFarmer();
           FirebaseAuth.instance.signOut();
         },
       ),

@@ -4,7 +4,7 @@ part 'sensor.g.dart';
 
 @JsonSerializable()
 class Sensor {
-  final double uuid; // 아두이노 기기 고유번호
+  final String uuid; // 아두이노 기기 고유번호
   @JsonKey(name:'temperature')
   final double temp; // 온도
   final double humidity; // 습도
