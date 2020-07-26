@@ -76,7 +76,6 @@ class _SignInState extends State<SignIn> {
                     _buildLoginBtn(),
                     _buildSignInWithText(),
                     _buildSocialBtnRow(),
-                    _buildSignupBtn(),
                   ],
                 ),
               ),
@@ -246,36 +245,6 @@ class _SignInState extends State<SignIn> {
             ),
           ),
         ],
-      ),
-    );
-  }
-  Widget _buildSignupBtn() {
-    return GestureDetector(
-      onTap: () {
-        final route = MaterialPageRoute(builder: (context) => SignUp());
-        Navigator.pushReplacement(context, route);
-      },
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: '계정이 없으신가요? ',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            TextSpan(
-              text: '가입하기',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

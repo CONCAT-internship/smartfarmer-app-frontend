@@ -6,7 +6,6 @@ import 'package:smartfarm/firebase/db_data/sensor_data.dart';
 import 'package:smartfarm/screen/farm_list_page.dart';
 
 class SensorListPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<SensorData>>(
@@ -22,11 +21,16 @@ class SensorListPage extends StatelessWidget {
                     title: Text(uuidList[index].uuid),
                     onTap: () {
                       //databaseProvider.addSensorUUID(),
+                      databaseProvider.addSensorUUID(
+                          farmerKey: Provider.of<MineFarmerData>(context,
+                                  listen: false)
+                              .data
+                              .farmerKey,
+                          sensorUUID: uuidList[index].uuid);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              FarmListPage(sensorUUID: uuidList[index].uuid),
+                          builder: (context) => FarmListPage(),
                         ),
                       );
                     },

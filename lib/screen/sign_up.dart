@@ -86,7 +86,6 @@ class _SignUpState extends State<SignUp> {
                       height: 20.0,
                     ),
                     _buildLoginBtn(),
-                    _buildSignupBtn(),
                   ],
                 ),
               ),
@@ -197,37 +196,6 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  Widget _buildSignupBtn() {
-    return GestureDetector(
-      onTap: () {
-        final route = MaterialPageRoute(builder: (context) => SignIn());
-        Navigator.pushReplacement(context, route);
-      },
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: '계정이 있으신가요? ',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            TextSpan(
-              text: '로그인하기',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   get _joinApp async {
     final AuthResult authResult = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
@@ -240,7 +208,8 @@ class _SignUpState extends State<SignUp> {
     } else {
       await databaseProvider.createFarmer(
           farmerKey: firebaseUser.uid, email: firebaseUser.email);
-      Provider.of<MineFarmerData>(context, listen: false).setFarmerStatus(MineFarmerStatus.progress);
+      Provider.of<MineFarmerData>(context, listen: false)
+          .setFarmerStatus(MineFarmerStatus.progress);
     }
   }
 }
