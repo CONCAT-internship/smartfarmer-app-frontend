@@ -12,21 +12,19 @@ class Transfomer {
 //        //snapshot을 SensorData로 변환
 //      });
 //
-//  final transSensorUUID =
-//  StreamTransformer<QuerySnapshot, List<SensorData>>.fromHandlers(
-//      handleData: (snapshot, sink) async {
-//        List<SensorData> sensors = [];
-//        snapshot.documents.forEach((doc){
-//          sensors.add(SensorData.fromSnapshot(doc));
-//        });
-//        sink.add(sensors);
-//      }
-//  );
-
-  final transFarmerData =
-      StreamTransformer<DocumentSnapshot, Farmer>.fromHandlers(
+  final transSensorUUID =
+      StreamTransformer<QuerySnapshot, List<SensorData>>.fromHandlers(
           handleData: (snapshot, sink) async {
-    sink.add(Farmer.fromSnapshot(snapshot));
+    List<SensorData> sensors = [];
+    snapshot.documents.forEach((doc) {
+      sensors.add(SensorData.fromSnapshot(doc));
+    });
+    sink.add(sensors);
+  });
+
+  final transFarmerData = StreamTransformer<DocumentSnapshot, Farmer>.fromHandlers(
+      handleData: (snapshot, sink) async {
+        sink.add(Farmer.fromSnapshot(snapshot));
     //snapshot을 SensorData로 변환
   });
 }

@@ -76,14 +76,12 @@ class Header extends StatelessWidget {
                     _InfoCard('온도', temp, 'Temperature', '1350'),
                     _InfoCard('습도', humidity, 'Humidity', '1190'),
                     _InfoCard('조도', sun, 'Roughness', '782'),
-//                    _InfoCard('Slack', slack, 'Business', '1350'),
                   ],
                 ),
               ),
             ],
           ),
         ),
-        //_graphBox(),
       ],
     );
   }

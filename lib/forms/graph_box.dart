@@ -55,7 +55,7 @@ class Graph_Box extends StatelessWidget {
                     ],
                   ),
                 ),
-                Graph(),
+                //Graph(),
                 //JsonTester(),
               ],
             ),

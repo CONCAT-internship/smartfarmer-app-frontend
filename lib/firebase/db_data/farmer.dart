@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smartfarm/constants/db_key.dart';
 
 class Farmer {
-  final String FarmerKey;
+  final String farmerKey;
   final String email;
   final List<dynamic> sensorUUID;
   final DocumentReference reference;
 
-  Farmer.fromMap(Map<String, dynamic> map, this.FarmerKey, {this.reference})
+  Farmer.fromMap(Map<String, dynamic> map, this.farmerKey, {this.reference})
       : email = map[KEY_EMAIL],
         sensorUUID = map[KEY_SENSOR_UUID];
 

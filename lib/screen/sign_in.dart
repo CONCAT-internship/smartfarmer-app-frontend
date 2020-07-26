@@ -1,31 +1,33 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:smartfarm/forms/sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
+import 'package:smartfarm/screen/sign_up.dart';
 import 'package:smartfarm/utils/snack_bar.dart';
+
 import '../constants/smartfarmer_constants.dart';
 
-class SignUp extends StatefulWidget {
+class SignIn extends StatefulWidget {
   @override
-  _SignUpState createState() => _SignUpState();
+  _SignInState createState() => _SignInState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignInState extends State<SignIn> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _emailTEC = TextEditingController();
   TextEditingController _pwTEC = TextEditingController();
-  TextEditingController _cpwTEC = TextEditingController();
 
   @override
   void dispose() {
     _emailTEC.dispose();
     _pwTEC.dispose();
-    _cpwTEC.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //resizeToAvoidBottomInset: true,
       body: Stack(
         children: <Widget>[
           Container(
@@ -59,30 +61,21 @@ class _SignUpState extends State<SignUp> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      '가입하기',
+                      '로그인',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: smartfarmer_auth_padding,
+                        fontSize: 30.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(
-                      height: smartfarmer_auth_padding,
-                    ),
-                    _buildTF(
-                        "이메일", "이메일을 입력해주세요", _emailTEC, false, Icons.email),
-                    SizedBox(
-                      height: smartfarmer_auth_padding,
-                    ),
+                    SizedBox(height: 30,),
+                    _buildTF("이메일", "이메일을 입력해주세요", _emailTEC, false, Icons.email),
+                    SizedBox(height: 30.0,),
                     _buildTF("비밀번호", "비밀번호를 입력해주세요", _pwTEC, true, Icons.lock),
-                    SizedBox(
-                      height: smartfarmer_auth_padding,
-                    ),
-                    _buildTF("비밀번호 확인", "비밀번호 확인", _cpwTEC, true, Icons.lock),
-                    SizedBox(
-                      height: 20.0,
-                    ),
+                    _buildForgotPasswordBtn(),
                     _buildLoginBtn(),
+                    _buildSignInWithText(),
+                    _buildSocialBtnRow(),
                     _buildSignupBtn(),
                   ],
                 ),
@@ -94,8 +87,7 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  Widget _buildTF(String using, String hint, TextEditingController formkey,
-      bool obscure, IconData icon) {
+  Widget _buildTF(String using, String hint, TextEditingController formkey, bool obscure, IconData icon) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -110,34 +102,23 @@ class _SignUpState extends State<SignUp> {
           height: 60.0,
           child: TextFormField(
             controller: formkey,
-            validator: (String value) {
-              if (formkey == _emailTEC) {
-                // email textformfield
+            validator: (String value){
+              if(formkey == _emailTEC){ // email textformfield
                 // ignore: missing_return
-                if (value.isEmpty || !value.contains("@")) {
+                if(value.isEmpty || !value.contains("@")){
                   //Snackbar(context, "이메일을 작성해주세요");
                   return "이메일을 작성해주세요";
-                } else if (value.contains(" ") || value.contains('\t')) {
+                }else if (value.contains(" ") || value.contains('\t')){
                   //Snackbar(context, "공백이 포함되어 있습니다");
                   return "공백이 포함되어 있습니다";
                 }
                 return null;
-              } else if (formkey == _pwTEC) {
-                //비밀번호 textformfield
-                if (value.isEmpty) {
+              }else{ //비밀번호 textformfield
+                if(value.isEmpty){
                   //Snackbar(context, "비밀번호를 입력해주세요");
+
                   return "비밀번호를 입력해주세요";
-                } else {
-                  return null;
-                }
-              } else {
-                //비밀번호 확인 textformfield
-                if (value.isEmpty) {
-                  //Snackbar(context, "비밀번호를 입력해주세요");
-                  return "비밀번호를 입력해주세요";
-                } else if (_pwTEC.text != value) {
-                  return "위에서 입력한 비밀번호랑 일치하지 않습니다";
-                } else {
+                }else{
                   return null;
                 }
               }
@@ -164,25 +145,37 @@ class _SignUpState extends State<SignUp> {
       ],
     );
   }
-
+  Widget _buildForgotPasswordBtn() {
+    return Container(
+      alignment: Alignment.centerRight,
+      child: FlatButton(
+        onPressed: () => print('Forgot Password Button Pressed'),
+        padding: EdgeInsets.only(right: 0.0),
+        child: Text(
+          '비밀번호 찾기',
+          style: kLabelStyle,
+        ),
+      ),
+    );
+  }
   Widget _buildLoginBtn() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () {
-          if (_formKey.currentState.validate()) {
-            _joinApp;
+        onPressed: (){
+          if(_formKey.currentState.validate()){
+            _loginApp;
           }
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(smartfarmer_auth_padding),
+          borderRadius: BorderRadius.circular(30.0),
         ),
         color: Colors.white,
         child: Text(
-          '가입하기',
+          '로그인',
           style: TextStyle(
             color: Color(0xFF527DAA),
             letterSpacing: 1.5,
@@ -193,18 +186,80 @@ class _SignUpState extends State<SignUp> {
       ),
     );
   }
-
+  Widget _buildSignInWithText() {
+    return Column(
+      children: <Widget>[
+        Text(
+          '- 또는 -',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        SizedBox(height: 20.0),
+        Text(
+          'Sign in with',
+          style: kLabelStyle,
+        ),
+      ],
+    );
+  }
+  Widget _buildSocialBtn(Function onTap, AssetImage logo) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 60.0,
+        width: 60.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              offset: Offset(0, 2),
+              blurRadius: 6.0,
+            ),
+          ],
+          image: DecorationImage(
+            image: logo,
+          ),
+        ),
+      ),
+    );
+  }
+  Widget _buildSocialBtnRow() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 30.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          _buildSocialBtn(
+            () => print('Login with Facebook'),
+            AssetImage(
+              facebook,
+            ),
+          ),
+          _buildSocialBtn(
+            () => print('Login with KaKao'),
+            AssetImage(
+              kakaotalk,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   Widget _buildSignupBtn() {
     return GestureDetector(
       onTap: () {
-        final route = MaterialPageRoute(builder: (context) => SignIn());
+        final route = MaterialPageRoute(builder: (context) => SignUp());
         Navigator.pushReplacement(context, route);
       },
       child: RichText(
         text: TextSpan(
           children: [
             TextSpan(
-              text: '계정이 있으신가요? ',
+              text: '계정이 없으신가요? ',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,
@@ -212,7 +267,7 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             TextSpan(
-              text: '로그인하기',
+              text: '가입하기',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,
@@ -225,15 +280,17 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  get _joinApp async {
+  get _loginApp async{
     final AuthResult authResult = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
-            email: _emailTEC.text, password: _pwTEC.text);
+        .signInWithEmailAndPassword(
+        email: _emailTEC.text, password: _pwTEC.text);
 
     final FirebaseUser firebaseUser = authResult.user;
 
     if (firebaseUser == null) {
       Snackbar(context, "잠시 뒤에 다시 시도해주세요");
+    } else {
+      Provider.of<MineFarmerData>(context, listen: false).setFarmerStatus(MineFarmerStatus.progress);
     }
   }
 }
