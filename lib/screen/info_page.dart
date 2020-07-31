@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
-import 'package:smartfarm/forms/body.dart';
-import 'package:smartfarm/constants/smartfarmer_constants.dart';
+import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:smartfarm/firebase/database_provider.dart';
 
 class InfoPage extends StatefulWidget {
@@ -15,11 +14,12 @@ class InfoPage extends StatefulWidget {
 class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
-        //color: appBarColor,
+        color: backgroundColor,
         //notchMargin: 12.0,
-        shape: CircularNotchedRectangle(),
+
         child: Container(
           height: 60.0,
           child: Padding(
@@ -32,7 +32,7 @@ class _InfoPageState extends State<InfoPage> {
                   onPressed: () {
                     //databaseProvider.send().then((_) => print("data send"));
                   },
-                  color: blueGradient1,
+                  color: infoButtonColor,
                   iconSize: 32.0,
                   //size: 32.0,
                 ),
@@ -51,42 +51,111 @@ class _InfoPageState extends State<InfoPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: infoButtonColor,
         child: Icon(Icons.add),
         onPressed: () {
           Provider.of<MineFarmerData>(context, listen: false).logoutFarmer();
-          FirebaseAuth.instance.signOut();
+          //FirebaseAuth.instance.signOut();
         },
       ),
-      appBar: buildAppBar(),
-      backgroundColor: bgColor,
-      body: Body(),
-    );
-  }
-
-  AppBar buildAppBar() {
-    return AppBar(
-      elevation: 0,
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [blueGradient1, blueGradient2],
-            begin: Alignment.bottomLeft,
-            end: Alignment.bottomRight,
+      body: Stack(
+        children: <Widget>[
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  infoGradient1,
+                  infoGradient2,
+                ],
+                stops: [0.1, 0.5],
+              ),
+            ),
           ),
-        ),
+          Container(
+            height: double.infinity,
+            padding: EdgeInsets.only(
+              left: 25.0,
+              right: 10.0,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: size.height * 0.078,
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "슈퍼파머스",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'NotoSans-Bold',
+                          fontSize: 18.0,
+                        ),
+                      ),
+                    ),
+                    Spacer(),
+                    IconButton(
+                      icon: Icon(Icons.menu),
+                      iconSize: 25,
+                      color: Colors.white,
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.notifications_none),
+                      iconSize: 25,
+                      color: Colors.white,
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: size.height * 0.04,
+                ),
+                Row(
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundImage: AssetImage('assets/images/ogu.png'),
+                      radius: 25.0,
+                      backgroundColor: Colors.white,
+                    ),
+                    SizedBox(width: 10,),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          "김태훈님",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'NotoSans-Bold',
+                            fontSize: 19.0,
+                          ),
+                        ),
+                        Text(
+                          "당신의 농장은 잘 관리되고 있습니다.",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'NotoSans-Thin',
+                            fontSize: 14.0,
+                          ),
+                        ),
+                      ],
+                    ),
+
+
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-//      elevation: 0,
-      leading: IconButton(
-        icon: SvgPicture.asset("assets/icons/menu.svg"),
-        onPressed: () {},
-      ),
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.notifications_none),
-          color: Colors.white,
-          onPressed: () {},
-        )
-      ],
     );
   }
 }

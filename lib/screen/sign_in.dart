@@ -5,7 +5,7 @@ import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
 import 'package:smartfarm/screen/sign_up.dart';
 import 'package:smartfarm/utils/snack_bar.dart';
 
-import '../constants/smartfarmer_constants.dart';
+import '../shared/smartfarmer_constants.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -92,7 +92,7 @@ class _SignInState extends State<SignIn> {
       children: <Widget>[
         Text(
           using,
-          style: kLabelStyle,
+          style: notoSansMedium,
         ),
         SizedBox(height: 10.0),
         Container(
@@ -134,7 +134,7 @@ class _SignInState extends State<SignIn> {
                 color: Colors.white,
               ),
               hintText: hint,
-              hintStyle: kHintTextStyle,
+              hintStyle: notoSansMedium,
               errorStyle: TextStyle(
                 color: Colors.white,
               ),
@@ -152,7 +152,7 @@ class _SignInState extends State<SignIn> {
         padding: EdgeInsets.only(right: 0.0),
         child: Text(
           '비밀번호 찾기',
-          style: kLabelStyle,
+          style: notoSansMedium,
         ),
       ),
     );
@@ -198,7 +198,7 @@ class _SignInState extends State<SignIn> {
         SizedBox(height: 20.0),
         Text(
           'Sign in with',
-          style: kLabelStyle,
+          style: notoSansMedium,
         ),
       ],
     );

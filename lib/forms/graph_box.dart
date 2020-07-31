@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:smartfarm/forms/graph.dart';
-import 'package:smartfarm/constants/smartfarmer_constants.dart';
+import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:smartfarm/sensor_data/json_tester.dart';
 import 'package:smartfarm/sensor_data/sensor.dart';
 
