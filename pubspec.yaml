@@ -35,6 +35,7 @@ dependencies:
   cloud_firestore: ^0.13.7
   json_annotation: ^3.0.1
   flutter_swiper: ^1.1.6
+  dotted_line: ^2.0.0
 
 dev_dependencies:
   flutter_test:
