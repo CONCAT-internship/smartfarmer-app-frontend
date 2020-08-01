@@ -23,13 +23,11 @@ var login_Gradient4 = Color(0xFF398AE5);
 var pinkGradient1 = Color(0xfffc6d86);
 var pinkGradient2 = Color(0xfffed0d1);
 
-
 var temp = 'assets/images/temp.png';
 var humidity = 'assets/images/humidity.png';
 var sun = 'assets/images/sun.png';
 var facebook = 'assets/images/facebook.jpg';
 var kakaotalk = 'assets/images/kakao-talk.png';
-
 
 final notoSansBold = TextStyle(
   color: Colors.white,
