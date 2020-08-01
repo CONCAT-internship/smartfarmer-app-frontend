@@ -31,15 +31,19 @@ var facebook = 'assets/images/facebook.jpg';
 var kakaotalk = 'assets/images/kakao-talk.png';
 
 
-final kHintTextStyle = TextStyle(
-  color: Colors.white54,
-  fontFamily: 'OpenSans',
+final notoSansBold = TextStyle(
+  color: Colors.white,
+  fontFamily: 'NotoSans-Bold',
 );
 
-final kLabelStyle = TextStyle(
+final notoSansRegular = TextStyle(
   color: Colors.white,
-  fontWeight: FontWeight.bold,
-  fontFamily: 'OpenSans',
+  fontFamily: 'NotoSans-Regular',
+);
+
+final notoSansMedium = TextStyle(
+  color: Colors.white,
+  fontFamily: 'NotoSans-Medium',
 );
 
 final kBoxDecorationStyle = BoxDecoration(
@@ -61,3 +65,16 @@ Color contentTextColor = Color(0xff868686);
 Color navigationColor = Color(0xFF6751B5);
 Color gradientStartColor = Color(0xFF0050AC);
 Color gradientEndColor = Color(0xFF9354B9);
+
+Color infoButtonColor = Color.fromRGBO(52, 139, 123, 1);
+Color backgroundColor = Color.fromRGBO(239, 239, 239, 1);
+Color infoGradient1 = Color.fromRGBO(73, 83, 207, 1);
+Color infoGradient2 = Color.fromRGBO(134, 13, 255, 1);
+Color textColor = Color.fromRGBO(0, 59, 73, 1);
+Color cardColor_off = Color.fromRGBO(238, 238, 238, 1);
+Color cardFontColor = Color.fromRGBO(51, 51, 51, 1);
+Color deviderColor = Color.fromRGBO(235, 235, 235, 1);
+Color infoBoxTextColor = Color.fromRGBO(0, 59, 73, 1);
+Color infoBoxResultColor = Color.fromRGBO(73, 51, 0, 1);
+Color noneGraphColor = Color.fromRGBO(226, 239, 237, 1);
+Color todayGraphColor = Color.fromRGBO(93, 59, 222, 1);

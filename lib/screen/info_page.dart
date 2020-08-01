@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
-import 'package:smartfarm/forms/body.dart';
-import 'package:smartfarm/constants/smartfarmer_constants.dart';
+import 'package:smartfarm/forms/graph.dart';
+import 'package:smartfarm/shared/smartfarmer_constants.dart';
+import 'package:dotted_line/dotted_line.dart';
 import 'package:smartfarm/firebase/database_provider.dart';
 
 class InfoPage extends StatefulWidget {
@@ -15,13 +16,15 @@ class InfoPage extends StatefulWidget {
 class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
+      //backgroundColor: backgroundColor,
       bottomNavigationBar: BottomAppBar(
-        //color: appBarColor,
+        color: backgroundColor,
         //notchMargin: 12.0,
-        shape: CircularNotchedRectangle(),
+
         child: Container(
-          height: 60.0,
+          height: 50.0,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 42.0),
             child: Row(
@@ -32,7 +35,7 @@ class _InfoPageState extends State<InfoPage> {
                   onPressed: () {
                     //databaseProvider.send().then((_) => print("data send"));
                   },
-                  color: blueGradient1,
+                  color: infoButtonColor,
                   iconSize: 32.0,
                   //size: 32.0,
                 ),
@@ -51,42 +54,294 @@ class _InfoPageState extends State<InfoPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: infoButtonColor,
         child: Icon(Icons.add),
         onPressed: () {
           Provider.of<MineFarmerData>(context, listen: false).logoutFarmer();
-          FirebaseAuth.instance.signOut();
+          //FirebaseAuth.instance.signOut();
         },
       ),
-      appBar: buildAppBar(),
-      backgroundColor: bgColor,
-      body: Body(),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            height: size.height * 0.8,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  infoGradient1,
+                  infoGradient2,
+                ],
+                stops: [0.1, 0.5],
+              ),
+            ),
+          ),
+          Container(
+            height: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: size.height * 0.066,
+                ),
+                Container(
+                    padding: EdgeInsets.only(
+                      left: 25.0,
+                      right: 10.0,
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "슈퍼파머스",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'NotoSans-Bold',
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                            ),
+                            Spacer(),
+                            IconButton(
+                              icon: Icon(Icons.menu),
+                              iconSize: 25,
+                              color: Colors.white,
+                              onPressed: () {},
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.notifications_none),
+                              iconSize: 25,
+                              color: Colors.white,
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: size.height * 0.04,
+                        ),
+                        Row(
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundImage:
+                                  AssetImage('assets/images/ogu.png'),
+                              radius: 25.0,
+                              backgroundColor: Colors.white,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "김태훈님",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'NotoSans-Bold',
+                                    fontSize: 19.0,
+                                  ),
+                                ),
+                                Text(
+                                  "당신의 농장은 잘 관리되고 있습니다.",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'NotoSans-Thin',
+                                    fontSize: 14.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
+                SizedBox(
+                  height: 30,
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 15.0,
+                            ),
+                          ]),
+                      child: Padding(
+                        padding: const EdgeInsets.all(30),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "장치 제어",
+                              style: TextStyle(
+                                color: infoBoxTextColor,
+                                fontFamily: 'NotoSans-Bold',
+                                fontSize: 15.0,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              height: 140.0,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: <Widget>[
+                                  _InfoCard('온도', temp, 'Temperature', '1350'),
+                                  _InfoCard('습도', humidity, 'Humidity', '1190'),
+                                  _InfoCard('조도', sun, 'Roughness', '782'),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            DottedLine(
+                              direction: Axis.horizontal,
+                              lineLength: double.infinity,
+                              lineThickness: 2.0,
+                              dashLength: 4.0,
+                              dashColor: deviderColor,
+                              dashRadius: 0.0,
+                              dashGapLength: 4.0,
+                              dashGapColor: Colors.transparent,
+                              dashGapRadius: 0.0,
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              "실시간 온도상황",
+                              style: TextStyle(
+                                color: infoBoxTextColor,
+                                fontFamily: 'NotoSans-Bold',
+                                fontSize: 15.0,
+                              ),
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  "현재 온도 ",
+                                  style: TextStyle(
+                                    color: infoBoxTextColor,
+                                    fontFamily: 'NotoSans-Medium',
+                                    fontSize: 13.0,
+                                  ),
+                                ),
+                                Text(
+                                  "30.0도",
+                                  style: TextStyle(
+                                    color: infoBoxResultColor,
+                                    fontFamily: 'NotoSans-Bold',
+                                    fontSize: 13.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Graph(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
+}
 
-  AppBar buildAppBar() {
-    return AppBar(
-      elevation: 0,
-      flexibleSpace: Container(
+class _InfoCard extends StatelessWidget {
+  final name;
+  final image;
+  final subTitle;
+  final upvotes;
+
+  _InfoCard(this.name, this.image, this.subTitle, this.upvotes);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: Container(
+        height: 140.0,
+        width: 110.0,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [blueGradient1, blueGradient2],
-            begin: Alignment.bottomLeft,
-            end: Alignment.bottomRight,
-          ),
+          borderRadius: BorderRadius.circular(38.0),
+          color: cardColor_off,
+        ),
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 16.0,
+            ),
+            Container(
+              width: 35.0,
+              height: 40.0,
+              child: Image.asset(image),
+            ),
+            SizedBox(
+              height: 4.0,
+            ),
+            Text(
+              name,
+              style:
+                  TextStyle(color: cardFontColor, fontFamily: 'NotoSans-Bold'),
+            ),
+            SizedBox(
+              height: 2.0,
+            ),
+            Text(
+              subTitle,
+              style: TextStyle(
+                  color: cardFontColor,
+                  fontSize: 10.0,
+                  fontFamily: 'NotoSans-Regular'),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 6.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.0),
+                  color: Colors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.arrow_upward,
+                        color: Colors.green,
+                        size: 14.0,
+                      ),
+                      Text(
+                        upvotes,
+                        style: TextStyle(color: cardFontColor, fontSize: 11.0),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
       ),
-//      elevation: 0,
-      leading: IconButton(
-        icon: SvgPicture.asset("assets/icons/menu.svg"),
-        onPressed: () {},
-      ),
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.notifications_none),
-          color: Colors.white,
-          onPressed: () {},
-        )
-      ],
     );
   }
 }

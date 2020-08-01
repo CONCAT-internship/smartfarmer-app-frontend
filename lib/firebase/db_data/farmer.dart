@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:smartfarm/constants/db_key.dart';
+import 'package:smartfarm/shared/db_key.dart';
 
 class Farmer {
   final String farmerKey;
