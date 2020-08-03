@@ -8,23 +8,21 @@ part of 'sensor.dart';
 
 Sensor _$SensorFromJson(Map<String, dynamic> json) {
   return Sensor(
-    json['uuid'] as String,
-    (json['temperature'] as num)?.toDouble(),
-    (json['humidity'] as num)?.toDouble(),
-    (json['pH'] as num)?.toDouble(),
-    (json['ec'] as num)?.toDouble(),
-    (json['light'] as num)?.toDouble(),
-    (json['liquid_temperature'] as num)?.toDouble(),
-    (json['liquid_flow_rate'] as num)?.toDouble(),
-    json['liquid_level'] as bool,
-    json['valve'] as bool,
-    json['led'] as bool,
-    json['fan'] as bool,
+    temp: (json['temperature'] as num)?.toDouble(),
+    humidity: (json['humidity'] as num)?.toDouble(),
+    pH: (json['pH'] as num)?.toDouble(),
+    ec: (json['ec'] as num)?.toDouble(),
+    light: (json['light'] as num)?.toDouble(),
+    liquidTemp: (json['liquid_temperature'] as num)?.toDouble(),
+    liquidFRate: (json['liquid_flow_rate'] as num)?.toDouble(),
+    liquidLevel: json['liquid_level'] as bool,
+    valve: json['valve'] as bool,
+    led: json['led'] as bool,
+    fan: json['fan'] as bool,
   );
 }
 
 Map<String, dynamic> _$SensorToJson(Sensor instance) => <String, dynamic>{
-      'uuid': instance.uuid,
       'temperature': instance.temp,
       'humidity': instance.humidity,
       'pH': instance.pH,

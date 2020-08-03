@@ -241,7 +241,7 @@ class _SignInState extends State<SignIn> {
           _buildSocialBtn(
             () => print('Login with KaKao'),
             AssetImage(
-              kakaotalk,
+              kakaoTalk,
             ),
           ),
         ],
