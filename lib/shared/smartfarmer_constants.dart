@@ -23,12 +23,6 @@ var login_Gradient4 = Color(0xFF398AE5);
 var pinkGradient1 = Color(0xfffc6d86);
 var pinkGradient2 = Color(0xfffed0d1);
 
-var temp = 'assets/images/temp.png';
-var humidity = 'assets/images/humidity.png';
-var sun = 'assets/images/sun.png';
-var facebook = 'assets/images/facebook.jpg';
-var kakaotalk = 'assets/images/kakao-talk.png';
-
 final notoSansBold = TextStyle(
   color: Colors.white,
   fontFamily: 'NotoSans-Bold',
@@ -76,3 +70,13 @@ Color infoBoxTextColor = Color.fromRGBO(0, 59, 73, 1);
 Color infoBoxResultColor = Color.fromRGBO(73, 51, 0, 1);
 Color noneGraphColor = Color.fromRGBO(226, 239, 237, 1);
 Color todayGraphColor = Color.fromRGBO(93, 59, 222, 1);
+
+var temp = 'assets/images/temp.png';
+var humidity = 'assets/images/humidity.png';
+var sun = 'assets/images/sun.png';
+var ion = 'assets/images/ion.png';
+var ph = 'assets/images/ph.png';
+var waterTemp = 'assets/images/water_temp.png';
+var rateOfFlow = 'assets/images/rate_of_flow.png';
+var facebook = 'assets/images/facebook.jpg';
+var kakaoTalk = 'assets/images/kakao-talk.png';

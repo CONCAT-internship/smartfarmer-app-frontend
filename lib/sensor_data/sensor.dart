@@ -4,7 +4,6 @@ part 'sensor.g.dart';
 
 @JsonSerializable()
 class Sensor {
-  final String uuid; // 아두이노 기기 고유번호
   @JsonKey(name:'temperature')
   final double temp; // 온도
   final double humidity; // 습도
@@ -21,9 +20,9 @@ class Sensor {
   final bool led; // LED
   final bool fan;
 
-  Sensor(this.uuid, this.temp, this.humidity, this.pH, this.ec, this.light,
+  Sensor({this.temp, this.humidity, this.pH, this.ec, this.light,
       this.liquidTemp, this.liquidFRate, this.liquidLevel, this.valve, this.led,
-      this.fan);
+      this.fan});
   factory Sensor.fromJson(Map<String, dynamic> json) => _$SensorFromJson(json);
 
   Map<String, dynamic> toJson() => _$SensorToJson(this);

@@ -1,19 +1,37 @@
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
+import 'package:http/http.dart' as http;
 import 'package:smartfarm/forms/graph.dart';
+import 'package:smartfarm/sensor_data/sensor.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:smartfarm/firebase/database_provider.dart';
 
 class InfoPage extends StatefulWidget {
+  String sensorUUID;
+  InfoPage({Key key, this.sensorUUID}) : super(key : key);
+
   @override
   _InfoPageState createState() => _InfoPageState();
 }
 
 class _InfoPageState extends State<InfoPage> {
+
+  Future<Sensor> getSeonsor() async{
+    try{
+      String url = 'https://asia-northeast1-superfarmers.cloudfunctions.net/RecentStatus?uuid=${widget.sensorUUID}';
+      final http.Response response = await http.get(url);
+      final responseData = json.decode(response.body);
+      final Sensor sensor = Sensor.fromJson(responseData);
+
+      return sensor;
+    } catch (err){
+      throw err;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -218,13 +236,27 @@ class _InfoPageState extends State<InfoPage> {
                 ),
                 Container(
                   height: 140.0,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      _InfoCard('온도', temp, 'Temperature', '1350'),
-                      _InfoCard('습도', humidity, 'Humidity', '1190'),
-                      _InfoCard('조도', sun, 'Roughness', '782'),
-                    ],
+                  child: FutureBuilder(
+                    future: getSeonsor(),
+                    builder: (context, snapshot){
+                      if(snapshot.hasData){
+                        final sensor = snapshot.data;
+                        return ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: <Widget>[
+                            _InfoCard('온도', temp, 'Temperature', sensor.temp.toString(), '℃'),
+                            _InfoCard('습도', humidity, 'Humidity', sensor.humidity.toString(), '%'),
+                            _InfoCard('산성', ph, 'pH', sensor.pH.toString(), '%'),
+                            _InfoCard('이온', ion, 'ec', sensor.ec.toString(), 'cc'),
+                            _InfoCard('조도', sun, 'Roughness', sensor.light.toString(), 'lx'),
+                            _InfoCard('수온', waterTemp, 'Water Temperature', sensor.liquidTemp.toString(), '℃'),
+                            _InfoCard('유량', rateOfFlow, 'Rate of flow', sensor.liquidFRate.toString(), 'lpm'),
+                          ],
+                        );
+                      } else {
+                        return Center(child: CircularProgressIndicator(),);
+                      }
+                    },
                   ),
                 ),
                 SizedBox(
@@ -263,7 +295,7 @@ class _InfoPageState extends State<InfoPage> {
                       ),
                     ),
                     Text(
-                      "30.0도",
+                      "25.0도",
                       style: TextStyle(
                         color: infoBoxResultColor,
                         fontFamily: 'NotoSans-Bold',
@@ -287,8 +319,9 @@ class _InfoCard extends StatelessWidget {
   final image;
   final subTitle;
   final upvotes;
+  final unit;
 
-  _InfoCard(this.name, this.image, this.subTitle, this.upvotes);
+  _InfoCard(this.name, this.image, this.subTitle, this.upvotes, this.unit);
 
   @override
   Widget build(BuildContext context) {
@@ -343,14 +376,13 @@ class _InfoCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Icon(
-                        Icons.arrow_upward,
-                        color: Colors.green,
-                        size: 14.0,
-                      ),
                       Text(
                         upvotes,
                         style: TextStyle(color: cardFontColor, fontSize: 11.0),
+                      ),
+                      Text(
+                        unit,
+                        style: TextStyle(color: cardFontColor, fontSize: 9.0),
                       ),
                     ],
                   ),

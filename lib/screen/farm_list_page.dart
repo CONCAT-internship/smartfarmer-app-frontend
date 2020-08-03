@@ -75,7 +75,6 @@ class FarmListPage extends StatelessWidget {
                                           height: 100,
                                         ),
                                         Text(
-                                          //Provider.of<MineFarmerData>(context).data.sensorUUID[index],
                                           "Farm $index",
                                           style: TextStyle(
                                             fontSize: 44,
@@ -103,7 +102,7 @@ class FarmListPage extends StatelessWidget {
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                    builder: (context) => InfoPage(),
+                                                    builder: (context) => InfoPage(sensorUUID: Provider.of<MineFarmerData>(context).data.sensorUUID[index]),
                                                   ),
                                                 );
                                               },
