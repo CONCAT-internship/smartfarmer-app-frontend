@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'sensor.dart';
+part of 'day_of_week.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Sensor _$SensorFromJson(Map<String, dynamic> json) {
-  return Sensor(
+DayOfWeek _$DayOfWeekFromJson(Map<String, dynamic> json) {
+  return DayOfWeek(
     temp: (json['temperature'] as num)?.toDouble(),
     humidity: (json['humidity'] as num)?.toDouble(),
     pH: (json['pH'] as num)?.toDouble(),
@@ -15,13 +15,10 @@ Sensor _$SensorFromJson(Map<String, dynamic> json) {
     light: (json['light'] as num)?.toDouble(),
     liquidTemp: (json['liquid_temperature'] as num)?.toDouble(),
     liquidFRate: (json['liquid_flow_rate'] as num)?.toDouble(),
-    liquidLevel: json['liquid_level'] as bool,
-    led: json['led'] as bool,
-    fan: json['fan'] as bool,
   );
 }
 
-Map<String, dynamic> _$SensorToJson(Sensor instance) => <String, dynamic>{
+Map<String, dynamic> _$DayOfWeekToJson(DayOfWeek instance) => <String, dynamic>{
       'temperature': instance.temp,
       'humidity': instance.humidity,
       'pH': instance.pH,
@@ -29,7 +26,4 @@ Map<String, dynamic> _$SensorToJson(Sensor instance) => <String, dynamic>{
       'light': instance.light,
       'liquid_temperature': instance.liquidTemp,
       'liquid_flow_rate': instance.liquidFRate,
-      'liquid_level': instance.liquidLevel,
-      'led': instance.led,
-      'fan': instance.fan,
     };
