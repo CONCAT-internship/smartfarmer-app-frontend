@@ -62,6 +62,8 @@ Color infoButtonColor = Color.fromRGBO(52, 139, 123, 1);
 Color backgroundColor = Color.fromRGBO(239, 239, 239, 1);
 Color infoGradient1 = Color.fromRGBO(73, 83, 207, 1);
 Color infoGradient2 = Color.fromRGBO(134, 13, 255, 1);
+Color tempGradient1 = Color.fromRGBO(254, 190, 119, 1);
+Color tempGradient2 = Color.fromRGBO(255, 147, 26, 1);
 Color textColor = Color.fromRGBO(0, 59, 73, 1);
 Color cardColor_off = Color.fromRGBO(238, 238, 238, 1);
 Color cardFontColor = Color.fromRGBO(51, 51, 51, 1);
@@ -70,6 +72,7 @@ Color infoBoxTextColor = Color.fromRGBO(0, 59, 73, 1);
 Color infoBoxResultColor = Color.fromRGBO(73, 51, 0, 1);
 Color noneGraphColor = Color.fromRGBO(226, 239, 237, 1);
 Color todayGraphColor = Color.fromRGBO(93, 59, 222, 1);
+
 
 var temp = 'assets/images/temp.png';
 var humidity = 'assets/images/humidity.png';
