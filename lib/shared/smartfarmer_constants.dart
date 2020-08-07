@@ -74,9 +74,7 @@ Color noneGraphColor = Color.fromRGBO(226, 239, 237, 1);
 Color todayGraphColor = Color.fromRGBO(93, 59, 222, 1);
 Color borderColor = Color.fromRGBO(224, 224, 224, 1);
 
-
-
-var temp = 'assets/images/temp.png';
+var temperature = 'assets/images/temperature.png';
 var humidity = 'assets/images/humidity.png';
 var sun = 'assets/images/sun.png';
 var ion = 'assets/images/ion.png';
