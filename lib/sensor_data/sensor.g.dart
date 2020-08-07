@@ -8,7 +8,7 @@ part of 'sensor.dart';
 
 Sensor _$SensorFromJson(Map<String, dynamic> json) {
   return Sensor(
-    temp: (json['temperature'] as num)?.toDouble(),
+    temperature: (json['temperature'] as num)?.toDouble(),
     humidity: (json['humidity'] as num)?.toDouble(),
     pH: (json['pH'] as num)?.toDouble(),
     ec: (json['ec'] as num)?.toDouble(),
@@ -22,7 +22,7 @@ Sensor _$SensorFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$SensorToJson(Sensor instance) => <String, dynamic>{
-      'temperature': instance.temp,
+      'temperature': instance.temperature,
       'humidity': instance.humidity,
       'pH': instance.pH,
       'ec': instance.ec,

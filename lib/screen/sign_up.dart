@@ -29,6 +29,7 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: Stack(
         children: <Widget>[
           Container(
