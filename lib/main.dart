@@ -24,30 +24,30 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       //home: InfoPage(),
-      home: QrPage(),
-//      home: Consumer<MineFarmerData>(
-//        builder: (context, farmerData, child) {
-//          switch (farmerData.status) {
-//            case MineFarmerStatus.progress:
-//              FirebaseAuth.instance.currentUser().then((firebaseFarmer) {
-//                if (firebaseFarmer == null)
-//                  farmerData.setFarmerStatus(MineFarmerStatus.none);
-//                else
-//                  databaseProvider
-//                      .linkFarmerData(firebaseFarmer.uid)
-//                      .listen((event) {
-//                    farmerData.setFarmerData(event);
-//                  });
-//              });
-//              return Progress_Indicator();
-//            case MineFarmerStatus.exist:
-//              //return SensorListPage();
-//              return SensorListPage();
-//            default:
-//              return AuthPage();
-//          }
-//        },
-//      ),
+      //home: QrPage(),
+      home: Consumer<MineFarmerData>(
+        builder: (context, farmerData, child) {
+          switch (farmerData.status) {
+            case MineFarmerStatus.progress:
+              FirebaseAuth.instance.currentUser().then((firebaseFarmer) {
+                if (firebaseFarmer == null)
+                  farmerData.setFarmerStatus(MineFarmerStatus.none);
+                else
+                  databaseProvider
+                      .linkFarmerData(firebaseFarmer.uid)
+                      .listen((event) {
+                    farmerData.setFarmerData(event);
+                  });
+              });
+              return Progress_Indicator();
+            case MineFarmerStatus.exist:
+              //return SensorListPage();
+              return SensorListPage();
+            default:
+              return AuthPage();
+          }
+        },
+      ),
     );
   }
 }

@@ -169,13 +169,13 @@ class _InfoPageState extends State<InfoPage> {
                 ),
                 Spacer(),
                 IconButton(
-                  icon: Icon(Icons.menu),
+                  icon: Icon(Icons.notifications_none),
                   iconSize: 25,
                   color: Colors.white,
                   onPressed: () {},
                 ),
                 IconButton(
-                  icon: Icon(Icons.notifications_none),
+                  icon: Icon(Icons.menu),
                   iconSize: 25,
                   color: Colors.white,
                   onPressed: () {},
@@ -272,31 +272,49 @@ class _InfoPageState extends State<InfoPage> {
                       InfoSession(
                         isClicked: false,
                         name: '온도',
+                        subName: 'Temperature',
+                        image: temperature,
+                        value: '20',
                         press: () {},
                       ),
                       InfoSession(
                         isClicked: false,
-                        name: '온도',
+                        name: '습도',
+                        subName: 'humidity',
+                        image: humidity,
+                        value: '30',
                         press: () {},
                       ),
                       InfoSession(
                         isClicked: false,
-                        name: '온도',
+                        name: '일조시간',
+                        subName: 'Led Duration',
+                        image: sun,
+                        value: '5',
                         press: () {},
                       ),
                       InfoSession(
                         isClicked: false,
-                        name: '온도',
+                        name: '산성도',
+                        subName: 'pH',
+                        image: ph,
+                        value: '8',
                         press: () {},
                       ),
                       InfoSession(
                         isClicked: false,
-                        name: '온도',
+                        name: '양액농도',
+                        subName: 'EC',
+                        image: ion,
+                        value: '50',
                         press: () {},
                       ),
                       InfoSession(
                         isClicked: false,
-                        name: '온도',
+                        name: '수온',
+                        subName: 'Liquid temp',
+                        image: waterTemp,
+                        value: '30',
                         press: () {},
                       ),
                     ],
@@ -406,6 +424,9 @@ class _InfoPageState extends State<InfoPage> {
 
 class InfoSession extends StatelessWidget {
   final name;
+  final subName;
+  final image;
+  final value;
   final bool isClicked;
   final Function press;
 
@@ -414,6 +435,9 @@ class InfoSession extends StatelessWidget {
     this.isClicked = false,
     this.name,
     this.press,
+    this.subName,
+    this.image,
+    this.value,
   }) : super(key: key);
 
   @override
@@ -433,22 +457,47 @@ class InfoSession extends StatelessWidget {
             child: InkWell(
               onTap: press,
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          name,
+                          style: TextStyle(
+                            color: cardFontColor,
+                            fontFamily: 'NotoSans-Bold',
+                            fontSize: 13.0,
+                          ),
+                        ),
+                        Spacer(),
+                        Container(
+                          width: 18.0,
+                          height: 18.0,
+                          child: Image.asset(image),
+                        ),
+                      ],
+                    ),
                     Text(
-                      name,
+                      subName,
                       style: TextStyle(
                         color: cardFontColor,
-                        fontFamily: 'NotoSans-Bold',
-                        fontSize: 13.0,
+                        fontFamily: 'NotoSans-Regular',
+                        fontSize: 10.0,
                       ),
                     ),
-                    Container(
-                      width: 35.0,
-                      height: 40.0,
-                      child: Image.asset(temp),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Text(
+                      value,
+                      style: TextStyle(
+                        color: cardFontColor,
+                        fontFamily: 'NotoSans-Regular',
+                        fontSize: 10.0,
+                      ),
                     ),
                   ],
                 ),
