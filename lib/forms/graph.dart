@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as graph_charts;
+import 'package:smartfarm/sensor_data/week_sensor.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:charts_flutter/flutter.dart' as graphCharts;
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
 class Graph extends StatefulWidget {
@@ -8,21 +11,40 @@ class Graph extends StatefulWidget {
 }
 
 class _GraphState extends State<Graph> {
+  var data;
+
+  Future<WeekSensor> getWeekSensor() async {
+    try {
+      String url =
+          'https://asia-northeast1-superfarmers.cloudfunctions.net/DailyAverage?uuid=123e6b776f000c04&unixtime=1595116800';
+      //'https://asia-northeast1-superfarmers.cloudfunctions.net/DailyAverage?uuid=${widget.sensorUUID}&unixtime=1595116800';
+
+      final http.Response response = await http.get(url);
+      final responseData = jsonDecode(response.body);
+      final WeekSensor weekSensor = WeekSensor.fromJson(responseData);
+
+      return weekSensor;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getWeekSensor();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var data = [
-      GraphLayout('Mon', 20, noneGraphColor),
-      GraphLayout('Tue', 30, noneGraphColor),
-      GraphLayout('Web', 10, noneGraphColor),
-      GraphLayout('Thr', 25, todayGraphColor),
-      GraphLayout('Fri', 40, noneGraphColor),
-      GraphLayout('Sat', 35, noneGraphColor),
-      GraphLayout('Sun', 12, noneGraphColor),
-    ];
-
     var series = [
-      new graph_charts.Series(
-        id: 'Clicks',
+      new graphCharts.Series(
+        id: 'sensorData',
         data: data,
         domainFn: (GraphLayout graphData, _) => graphData.day,
         measureFn: (GraphLayout graphData, _) => graphData.clicks,
@@ -30,24 +52,21 @@ class _GraphState extends State<Graph> {
       )
     ];
 
-    var chart = new graph_charts.BarChart(series,
+    var chart = new graphCharts.BarChart(series,
         animate: true, animationDuration: Duration(milliseconds: 1500));
 
-    var chartWidget = SizedBox(height: 180.0, child: chart);
-
     return Container(
-      child: chartWidget,
+      child: Container(height: 180.0, child: chart),
     );
   }
 }
 
-
 class GraphLayout {
   final String day;
   final int clicks;
-  final graph_charts.Color color;
+  final graphCharts.Color color;
 
   GraphLayout(this.day, this.clicks, Color color)
-      : this.color = new graph_charts.Color(
+      : this.color = new graphCharts.Color(
             r: color.red, g: color.green, b: color.blue, a: color.alpha);
 }

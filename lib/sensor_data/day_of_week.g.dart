@@ -8,7 +8,7 @@ part of 'day_of_week.dart';
 
 DayOfWeek _$DayOfWeekFromJson(Map<String, dynamic> json) {
   return DayOfWeek(
-    temp: (json['temperature'] as num)?.toDouble(),
+    temperature: (json['temperature'] as num)?.toDouble(),
     humidity: (json['humidity'] as num)?.toDouble(),
     pH: (json['pH'] as num)?.toDouble(),
     ec: (json['ec'] as num)?.toDouble(),
@@ -19,7 +19,7 @@ DayOfWeek _$DayOfWeekFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$DayOfWeekToJson(DayOfWeek instance) => <String, dynamic>{
-      'temperature': instance.temp,
+      'temperature': instance.temperature,
       'humidity': instance.humidity,
       'pH': instance.pH,
       'ec': instance.ec,

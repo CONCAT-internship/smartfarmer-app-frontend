@@ -4,8 +4,7 @@ part 'sensor.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Sensor {
-  @JsonKey(name: 'temperature')
-  final double temp; // 온도
+  final double temperature; // 온도
   final double humidity; // 습도
   final double pH; // 배양액 산성
   final double ec; // 배양액 이온
@@ -20,7 +19,7 @@ class Sensor {
   final bool fan;
 
   Sensor(
-      {this.temp,
+      {this.temperature,
       this.humidity,
       this.pH,
       this.ec,

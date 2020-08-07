@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
 import 'package:http/http.dart' as http;
+import 'package:charts_flutter/flutter.dart' as graphCharts;
 import 'package:smartfarm/forms/graph.dart';
 import 'package:smartfarm/sensor_data/sensor.dart';
 import 'package:smartfarm/sensor_data/week_sensor.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:dotted_line/dotted_line.dart';
+import 'package:intl/intl.dart';
 import 'package:smartfarm/firebase/database_provider.dart';
 
 class InfoPage extends StatefulWidget {
@@ -22,7 +24,16 @@ class InfoPage extends StatefulWidget {
 }
 
 class _InfoPageState extends State<InfoPage> {
+  GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
+
   Future<Sensor> getSensor() async {
+//    var now = (DateTime.now().millisecondsSinceEpoch) / 1000;
+//    print(DateFormat('EE').format(DateTime.now()));
+//    var day = 24 * 60 * 60;
+//    var lastSunStart = now % (7 * day) < (3 * day)
+//        ? now - now % (7 * day) - (4 * day)
+//        : now - now % (7 * day) + (3 * day);
+//    print(lastSunStart);
     try {
       String url =
           'https://asia-northeast1-superfarmers.cloudfunctions.net/RecentStatus?uuid=${widget.sensorUUID}';
@@ -34,26 +45,15 @@ class _InfoPageState extends State<InfoPage> {
       throw err;
     }
   }
-  Future<WeekSensor> getWeekSensor() async {
-    try {
-      String url =
-          'https://asia-northeast1-superfarmers.cloudfunctions.net/DailyAverage?uuid=${widget.sensorUUID}&unixtime=1595116800';
-
-      final http.Response response = await http.get(url);
-      final responseData = jsonDecode(response.body);
-      final WeekSensor weekSensor = WeekSensor.fromJson(responseData);
-      print(weekSensor.fri.temp);
-      print(weekSensor.toJson());
-      return weekSensor;
-    } catch (err) {
-      throw err;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      key: drawerKey,
+      endDrawer: Drawer(
+          child: SafeArea(
+              child: ListView(padding: EdgeInsets.zero, children: <Widget>[]))),
       //backgroundColor: backgroundColor,
       bottomNavigationBar: _buildBottomAppBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -95,7 +95,9 @@ class _InfoPageState extends State<InfoPage> {
             children: <Widget>[
               IconButton(
                 icon: Icon(Icons.home),
-                onPressed: () {},
+                onPressed: () {
+                  drawerKey.currentState.openEndDrawer();
+                },
                 color: infoButtonColor,
                 iconSize: 32.0,
                 //size: 32.0,
@@ -263,34 +265,86 @@ class _InfoPageState extends State<InfoPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    height: 140.0,
-                    child: FutureBuilder(
-                      future: getWeekSensor(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final sensor = snapshot.data;
-                          return ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: <Widget>[
-                              _InfoCard('온도', temp, 'Temperature', sensor.fri.temp.toString(), '℃'),
-//                              _InfoCard('온도', temp, 'Temperature', sensor.temp.toString(), '℃'),
-//                              _InfoCard('습도', humidity, 'Humidity', sensor.humidity.toString(), '%'),
-//                              _InfoCard('산성', ph, 'pH', sensor.pH.toString(), '%'),
-//                              _InfoCard('이온', ion, 'ec', sensor.ec.toString(), 'cc'),
-//                              _InfoCard('조도', sun, 'Roughness', sensor.light.toString(), 'lx'),
-//                              _InfoCard('수온', waterTemp, 'Water Temperature', sensor.liquidTemp.toString(), '℃'),
-//                              _InfoCard('유량', rateOfFlow, 'Rate of flow', sensor.liquidFRate.toString(), 'lpm'),
-                            ],
-                          );
-                        } else {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      },
-                    ),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: <Widget>[
+                      InfoSession(
+                        isClicked: false,
+                        name: '온도',
+                        press: () {},
+                      ),
+                      InfoSession(
+                        isClicked: false,
+                        name: '온도',
+                        press: () {},
+                      ),
+                      InfoSession(
+                        isClicked: false,
+                        name: '온도',
+                        press: () {},
+                      ),
+                      InfoSession(
+                        isClicked: false,
+                        name: '온도',
+                        press: () {},
+                      ),
+                      InfoSession(
+                        isClicked: false,
+                        name: '온도',
+                        press: () {},
+                      ),
+                      InfoSession(
+                        isClicked: false,
+                        name: '온도',
+                        press: () {},
+                      ),
+                    ],
                   ),
+//                  Container(
+//                    height: 140.0,
+//                    child: FutureBuilder(
+//                      future: getSensor(),
+//                      builder: (context, snapshot) {
+//                        if (snapshot.hasData) {
+//                          final sensor = snapshot.data;
+//                          return ListView(
+//                            scrollDirection: Axis.horizontal,
+//                            children: <Widget>[
+//                              _InfoCard('temperature', '온도', temp,
+//                                  'Temperature', sensor.temperature.toString(), '℃'),
+//                              _InfoCard('humidity', '습도', humidity, 'Humidity',
+//                                  sensor.humidity.toString(), '%'),
+//                              _InfoCard('ph', '산성', ph, 'pH',
+//                                  sensor.pH.toString(), '%'),
+//                              _InfoCard('ion', '이온', ion, 'ec',
+//                                  sensor.ec.toString(), 'cc'),
+//                              _InfoCard('light', '조도', sun, 'Roughness',
+//                                  sensor.light.toString(), 'lx'),
+//                              _InfoCard(
+//                                  'waterTemp',
+//                                  '수온',
+//                                  waterTemp,
+//                                  'Water Temperature',
+//                                  sensor.liquidTemp.toString(),
+//                                  '℃'),
+//                              _InfoCard(
+//                                  'waterFlow',
+//                                  '유량',
+//                                  rateOfFlow,
+//                                  'Rate of flow',
+//                                  sensor.liquidFRate.toString(),
+//                                  'lpm'),
+//                            ],
+//                          );
+//                        } else {
+//                          return Center(
+//                            child: CircularProgressIndicator(),
+//                          );
+//                        }
+//                      },
+//                    ),
+//                  ),
                   SizedBox(
                     height: 30,
                   ),
@@ -327,7 +381,7 @@ class _InfoPageState extends State<InfoPage> {
                         ),
                       ),
                       Text(
-                        "25.0도",
+                        "23.1도",
                         style: TextStyle(
                           color: infoBoxResultColor,
                           fontFamily: 'NotoSans-Bold',
@@ -336,7 +390,10 @@ class _InfoPageState extends State<InfoPage> {
                       ),
                     ],
                   ),
-                  Graph(),
+                  //Graph(),
+                  Container(
+                    height: 180.0,
+                  ),
                 ],
               ),
             ),
@@ -347,14 +404,73 @@ class _InfoPageState extends State<InfoPage> {
   }
 }
 
+class InfoSession extends StatelessWidget {
+  final name;
+  final bool isClicked;
+  final Function press;
+
+  const InfoSession({
+    Key key,
+    this.isClicked = false,
+    this.name,
+    this.press,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, size) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(25),
+        child: Container(
+          width: size.maxWidth / 2 - 60,
+          decoration: BoxDecoration(
+            color: isClicked ? Colors.blue : Colors.white,
+            border: Border.all(width: 1.5, color: borderColor),
+            borderRadius: BorderRadius.circular(25),
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: press,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      name,
+                      style: TextStyle(
+                        color: cardFontColor,
+                        fontFamily: 'NotoSans-Bold',
+                        fontSize: 13.0,
+                      ),
+                    ),
+                    Container(
+                      width: 35.0,
+                      height: 40.0,
+                      child: Image.asset(temp),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    });
+  }
+}
+
 class _InfoCard extends StatelessWidget {
+  final value;
   final name;
   final image;
   final subTitle;
   final upvotes;
   final unit;
 
-  _InfoCard(this.name, this.image, this.subTitle, this.upvotes, this.unit);
+  _InfoCard(this.value, this.name, this.image, this.subTitle, this.upvotes,
+      this.unit);
 
   @override
   Widget build(BuildContext context) {
@@ -362,7 +478,7 @@ class _InfoCard extends StatelessWidget {
       padding: const EdgeInsets.only(left: 10),
       child: GestureDetector(
         onTap: () {
-          print("tap $subTitle");
+          if (value == 'temperature') {}
         },
         child: Container(
           height: 140.0,
