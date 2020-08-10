@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
+import 'package:smartfarm/screen/connect_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
 
@@ -43,7 +44,7 @@ class FarmListPage extends StatelessWidget {
                     child: Swiper(
                       itemCount: Provider.of<MineFarmerData>(context)
                           .data
-                          .sensorUUID
+                          .deviceUUID
                           .length,
                       itemWidth: MediaQuery.of(context).size.width - 2 * 64,
                       layout: SwiperLayout.STACK,
@@ -102,7 +103,8 @@ class FarmListPage extends StatelessWidget {
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                    builder: (context) => InfoPage(sensorUUID: Provider.of<MineFarmerData>(context).data.sensorUUID[index]),
+                                                    builder: (context) => ConnectPage(),
+                                                    //builder: (context) => InfoPage(sensorUUID: Provider.of<MineFarmerData>(context).data.sensorUUID[index]),
                                                   ),
                                                 );
                                               },

@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:smartfarm/sensor_data/day_of_week.dart';
+import 'package:smartfarm/json/day_of_week.dart';
 part 'week_sensor.g.dart';
 
 @JsonSerializable(explicitToJson: true)

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartfarm/sensor_data/week_sensor.dart';
+import 'package:smartfarm/json/week_sensor.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:charts_flutter/flutter.dart' as graphCharts;

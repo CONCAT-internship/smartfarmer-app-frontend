@@ -3,7 +3,7 @@ import 'package:smartfarm/shared/db_key.dart';
 import 'package:smartfarm/firebase/db_data/sensor_data.dart';
 import 'package:smartfarm/firebase/db_data/transfomer.dart';
 
-import 'db_data/farmer.dart';
+import '../farmer.dart';
 
 DatabaseProvider databaseProvider = DatabaseProvider();
 
@@ -44,27 +44,27 @@ class DatabaseProvider with Transfomer {
   }
 
   Future<Map<String, dynamic>> addSensorUUID(
-      {String farmerKey, String sensorUUID}) async {
+      {String farmerKey, String device_uuid}) async {
     final DocumentReference farmerRef =
         _firestore.collection(COLLECTION_FARMER).document(farmerKey);
     final DocumentSnapshot snapshot = await farmerRef.get();
 
     return _firestore.runTransaction((Transaction tx) async {
       if (snapshot.exists) await tx.update(farmerRef, <String, dynamic>{
-        KEY_SENSOR_UUID : FieldValue.arrayUnion([sensorUUID])
+        KEY_SENSOR_UUID : FieldValue.arrayUnion([device_uuid])
       });
     });
   }
 
   Future<Map<String, dynamic>> delSensorUUID(
-      {String farmerKey, String sensorUUID}) async {
+      {String farmerKey, String device_uuid}) async {
     final DocumentReference farmerRef =
     _firestore.collection(COLLECTION_FARMER).document(farmerKey);
     final DocumentSnapshot snapshot = await farmerRef.get();
 
     return _firestore.runTransaction((Transaction tx) async {
       if (snapshot.exists) await tx.update(farmerRef, <String, dynamic>{
-        KEY_SENSOR_UUID : FieldValue.arrayRemove([sensorUUID])
+        KEY_SENSOR_UUID : FieldValue.arrayRemove([device_uuid])
       });
     });
   }
