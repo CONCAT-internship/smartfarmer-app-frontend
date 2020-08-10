@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smartfarm/animation/fade_animation.dart';
+import 'package:smartfarm/firebase/db_data/provider/firebase_provider.dart';
+import 'package:smartfarm/screen/signup_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
 class LoginPage extends StatefulWidget {
@@ -8,9 +11,24 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController _mailCon = TextEditingController();
+  TextEditingController _pwCon = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  FirebaseProvider fp;
+
+  @override
+  void dispose() {
+    _mailCon.dispose();
+    _pwCon.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    fp = Provider.of<FirebaseProvider>(context);
+    logger.d(fp.getUser());
     return Scaffold(
+      key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -68,8 +86,24 @@ class _LoginPageState extends State<LoginPage> {
                       padding: EdgeInsets.symmetric(horizontal: 40),
                       child: Column(
                         children: <Widget>[
-                          FadeAnimation(1.2, makeInput(label: '이메일')),
-                          FadeAnimation(1.3, makeInput(label: '비밀번호', obscureText: true)),
+                          FadeAnimation(1.2, makeInput(label: '이메일', editingController: _mailCon),),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          FadeAnimation(1.3, makeInput(label: '비밀번호', obscureText: true, editingController: _pwCon)),
+                          SizedBox(
+                            height: 6,
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: InkWell(
+                              onTap: (){print("비밀번호 찾기 버튼 클릭");},
+                              child: FadeAnimation(1.3, Text("비밀번호 찾기", style: TextStyle(
+                                  fontFamily: 'NotoSans-Medium'
+                                ),),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -89,7 +123,10 @@ class _LoginPageState extends State<LoginPage> {
                           child: MaterialButton(
                             minWidth: double.infinity,
                             height: 60,
-                            onPressed: () {},
+                            onPressed: () {
+                              FocusScope.of(context).requestFocus(new FocusNode());
+                              _logIn();
+                            },
                             color: Colors.greenAccent,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
@@ -113,10 +150,15 @@ class _LoginPageState extends State<LoginPage> {
                             "계정이 없으신가요? ",
                             style: TextStyle(fontFamily: 'Notosans-Regular'),
                           ),
-                          Text(
-                            "가입하기",
-                            style: TextStyle(
-                              fontFamily: 'Notosans-Bold',
+                          InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
+                            },
+                            child: Text(
+                              "가입하기",
+                              style: TextStyle(
+                                fontFamily: 'Notosans-Bold',
+                              ),
                             ),
                           ),
                         ],
@@ -140,9 +182,46 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
+  void _logIn() async{
+    _scaffoldKey.currentState
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        duration: Duration(seconds: 10),
+        content: Row(
+          children: <Widget>[
+            CircularProgressIndicator(),
+            Text("   Signing-In...")
+          ],
+        ),
+      ));
+    bool result = await fp.signInWithEmail(_mailCon.text, _pwCon.text);
+    _scaffoldKey.currentState.hideCurrentSnackBar();
+    if (result == false){
+      showLastFBMessage();
+      _pwCon.text = '';
+    }else{
+      Navigator.pop(context);
+    }
+  }
+
+  showLastFBMessage() {
+    _scaffoldKey.currentState
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        backgroundColor: Colors.red[400],
+        duration: Duration(seconds: 10),
+        content: Text(fp.getLastFBMessage()),
+        action: SnackBarAction(
+          label: "Done",
+          textColor: Colors.white,
+          onPressed: () {},
+        ),
+      ));
+  }
 }
 
-Widget makeInput({label, obscureText = false}) {
+Widget makeInput({label, obscureText = false, TextEditingController editingController}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -158,8 +237,15 @@ Widget makeInput({label, obscureText = false}) {
         height: 5,
       ),
       TextField(
+        controller: editingController,
         obscureText: obscureText,
         decoration: InputDecoration(
+          hintText: obscureText ? '비밀번호를 입력해주세요' : '이메일을 입력해주세요',
+          hintStyle: TextStyle(
+            fontFamily: 'NotoSans-Regular',
+            fontSize: 13,
+          ),
+          prefixIcon: obscureText ? Icon(Icons.lock) : Icon(Icons.mail),
           contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey[400]),
@@ -168,9 +254,6 @@ Widget makeInput({label, obscureText = false}) {
             borderSide: BorderSide(color: Colors.grey[400]),
           ),
         ),
-      ),
-      SizedBox(
-        height: 30,
       ),
     ],
   );

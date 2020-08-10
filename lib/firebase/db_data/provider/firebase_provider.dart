@@ -1,5 +1,10 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:logger/logger.dart';
+import 'package:smartfarm/firebase/db_data/provider/database_provider.dart';
+
+Logger logger = Logger();
 
 class FirebaseProvider with ChangeNotifier {
   final FirebaseAuth fAuth = FirebaseAuth.instance; // Firebase 인증 플러그인의 인스턴스
@@ -8,7 +13,7 @@ class FirebaseProvider with ChangeNotifier {
   String _lastFirebaseResponse = ""; // Firebase로부터 받은 최신 메시지(에러 처리용)
 
   FirebaseProvider() {
-    print("init FirebaseProvider");
+    logger.d("init FirebaseProvider");
     _prepareUser();
   }
 
@@ -34,14 +39,13 @@ class FirebaseProvider with ChangeNotifier {
       AuthResult result = await fAuth.createUserWithEmailAndPassword(
           email: email, password: password);
       if (result.user != null) {
-        // 인증 메일 발송
-        result.user.sendEmailVerification();
-        // 새로운 계정 생성이 성공하였으므로 기존 계정이 있을 경우 로그아웃 시킴
         signOut();
+        await databaseProvider.createFarmer(farmerKey: result.user.uid, email: email);
+        _user = result.user;
         return true;
       }
     } on Exception catch (e) {
-      print(e.toString());
+      logger.e(e.toString());
       List<String> result = e.toString().split(", ");
       setLastFBMessage(result[1]);
       return false;
@@ -55,12 +59,12 @@ class FirebaseProvider with ChangeNotifier {
           email: email, password: password);
       if (result != null) {
         setUser(result.user);
-        print(getUser());
+        logger.d(getUser());
         return true;
       }
       return false;
     } on Exception catch (e) {
-      print(e.toString());
+      logger.e(e.toString());
       List<String> result = e.toString().split(", ");
       setLastFBMessage(result[1]);
       return false;
