@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smartfarm/firebase/database_provider.dart';
+import 'package:smartfarm/firebase/db_data/provider/database_provider.dart';
 import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
 import 'package:smartfarm/firebase/db_data/sensor_data.dart';
 import 'package:smartfarm/screen/farm_list_page.dart';
@@ -26,7 +26,7 @@ class SensorListPage extends StatelessWidget {
                                   listen: false)
                               .data
                               .farmerKey,
-                          sensorUUID: uuidList[index].uuid);
+                          device_uuid: uuidList[index].uuid);
                       Navigator.push(
                         context,
                         MaterialPageRoute(

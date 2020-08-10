@@ -6,28 +6,16 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
 import 'package:http/http.dart' as http;
-import 'package:smartfarm/forms/dashboard_form.dart';
-import 'package:smartfarm/forms/graph.dart';
 import 'package:smartfarm/forms/qrcode_form.dart';
-import 'package:smartfarm/forms/tutorial_form.dart';
-import 'package:smartfarm/json/sensor.dart';
-import 'package:smartfarm/json/week_sensor.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
-import 'package:dotted_line/dotted_line.dart';
-import 'package:intl/intl.dart';
-import 'package:smartfarm/firebase/db_data/provider/database_provider.dart';
 
-class InfoPage extends StatefulWidget {
-  String sensorUUID;
-
-  InfoPage({Key key, this.sensorUUID}) : super(key: key);
-
+class ConnectPage extends StatefulWidget {
   @override
-  _InfoPageState createState() => _InfoPageState();
+  _ConnectPageState createState() => _ConnectPageState();
 }
 
-class _InfoPageState extends State<InfoPage> {
-  GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
+class _ConnectPageState extends State<ConnectPage> {
+  GlobalKey<FormState> _fKey = GlobalKey<FormState>();
   bool autoValidate = false;
   int selectedStack = 0;
 
@@ -35,14 +23,6 @@ class _InfoPageState extends State<InfoPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      key: _drawerKey,
-      endDrawer: Drawer(
-          child: SafeArea(
-              child: ListView(padding: EdgeInsets.zero, children: <Widget>[]))),
-      //backgroundColor: backgroundColor,
-      bottomNavigationBar: _buildBottomAppBar(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _buildFloatingActionButton(context),
       body: Stack(
         children: <Widget>[
           _headerGradient(size), // HEAD 그라디언트 색상
@@ -71,52 +51,6 @@ class _InfoPageState extends State<InfoPage> {
     );
   }
 
-  BottomAppBar _buildBottomAppBar() {
-    return BottomAppBar(
-      color: backgroundColor,
-      //notchMargin: 12.0,
-      child: Container(
-        height: 50.0,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 42.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.home),
-                onPressed: () {
-                  _drawerKey.currentState.openEndDrawer();
-                },
-                color: infoButtonColor,
-                iconSize: 32.0,
-                //size: 32.0,
-              ),
-              IconButton(
-                icon: Icon(Icons.settings),
-                onPressed: () {
-                  //databaseProvider.recv();
-                },
-                color: Colors.grey,
-                iconSize: 32.0,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  FloatingActionButton _buildFloatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      backgroundColor: infoButtonColor,
-      child: Icon(Icons.add),
-      onPressed: () {
-        Provider.of<MineFarmerData>(context, listen: false).logoutFarmer();
-        FirebaseAuth.instance.signOut();
-      },
-    );
-  }
-
   Container _headerGradient(Size size) {
     return Container(
       height: size.height * 0.8,
@@ -134,7 +68,6 @@ class _InfoPageState extends State<InfoPage> {
       ),
     );
   }
-
   Container _headerContents(Size size) {
     return Container(
         padding: EdgeInsets.only(
@@ -224,22 +157,19 @@ class _InfoPageState extends State<InfoPage> {
             ),
           ],
         ),
-        child: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(30.0)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 15.0,
-                ),
-              ],
-            ),
-            child: QRcodeForm(),
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 15.0,
+              ),
+            ],
           ),
+          child: QRcodeForm(),
         ),
       ),
     );
