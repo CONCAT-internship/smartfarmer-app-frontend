@@ -1,20 +1,10 @@
-import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:smartfarm/forms/dashboard_form.dart';
-import 'package:smartfarm/forms/graph.dart';
 import 'package:smartfarm/forms/qrcode_form.dart';
-import 'package:smartfarm/forms/tutorial_form.dart';
-import 'package:smartfarm/json/sensor.dart';
-import 'package:smartfarm/json/week_sensor.dart';
+
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
-import 'package:dotted_line/dotted_line.dart';
-import 'package:intl/intl.dart';
-import 'package:smartfarm/firebase/db_data/provider/database_provider.dart';
+
 
 class InfoPage extends StatefulWidget {
   String sensorUUID;
