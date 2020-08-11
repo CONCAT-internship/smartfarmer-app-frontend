@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:smartfarm/forms/dashboard_form.dart';
 import 'package:smartfarm/forms/graph.dart';
@@ -111,8 +110,6 @@ class _InfoPageState extends State<InfoPage> {
       backgroundColor: infoButtonColor,
       child: Icon(Icons.add),
       onPressed: () {
-        Provider.of<MineFarmerData>(context, listen: false).logoutFarmer();
-        FirebaseAuth.instance.signOut();
       },
     );
   }
