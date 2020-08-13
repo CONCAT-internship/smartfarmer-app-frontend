@@ -1,8 +1,10 @@
+import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 class QRcodeForm extends StatefulWidget {
   @override
@@ -12,12 +14,33 @@ class QRcodeForm extends StatefulWidget {
 class _QRcodeFormState extends State<QRcodeForm> {
   var result;
 
+  void _createPost(String uuid) async {
+    String url =
+        'https://asia-northeast1-superfarmers.cloudfunctions.net/CheckDeviceOverlap';
+    final response = await http.post(
+      url,
+      body: jsonEncode(
+        {
+          'uuid': '$uuid',
+        },
+      ),
+      headers: {'Content-Type': "application/json"},
+    );
+
+    if(response.statusCode == 200){ // 등록 가능한 uuid
+
+    }else if(response.statusCode == 403){ // 이미 존재하는 uuid
+      showToast('이미 사용중인 기기입니다.');
+    }else{
+      showToast('알 수 없는 에러입니다. 잠시 뒤 시도해주세요.');
+    }
+  }
+
   Future _scanQR() async {
     try {
       final qrResult = await BarcodeScanner.scan();
       setState(() {
-        result = qrResult.rawContent;
-        print(result);
+        _createPost(qrResult.rawContent);
       });
     } on PlatformException catch (ex) {
       if (ex.code == BarcodeScanner.cameraAccessDenied) {
@@ -68,12 +91,27 @@ class _QRcodeFormState extends State<QRcodeForm> {
                 color: tutorialFontColor,
               ),
             ),
-//            Text(
-//              //result,
-//            ),
+            Text(
+              result ?? '',
+              style: TextStyle(
+                fontSize: 32.0,
+                color: Colors.blue,
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void showToast(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        fontSize: 16.0,
+        textColor: Colors.white,
+        backgroundColor: Colors.grey[400],
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIosWeb: 1,
+        gravity: ToastGravity.BOTTOM);
   }
 }
