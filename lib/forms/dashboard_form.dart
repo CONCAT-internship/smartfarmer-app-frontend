@@ -13,8 +13,8 @@ class DashBoardForm extends StatefulWidget {
 
 Future<Sensor> getSensor() async {
   try {
-    String url = 'https://asia-northeast1-superfarmers.cloudfunctions.net/RecentStatus?uuid=123e6b776f000c04';
-        //'https://asia-northeast1-superfarmers.cloudfunctions.net/RecentStatus?uuid=${widget.sensorUUID}';
+    String url = '$API/RecentStatus?uuid=123e6b776f000c04';
+        //'$API/RecentStatus?uuid=${widget.sensorUUID}';
     final http.Response response = await http.get(url);
     final responseData = jsonDecode(response.body);
     final Sensor sensor = Sensor.fromJson(responseData);

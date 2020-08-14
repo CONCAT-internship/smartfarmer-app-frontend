@@ -11,10 +11,5 @@ class MineFarmerData extends ChangeNotifier {
     notifyListeners();
     //값이 바뀌면 위젯들에게 알림
   }
-
-  void logoutFarmer() {
-    _mineFarmerData = null;
-    notifyListeners();
-  }
 }
 

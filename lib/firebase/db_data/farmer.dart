@@ -18,9 +18,9 @@ class Farmer {
           reference: ds.reference,
         );
 
-  static Map<String, dynamic> createMap(String email){
+  static Map<String, dynamic> createMap(String nickName){
     Map<String, dynamic> map = Map();
-    map[KEY_EMAIL] = email;
+    map[KEY_EMAIL] = nickName;
     map[KEY_SENSOR_UUID] = [];
     return map;
   }

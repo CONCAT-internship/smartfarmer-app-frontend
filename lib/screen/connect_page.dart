@@ -16,7 +16,6 @@ class ConnectPage extends StatefulWidget {
 }
 
 class _ConnectPageState extends State<ConnectPage> {
-  GlobalKey<FormState> _fKey = GlobalKey<FormState>();
   bool autoValidate = false;
   int selectedStack = 0;
 
@@ -24,6 +23,7 @@ class _ConnectPageState extends State<ConnectPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
           _headerGradient(size), // HEAD 그라디언트 색상

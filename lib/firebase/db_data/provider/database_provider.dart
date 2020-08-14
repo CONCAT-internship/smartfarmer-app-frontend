@@ -34,12 +34,12 @@ class DatabaseProvider with Transfomer {
         .transform(transFarmerData);
   }
 
-  Future<void> createFarmer({String farmerKey, String email}) async {
+  Future<void> createFarmer({String farmerKey, String nickName}) async {
     final DocumentReference farmerRef =
         _firestore.collection(COLLECTION_FARMER).document(farmerKey);
     final DocumentSnapshot snapshot = await farmerRef.get();
     return _firestore.runTransaction((Transaction tx) async {
-      if (!snapshot.exists) await tx.set(farmerRef, Farmer.createMap(email));
+      if (!snapshot.exists) await tx.set(farmerRef, Farmer.createMap(nickName));
     });
   }
 
