@@ -42,10 +42,11 @@ class FarmListPage extends StatelessWidget {
                     height: 500,
                     padding: const EdgeInsets.only(left: 32),
                     child: Swiper(
-                      itemCount: Provider.of<MineFarmerData>(context)
-                          .data
-                          .deviceUUID
-                          .length,
+                      itemCount: 5,
+//                      itemCount: Provider.of<MineFarmerData>(context)
+//                          .data
+//                          .deviceUUID
+//                          .length,
                       itemWidth: MediaQuery.of(context).size.width - 2 * 64,
                       layout: SwiperLayout.STACK,
                       pagination: SwiperPagination(

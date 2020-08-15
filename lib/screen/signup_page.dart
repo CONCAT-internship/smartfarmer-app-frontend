@@ -168,11 +168,11 @@ class _SignUpPageState extends State<SignUpPage> {
         content: Row(
           children: <Widget>[
             CircularProgressIndicator(),
-            Text("   Signing-Up...")
+            Text("   가입 중입니다...")
           ],
         ),
       ));
-    bool result = await fp.signUpWithEmail(_mailCon.text, _pwCon.text);
+    bool result = await fp.signUpWithEmail(_mailCon.text, _pwCon.text, _nickCon.text);
     _scaffoldKey.currentState.hideCurrentSnackBar();
     if (result) {
       Navigator.pop(context);
@@ -213,6 +213,7 @@ Widget makeInput({label, obscureText = false, TextEditingController editingContr
         height: 5,
       ),
       TextField(
+        maxLines: 1,
         controller: editingController,
         obscureText: obscureText,
         decoration: InputDecoration(

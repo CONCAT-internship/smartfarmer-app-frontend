@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/animation/fade_animation.dart';
+import 'package:smartfarm/firebase/db_data/provider/database_provider.dart';
 import 'package:smartfarm/firebase/db_data/provider/firebase_provider.dart';
+import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
 import 'package:smartfarm/screen/connect_page.dart';
 import 'package:smartfarm/screen/login_page.dart';
-import 'package:smartfarm/screen/sensor_list_page.dart';
 import 'package:smartfarm/screen/signup_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
@@ -16,9 +17,18 @@ class AuthPage extends StatelessWidget {
     fp = Provider.of<FirebaseProvider>(context);
     logger.d("user: ${fp.getUser()}");
 
-    if (fp.getUser() != null) {
+    if(fp.getUser() != null){
       return ConnectPage();
-    } else {
+    }
+//    if (fp.getUser() != null) {
+//      databaseProvider
+//          .linkFarmerData(fp.getUser().uid)
+//          .listen((event) {
+//        Provider.of<MineFarmerData>(context).setFarmerData(event);
+//      });
+//
+//      return ConnectPage();
+//    } else {
       return Scaffold(
         body: SafeArea(
           child: Container(
@@ -144,5 +154,5 @@ class AuthPage extends StatelessWidget {
         ),
       );
     }
-  }
+  //}
 }

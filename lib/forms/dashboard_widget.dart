@@ -6,15 +6,15 @@ import 'package:smartfarm/json/sensor.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:http/http.dart' as http;
 
-class DashBoardForm extends StatefulWidget {
+class DashBoardWidget extends StatefulWidget {
   @override
-  _DashBoardFormState createState() => _DashBoardFormState();
+  _DashBoardWidgetState createState() => _DashBoardWidgetState();
 }
 
 Future<Sensor> getSensor() async {
   try {
-    String url = 'https://asia-northeast1-superfarmers.cloudfunctions.net/RecentStatus?uuid=123e6b776f000c04';
-        //'https://asia-northeast1-superfarmers.cloudfunctions.net/RecentStatus?uuid=${widget.sensorUUID}';
+    String url = '$API/RecentStatus?uuid=123e6b776f000c04';
+        //'$API/RecentStatus?uuid=${widget.sensorUUID}';
     final http.Response response = await http.get(url);
     final responseData = jsonDecode(response.body);
     final Sensor sensor = Sensor.fromJson(responseData);
@@ -24,7 +24,7 @@ Future<Sensor> getSensor() async {
   }
 }
 
-class _DashBoardFormState extends State<DashBoardForm> {
+class _DashBoardWidgetState extends State<DashBoardWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(

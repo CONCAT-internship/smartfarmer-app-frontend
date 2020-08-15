@@ -191,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
         content: Row(
           children: <Widget>[
             CircularProgressIndicator(),
-            Text("   Signing-In...")
+            Text("   로그인 중입니다...")
           ],
         ),
       ));

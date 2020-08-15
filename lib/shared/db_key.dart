@@ -1,6 +1,6 @@
 /* Farmer DATA Collection */
 const COLLECTION_FARMER = 'farmers';
-const KEY_EMAIL = 'email';
+const KEY_EMAIL = 'nick_name';
 const KEY_SENSOR_UUID = 'device_uuid';
 
 /* Sensor DATA Collection */
