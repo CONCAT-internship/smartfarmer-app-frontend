@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:smartfarm/forms/qrcode_form.dart';
+import 'package:smartfarm/forms/dashboard_widget.dart';
 
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
@@ -225,7 +225,7 @@ class _InfoPageState extends State<InfoPage> {
                 ),
               ],
             ),
-            child: QRcodeForm(),
+            child: DashBoardWidget(),
           ),
         ),
       ),

@@ -17,15 +17,18 @@ class AuthPage extends StatelessWidget {
     fp = Provider.of<FirebaseProvider>(context);
     logger.d("user: ${fp.getUser()}");
 
-    if (fp.getUser() != null) {
-      databaseProvider
-          .linkFarmerData(fp.getUser().uid)
-          .listen((event) {
-        Provider.of<MineFarmerData>(context).setFarmerData(event);
-      });
-
+    if(fp.getUser() != null){
       return ConnectPage();
-    } else {
+    }
+//    if (fp.getUser() != null) {
+//      databaseProvider
+//          .linkFarmerData(fp.getUser().uid)
+//          .listen((event) {
+//        Provider.of<MineFarmerData>(context).setFarmerData(event);
+//      });
+//
+//      return ConnectPage();
+//    } else {
       return Scaffold(
         body: SafeArea(
           child: Container(
@@ -151,5 +154,5 @@ class AuthPage extends StatelessWidget {
         ),
       );
     }
-  }
+  //}
 }

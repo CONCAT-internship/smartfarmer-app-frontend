@@ -1,14 +1,13 @@
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartfarm/firebase/db_data/provider/firebase_provider.dart';
 import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
 import 'package:http/http.dart' as http;
-import 'package:smartfarm/forms/qrcode_form.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/services.dart';
 
 class ConnectPage extends StatefulWidget {
   @override
@@ -16,8 +15,74 @@ class ConnectPage extends StatefulWidget {
 }
 
 class _ConnectPageState extends State<ConnectPage> {
-  bool autoValidate = false;
-  int selectedStack = 0;
+  final PageController _pageController = PageController(
+    initialPage: 0,
+  );
+
+  int currentPage = 0;
+  var result; //QR코드 결과
+
+  void showToast(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        fontSize: 16.0,
+        textColor: Colors.white,
+        backgroundColor: Colors.grey[400],
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIosWeb: 1,
+        gravity: ToastGravity.BOTTOM);
+  }
+
+  void _createPost(String uuid) async {
+    final response = await http.post(
+      '$API/CheckDeviceOverlap',
+      body: jsonEncode(
+        {
+          'uuid': '$uuid',
+        },
+      ),
+      headers: {'Content-Type': "application/json"},
+    );
+
+    if (response.statusCode == 200) {
+      // 등록 가능한 uuid
+      _pageController.jumpToPage(1);
+    } else if (response.statusCode == 403) {
+      // 이미 존재하는 uuid
+      showToast('사용중인 기기입니다.');
+    } else if (response.statusCode == 404) {
+      showToast('등록되어있지 않은 기기입니다.');
+    } else {
+      showToast('알 수 없는 에러입니다. 잠시 뒤 시도해주세요.');
+    }
+  }
+
+  Future _scanQR() async {
+    try {
+      final qrResult = await BarcodeScanner.scan();
+      setState(() {
+        _createPost(qrResult.rawContent);
+      });
+    } on PlatformException catch (ex) {
+      if (ex.code == BarcodeScanner.cameraAccessDenied) {
+        setState(() {
+          result = 'Camera permission was denied';
+        });
+      } else {
+        setState(() {
+          result = 'Unknown Error $ex';
+        });
+      }
+    } on FormatException {
+      setState(() {
+        result = 'you pressed the back button before scanning anything';
+      });
+    } catch (ex) {
+      setState(() {
+        result = 'Unknown Error $ex';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +91,21 @@ class _ConnectPageState extends State<ConnectPage> {
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
-          _headerGradient(size), // HEAD 그라디언트 색상
+          Container(
+            height: size.height * 0.8,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  infoGradient1,
+                  infoGradient2,
+                ],
+                stops: [0.1, 0.5],
+              ),
+            ),
+          ),
           Container(
             height: double.infinity,
 //            foregroundDecoration: BoxDecoration(
@@ -52,24 +131,7 @@ class _ConnectPageState extends State<ConnectPage> {
     );
   }
 
-  Container _headerGradient(Size size) {
-    return Container(
-      height: size.height * 0.8,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            infoGradient1,
-            infoGradient2,
-          ],
-          stops: [0.1, 0.5],
-        ),
-      ),
-    );
-  }
-  Container _headerContents(Size size) {
+  Widget _headerContents(Size size) {
     return Container(
         padding: EdgeInsets.only(
           left: 25.0,
@@ -96,7 +158,8 @@ class _ConnectPageState extends State<ConnectPage> {
                   iconSize: 25,
                   color: Colors.white,
                   onPressed: () {
-                    Provider.of<FirebaseProvider>(context, listen: false).signOut();
+                    Provider.of<FirebaseProvider>(context, listen: false)
+                        .signOut();
                   },
                 ),
                 IconButton(
@@ -135,7 +198,7 @@ class _ConnectPageState extends State<ConnectPage> {
                       "당신의 농장은 잘 관리되고 있습니다.",
                       style: TextStyle(
                         color: Colors.white,
-                        fontFamily: 'NotoSans-Thin',
+                        fontFamily: 'NotoSans-Regular',
                         fontSize: 14.0,
                       ),
                     ),
@@ -147,7 +210,7 @@ class _ConnectPageState extends State<ConnectPage> {
         ));
   }
 
-  Expanded infoBox() {
+  Widget infoBox() {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
@@ -172,7 +235,165 @@ class _ConnectPageState extends State<ConnectPage> {
               ),
             ],
           ),
-          child: QRcodeForm(),
+          child: PageView(
+            controller: _pageController,
+            onPageChanged: (selectedPage) {
+              currentPage = selectedPage;
+            },
+            children: <Widget>[
+              scannerQR(),
+              SingleChildScrollView(
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                Image.asset(
+                                  farmName,
+                                  width: 80,
+                                  height: 80,
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Container(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 110),
+                                  child: TextField(
+                                    textAlign: TextAlign.center,
+                                    maxLength: 10,
+                                    decoration: InputDecoration(
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: fieldLineColor, width: 2.5),
+                                      ),
+                                      hintText: '농장 이름을 입력해주세요',
+                                      hintStyle: TextStyle(
+                                        fontSize: 15.0,
+                                        fontFamily: 'NotoSans-Medium',
+                                        color: tutorialFontColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 40,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                children: <Widget>[
+                                  makeInput(),
+                                  SizedBox(height: 15,),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      makeInput(),
+                                      Text('~'),
+                                      makeInput(),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Row makeInput() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          "작물",
+          style: TextStyle(
+            fontSize: 14,
+            color: fieldTextColor,
+            fontFamily: 'NotoSans-Medium',
+          ),
+        ),
+        SizedBox(
+          width: 15,
+        ),
+        Container(
+          width: 100,
+          height: 30,
+          child: TextField(
+            decoration: InputDecoration(
+              suffixText: "dd",
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: borderColor),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: borderColor),
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget scannerQR() {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: double.infinity,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 120),
+          child: Column(
+            children: <Widget>[
+              InkWell(
+                onTap: () {
+                  _scanQR();
+                },
+                child: Image.asset(
+                  qrCodeImg,
+                  width: 80,
+                  height: 80,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                //Provider.of<FirebaseProvider>(context).getUser().uid,
+                //Provider.of<MineFarmerData>(context).data.email,
+                'QR코드로 농장 등록',
+                style: TextStyle(
+                  fontSize: 15.0,
+                  fontFamily: 'NotoSans-Medium',
+                  color: tutorialFontColor,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

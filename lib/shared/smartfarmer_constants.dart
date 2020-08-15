@@ -53,6 +53,8 @@ Color infoBoxLedColor = Color.fromRGBO(122, 108, 255, 1);
 
 /* 농장 등록 페이지 (QR) */
 Color tutorialFontColor = Color.fromRGBO(183, 183, 183, 1);
+Color fieldLineColor = Color.fromRGBO(73, 83, 207, 1);
+Color fieldTextColor = Color.fromRGBO(51, 51, 51, 1);
 
 var farmer = 'assets/images/farmer.png';
 var farmerWomen = 'assets/images/farmer_women.png';
