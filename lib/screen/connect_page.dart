@@ -247,17 +247,13 @@ class _ConnectPageState extends State<ConnectPage> {
                   height: MediaQuery.of(context).size.height,
                   width: double.infinity,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Expanded(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Column(
                               children: <Widget>[
-                                SizedBox(
-                                  height: 40,
-                                ),
                                 Image.asset(
                                   farmName,
                                   width: 80,
@@ -288,26 +284,40 @@ class _ConnectPageState extends State<ConnectPage> {
                                 ),
                               ],
                             ),
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: Column(
-                                children: <Widget>[
-                                  makeInput(),
-                                  SizedBox(height: 15,),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      makeInput(),
-                                      Text('~'),
-                                      makeInput(),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    makeInput(label: '작물'),
+                                    limitInput(prop: '온도'),
+                                    limitInput(prop: '습도'),
+                                    limitInput(prop: 'pH  '),
+                                    limitInput(prop: 'EC   '),
+                                    makeInputDuo(prop: '수온', prop2: '수위'),
+                                    makeInputDuo(prop: '조도', prop2: '일조'),
+                                    Text(
+                                      '재식 거리',
+                                      style: connectFont,
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        makeShortInput(),
+                                        Text(' X '),
+                                        makeShortInput(),
+                                        Text('    ~    '),
+                                        makeShortInput(),
+                                        Text(' X '),
+                                        makeShortInput(),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -323,38 +333,84 @@ class _ConnectPageState extends State<ConnectPage> {
     );
   }
 
-  Row makeInput() {
+  Widget makeInputDuo({prop, prop2}) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Text(
-          "작물",
-          style: TextStyle(
-            fontSize: 14,
-            color: fieldTextColor,
-            fontFamily: 'NotoSans-Medium',
+        makeInput(label: prop),
+        SizedBox(
+          width: 23,
+        ),
+        makeInput(label: prop2),
+      ],
+    );
+  }
+
+  Widget limitInput({prop}) {
+    return Row(
+      children: <Widget>[
+        makeInput(label: prop),
+        Text('     ~     '),
+        makeInput(label: ''),
+      ],
+    );
+  }
+
+  Widget makeShortInput() {
+    return Container(
+      width: 58,
+      height: 30,
+      child: TextField(
+        decoration: InputDecoration(
+          suffixText: "dd",
+          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: borderColor),
+            borderRadius: BorderRadius.circular(30),
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: borderColor),
+            borderRadius: BorderRadius.circular(30),
           ),
         ),
-        SizedBox(
-          width: 15,
-        ),
-        Container(
-          width: 100,
-          height: 30,
-          child: TextField(
-            decoration: InputDecoration(
-              suffixText: "dd",
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: borderColor),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: borderColor),
-                borderRadius: BorderRadius.circular(30),
+      ),
+    );
+  }
+
+  Widget makeInput({label}) {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              label,
+              style: connectFont,
+            ),
+            SizedBox(
+              width: 15,
+            ),
+            Container(
+              width: 100,
+              height: 30,
+              child: TextField(
+                decoration: InputDecoration(
+                  suffixText: "dd",
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: borderColor),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: borderColor),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
+        ),
+        SizedBox(
+          height: 15,
         ),
       ],
     );
