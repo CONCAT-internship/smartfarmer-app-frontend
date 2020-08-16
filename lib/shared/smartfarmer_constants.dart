@@ -3,20 +3,12 @@ import 'package:flutter/material.dart';
 
 const API = 'https://asia-northeast1-superfarmers.cloudfunctions.net';
 
-final notoSansBold = TextStyle(
-  color: Colors.white,
-  fontFamily: 'NotoSans-Bold',
-);
-
-final notoSansRegular = TextStyle(
-  color: Colors.white,
-  fontFamily: 'NotoSans-Regular',
-);
-
-final notoSansMedium = TextStyle(
-  color: Colors.white,
+final connectFont = TextStyle(
+  fontSize: 14,
+  color: fieldTextColor,
   fontFamily: 'NotoSans-Medium',
 );
+
 
 final kBoxDecorationStyle = BoxDecoration(
   color: Color(0xFF6CA8F1),
