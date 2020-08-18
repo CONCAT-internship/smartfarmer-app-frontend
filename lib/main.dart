@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
+import 'package:smartfarm/firebase/db_data/provider/scan_data.dart';
 import 'package:smartfarm/screen/auth_page.dart';
 import 'firebase/db_data/provider/firebase_provider.dart';
 
@@ -16,6 +17,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<FirebaseProvider>(
           create: (_) => FirebaseProvider(),
+        ),
+        ChangeNotifierProvider<ScanData>(
+          create: (_) => ScanData(),
         ),
       ],
       child: MaterialApp(
