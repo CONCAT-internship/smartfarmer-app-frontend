@@ -16,7 +16,6 @@ class ScannerWidget extends StatefulWidget {
 
 class _ScannerWidgetState extends State<ScannerWidget> {
   var result; //QR코드 결과
-  bool isScan = false;
 
   void showToast(String message) {
     Fluttertoast.showToast(
@@ -30,6 +29,7 @@ class _ScannerWidgetState extends State<ScannerWidget> {
   }
 
   void _createPost(String uuid) async {
+    final scanData = Provider.of<ScanData>(context, listen: false);
     final response = await http.post(
       '$API/CheckDeviceOverlap',
       body: jsonEncode(
@@ -42,8 +42,8 @@ class _ScannerWidgetState extends State<ScannerWidget> {
 
     if (response.statusCode == 200) {
       // 등록 가능한 uuid
-      isScan = true;
-
+      scanData.setScan(true);
+      scanData.setDeviceUUID(result);
     } else if (response.statusCode == 403) {
       // 이미 존재하는 uuid
       showToast('사용중인 기기입니다.');
@@ -76,7 +76,6 @@ class _ScannerWidgetState extends State<ScannerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final scanData = Provider.of<ScanData>(context);
     return Container(
       height: MediaQuery.of(context).size.height,
       width: double.infinity,
@@ -88,10 +87,6 @@ class _ScannerWidgetState extends State<ScannerWidget> {
               InkWell(
                 onTap: () {
                   _scanQR();
-                  if(isScan){
-                    scanData.isScan = true;
-                    scanData.deviceUUID = result;
-                  }
                 },
                 child: Image.asset(
                   qrCodeImg,

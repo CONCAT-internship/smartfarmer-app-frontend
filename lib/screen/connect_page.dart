@@ -12,8 +12,6 @@ class ConnectPage extends StatefulWidget {
 }
 
 class _ConnectPageState extends State<ConnectPage> {
-  GlobalKey<FormState> _fKey = GlobalKey<FormState>();
-  bool autovalidate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -167,17 +165,12 @@ class _ConnectPageState extends State<ConnectPage> {
               ),
             ],
           ),
-          child: Form(
-
-            key: _fKey,
-            autovalidate: autovalidate,
-            child: IndexedStack(
-              index: scanData.isScan ? 1 : 0,
-              children: <Widget>[
-                ScannerWidget(),
-                CropEditWidget(),
-              ],
-            ),
+          child: IndexedStack(
+            index: scanData.isScan ? 1 : 0,
+            children: <Widget>[
+              ScannerWidget(),
+              CropEditWidget(),
+            ],
           ),
         ),
       ),

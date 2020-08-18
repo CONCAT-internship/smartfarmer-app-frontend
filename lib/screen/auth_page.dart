@@ -5,6 +5,7 @@ import 'package:smartfarm/firebase/db_data/provider/database_provider.dart';
 import 'package:smartfarm/firebase/db_data/provider/firebase_provider.dart';
 import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
 import 'package:smartfarm/screen/connect_page.dart';
+import 'package:smartfarm/screen/info_page.dart';
 import 'package:smartfarm/screen/login_page.dart';
 import 'package:smartfarm/screen/signup_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
@@ -19,6 +20,7 @@ class AuthPage extends StatelessWidget {
 
     if(fp.getUser() != null){
       return ConnectPage();
+      //return InfoPage();
     }
 //    if (fp.getUser() != null) {
 //      databaseProvider

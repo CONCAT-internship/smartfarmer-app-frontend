@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
 class CropEditWidget extends StatefulWidget {
@@ -7,6 +8,8 @@ class CropEditWidget extends StatefulWidget {
 }
 
 class _CropEditWidgetState extends State<CropEditWidget> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   TextEditingController _farmName = TextEditingController();
   TextEditingController _cropCon = TextEditingController(); // 작물 품종
   TextEditingController _minTemperatureCon = TextEditingController(); // 최저 온도
@@ -51,13 +54,13 @@ class _CropEditWidgetState extends State<CropEditWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        width: double.infinity,
-        child: Column(
-          children: <Widget>[
-            Expanded(
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: double.infinity,
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
                   Column(
@@ -126,9 +129,6 @@ class _CropEditWidgetState extends State<CropEditWidget> {
                             value: '바질',
                             onChanged: (value) => setState(() {}),
                           ),
-//                          makeInput(
-//                              label: '작물',
-//                              editingController: _cropCon),
                           limitInput(
                               prop: '온도',
                               minControl: _minTemperatureCon,
@@ -186,7 +186,9 @@ class _CropEditWidgetState extends State<CropEditWidget> {
                     child: MaterialButton(
                       minWidth: 160,
                       height: 40,
-                      onPressed: () {},
+                      onPressed: () {
+
+                      },
                       color: Colors.greenAccent,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -205,8 +207,8 @@ class _CropEditWidgetState extends State<CropEditWidget> {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -227,7 +229,10 @@ class _CropEditWidgetState extends State<CropEditWidget> {
     );
   }
 
-  Widget limitInput({prop, TextEditingController minControl, TextEditingController maxControl}) {
+  Widget limitInput(
+      {prop,
+      TextEditingController minControl,
+      TextEditingController maxControl}) {
     return Row(
       children: <Widget>[
         makeInput(label: prop, editingController: minControl),
@@ -242,19 +247,19 @@ class _CropEditWidgetState extends State<CropEditWidget> {
       width: 58,
       height: 30,
       child: TextFormField(
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          WhitelistingTextInputFormatter(RegExp('[0-9]')),
+        ],
+        validator: (value) {
+          if (value.isEmpty) {
+            return '값을 입력해주세요.';
+          } else {
+            return null;
+          }
+        },
         controller: editingController,
-        decoration: InputDecoration(
-          suffixText: "dd",
-          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: borderColor),
-            borderRadius: BorderRadius.circular(30),
-          ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: borderColor),
-            borderRadius: BorderRadius.circular(30),
-          ),
-        ),
+        decoration: cropTextInputDeco,
       ),
     );
   }
@@ -275,20 +280,19 @@ class _CropEditWidgetState extends State<CropEditWidget> {
               width: 100,
               height: 30,
               child: TextFormField(
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return '값을 입력해주세요.';
+                  } else {
+                    return null;
+                  }
+                },
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  WhitelistingTextInputFormatter(RegExp('[0-9]')),
+                ],
                 controller: editingController,
-                decoration: InputDecoration(
-                  suffixText: "dd",
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: borderColor),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: borderColor),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
+                decoration: cropTextInputDeco,
               ),
             ),
           ],
