@@ -42,6 +42,7 @@ Color infoBoxTempColor = Color.fromRGBO(64, 78, 255, 1);
 Color infoBoxTempColorBlur = Color.fromRGBO(144, 150, 255, 0.5);
 Color infoBoxHumidityColor = Color.fromRGBO(255, 165, 66, 1);
 Color infoBoxLedColor = Color.fromRGBO(122, 108, 255, 1);
+Color chartTextColor = Color.fromRGBO(99, 149, 140, 0.7);
 
 /* 농장 등록 페이지 (QR) */
 Color tutorialFontColor = Color.fromRGBO(183, 183, 183, 1);
@@ -71,3 +72,17 @@ var wWaterTemp = 'assets/images/water_temp_w.png';
 
 var qrCodeImg = 'assets/images/QRcode.png';
 var farmName = 'assets/images/farm_name.png';
+
+var cropTextInputDeco = InputDecoration(
+  suffixText: "dd",
+  contentPadding:
+  EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+  enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: borderColor),
+    borderRadius: BorderRadius.circular(30),
+  ),
+  border: OutlineInputBorder(
+    borderSide: BorderSide(color: borderColor),
+    borderRadius: BorderRadius.circular(30),
+  ),
+);

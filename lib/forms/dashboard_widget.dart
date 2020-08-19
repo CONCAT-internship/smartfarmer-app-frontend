@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:smartfarm/forms/chart_widget.dart';
 import 'package:smartfarm/json/sensor.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:http/http.dart' as http;
@@ -13,8 +14,8 @@ class DashBoardWidget extends StatefulWidget {
 
 Future<Sensor> getSensor() async {
   try {
-    String url = '$API/RecentStatus?uuid=123e6b776f000c04';
-        //'$API/RecentStatus?uuid=${widget.sensorUUID}';
+    String url = '$API/RecentStatus?uuid=756e6b776f000c04';
+    //'$API/RecentStatus?uuid=${widget.sensorUUID}';
     final http.Response response = await http.get(url);
     final responseData = jsonDecode(response.body);
     final Sensor sensor = Sensor.fromJson(responseData);
@@ -162,20 +163,29 @@ class _DashBoardWidgetState extends State<DashBoardWidget> {
                   fontSize: 13.0,
                 ),
               ),
-              Text(
-                "23.1도",
-                style: TextStyle(
-                  color: infoBoxResultColor,
-                  fontFamily: 'NotoSans-Bold',
-                  fontSize: 13.0,
-                ),
+              FutureBuilder(
+                future: getSensor(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    final sensor = snapshot.data;
+                    return Text(
+                      '${sensor.temperature}도',
+                      style: TextStyle(
+                        color: infoBoxResultColor,
+                        fontFamily: 'NotoSans-Bold',
+                        fontSize: 13.0,
+                      ),
+                    );
+                  }
+                },
               ),
             ],
           ),
-          //Graph(),
-          Container(
-            height: 180.0,
-          ),
+          ChartWidget(),
         ],
       ),
     );
@@ -214,7 +224,9 @@ class InfoSession extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(25),
             child: Container(
-              width: size.maxWidth / 2 - 60,
+              width: size.maxWidth > 350
+                  ? size.maxWidth / 2 - 66
+                  : size.maxWidth / 2 - 60,
               decoration: BoxDecoration(
                 color: isClicked ? color : Colors.white,
                 border: isClicked
