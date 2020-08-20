@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 const API = 'https://asia-northeast1-superfarmers.cloudfunctions.net';
 
 final connectFont = TextStyle(
-  fontSize: 14,
+  fontSize: 12,
   color: fieldTextColor,
   fontFamily: 'NotoSans-Medium',
 );
-
 
 final kBoxDecorationStyle = BoxDecoration(
   color: Color(0xFF6CA8F1),
@@ -74,9 +73,7 @@ var qrCodeImg = 'assets/images/QRcode.png';
 var farmName = 'assets/images/farm_name.png';
 
 var cropTextInputDeco = InputDecoration(
-  suffixText: "dd",
-  contentPadding:
-  EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+  contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
   enabledBorder: OutlineInputBorder(
     borderSide: BorderSide(color: borderColor),
     borderRadius: BorderRadius.circular(30),

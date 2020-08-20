@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
+import 'package:http/http.dart' as http;
 
 class CropEditWidget extends StatefulWidget {
   @override
@@ -8,6 +11,57 @@ class CropEditWidget extends StatefulWidget {
 }
 
 class _CropEditWidgetState extends State<CropEditWidget> {
+  void _registerDevice() async {
+    final response = await http.post(
+      '$API/RegisterDevice',
+      body: jsonEncode(
+        {"uid": "Xecm2PHp7QNfCmb0MQOFdJdy5af2", "uuid": "testtesttest"},
+      ),
+      headers: {'Content-Type': "application/json"},
+    );
+
+    if (response.statusCode == 200) {
+      _createFarm();
+    }
+  }
+
+  void _createFarm() async {
+    final response = await http.post(
+      '$API/RegisterRecipe',
+      body: jsonEncode(
+        {
+          "uid": "Xecm2PHp7QNfCmb0MQOFdJdy5af2",
+          "uuid": "testtesttest",
+          "recipe": {
+            "crop": "basil",
+            "farm_name": _farmName.text,
+            "temperature_min": int.parse(_minTemperatureCon.text),
+            "temperature_max": int.parse(_maxTemperatureCon.text),
+            "humidity_min": int.parse(_minHumidityCon.text),
+            "humidity_max": int.parse(_maxHumidityCon.text),
+            "liquid_temperature": int.parse(_liquidTempCon.text),
+            "tray_liquid_level": int.parse(_liquidLevCon.text),
+            "light": int.parse(_lightCon.text),
+            "light_time": int.parse(_lightTimeCon.text),
+            "pH_min": int.parse(_minPHCon.text),
+            "pH_max": int.parse(_maxPHCon.text),
+            "ec_min": int.parse(_minECCon.text),
+            "ec_max": int.parse(_maxECCon.text),
+            "planting_distance_min_width": int.parse(_minPlantDistanceWidth.text),
+            "planting_distance_min_height": int.parse(_minPlantDistanceHeight.text),
+            "planting_distance_max_width": int.parse(_maxPlantDistanceWidth.text),
+            "planting_distance_max_height": int.parse(_maxPlantDistanceHeight.text)
+          }
+        },
+      ),
+      headers: {'Content-Type': "application/json"},
+    );
+
+    if (response.statusCode == 200) {
+      return null;
+    }
+  }
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController _farmName = TextEditingController();
@@ -52,201 +106,63 @@ class _CropEditWidgetState extends State<CropEditWidget> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: double.infinity,
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Image.asset(
-                        farmName,
-                        width: 80,
-                        height: 80,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 110),
-                        child: TextFormField(
-                          controller: _farmName,
-                          textAlign: TextAlign.center,
-                          maxLength: 10,
-                          decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: fieldLineColor, width: 2.5),
-                            ),
-                            hintText: '농장 이름을 입력해주세요',
-                            hintStyle: TextStyle(
-                              fontSize: 15.0,
-                              fontFamily: 'NotoSans-Medium',
-                              color: tutorialFontColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          DropdownButton(
-                            //isExpanded: true,
-                            elevation: 12,
-                            itemHeight: kMinInteractiveDimension + 10,
-
-                            items: ['바질', '야채']
-                                .map<DropdownMenuItem<String>>(
-                                  (value) => DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 20),
-                                      child: Text(
-                                        value,
-                                        style: TextStyle(fontSize: 17),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                            value: '바질',
-                            onChanged: (value) => setState(() {}),
-                          ),
-                          limitInput(
-                              prop: '온도',
-                              minControl: _minTemperatureCon,
-                              maxControl: _maxTemperatureCon),
-                          limitInput(
-                              prop: '습도',
-                              minControl: _minHumidityCon,
-                              maxControl: _maxHumidityCon),
-                          limitInput(
-                              prop: 'pH  ',
-                              minControl: _minPHCon,
-                              maxControl: _maxPHCon),
-                          limitInput(
-                              prop: 'EC   ',
-                              minControl: _minECCon,
-                              maxControl: _maxECCon),
-                          makeInputDuo(
-                              prop: '수온',
-                              leftCon: _liquidTempCon,
-                              prop2: '수위',
-                              rightCon: _liquidLevCon),
-                          makeInputDuo(
-                              prop: '조도',
-                              leftCon: _lightCon,
-                              prop2: '일조',
-                              rightCon: _lightTimeCon),
-                          Text(
-                            '재식 거리',
-                            style: connectFont,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: <Widget>[
-                              makeShortInput(
-                                  editingController: _minPlantDistanceWidth),
-                              Text(' X '),
-                              makeShortInput(
-                                  editingController: _minPlantDistanceHeight),
-                              Text('    ~    '),
-                              makeShortInput(
-                                  editingController: _maxPlantDistanceWidth),
-                              Text(' X '),
-                              makeShortInput(
-                                  editingController: _maxPlantDistanceHeight),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 40),
-                    child: MaterialButton(
-                      minWidth: 160,
-                      height: 40,
-                      onPressed: () {
-
-                      },
-                      color: Colors.greenAccent,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Text(
-                        '저장',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'NotoSans-Medium',
-                          fontSize: 18.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget makeInputDuo(
-      {prop,
-      prop2,
-      TextEditingController leftCon,
-      TextEditingController rightCon}) {
-    return Row(
-      children: <Widget>[
-        makeInput(label: prop, editingController: leftCon),
-        SizedBox(
-          width: 23,
+  Widget buildFarmName({TextEditingController controller}) {
+    return TextFormField(
+      controller: controller,
+      validator: (value) {
+        Pattern nickNamePattern = r'^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]{2,10}$';
+        RegExp nickNameRegex = RegExp(nickNamePattern);
+        if (value.isEmpty) {
+          return '농장 이름을 입력해주세요.';
+        } else if (!nickNameRegex.hasMatch(value)) {
+          return '영문 및 특수기호 입력은 제한됩니다.';
+        } else {
+          return null;
+        }
+      },
+      textAlign: TextAlign.center,
+      maxLength: 10,
+      decoration: InputDecoration(
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: fieldLineColor, width: 2.5),
         ),
-        makeInput(label: prop2, editingController: rightCon),
-      ],
+        hintText: '농장 이름을 입력해주세요',
+        hintStyle: TextStyle(
+          fontSize: 15.0,
+          fontFamily: 'NotoSans-Medium',
+          color: tutorialFontColor,
+        ),
+      ),
+      onSaved: (String value) {
+        //_farmName = value;
+      },
     );
   }
 
-  Widget limitInput(
-      {prop,
-      TextEditingController minControl,
-      TextEditingController maxControl}) {
-    return Row(
-      children: <Widget>[
-        makeInput(label: prop, editingController: minControl),
-        Text('       ~   '),
-        makeInput(label: '', editingController: maxControl),
+  Widget buildInfo({label, TextEditingController controller}) {
+    return TextFormField(
+      controller: controller,
+      validator: (value) {
+        if (value.isEmpty) {
+          return '$label(을)를 입력해주세요..';
+        } else {
+          return null;
+        }
+      },
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        WhitelistingTextInputFormatter(RegExp('[0-9]')),
       ],
+      decoration: cropTextInputDeco,
     );
   }
 
-  Widget makeShortInput({TextEditingController editingController}) {
+  Widget buildDistance({TextEditingController controller}) {
     return Container(
       width: 58,
       height: 30,
       child: TextFormField(
+        controller: controller,
         keyboardType: TextInputType.number,
         inputFormatters: [
           WhitelistingTextInputFormatter(RegExp('[0-9]')),
@@ -258,19 +174,202 @@ class _CropEditWidgetState extends State<CropEditWidget> {
             return null;
           }
         },
-        controller: editingController,
         decoration: cropTextInputDeco,
       ),
     );
   }
 
-  Widget makeInput({label, TextEditingController editingController}) {
+  @override
+  Widget build(BuildContext context) {
+    _cropCon.text = '바질';
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: double.infinity,
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Image.asset(
+                          farmName,
+                          width: 80,
+                          height: 80,
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 110),
+                          child: buildFarmName(controller: _farmName),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            DropdownButton(
+                              //isExpanded: true,
+                              elevation: 12,
+                              itemHeight: kMinInteractiveDimension + 10,
+                              items: ['바질']
+                                  .map<DropdownMenuItem<String>>(
+                                    (value) => DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 20),
+                                        child: Text(
+                                          value,
+                                          style: connectFont,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                              value: '바질',
+                              onChanged: (value) => setState(() {
+                                _cropCon.text = value;
+                              }),
+                            ),
+                            buildInput(
+                                label1: '최저 온도',
+                                label2: '최고 온도',
+                                widget1: buildInfo(
+                                    label: '온도',
+                                    controller: _minTemperatureCon),
+                                widget2: buildInfo(
+                                    label: '온도',
+                                    controller: _maxTemperatureCon)),
+                            buildInput(
+                                label1: '최저 습도',
+                                label2: '최고 습도',
+                                widget1: buildInfo(
+                                    label: '습도', controller: _minHumidityCon),
+                                widget2: buildInfo(
+                                    label: '습도', controller: _maxHumidityCon)),
+                            buildInput(
+                                label1: ' 최저 pH ',
+                                label2: ' 최고 pH ',
+                                widget1: buildInfo(
+                                    label: 'pH', controller: _minPHCon),
+                                widget2: buildInfo(
+                                    label: 'pH', controller: _maxPHCon)),
+                            buildInput(
+                                label1: ' 최저 EC ',
+                                label2: ' 최고 EC ',
+                                widget1: buildInfo(
+                                    label: 'EC', controller: _minECCon),
+                                widget2: buildInfo(
+                                    label: 'EC', controller: _maxECCon)),
+                            buildInput(
+                                label1: '    수온     ',
+                                label2: '    수위     ',
+                                widget1: buildInfo(
+                                    label: '수온', controller: _liquidTempCon),
+                                widget2: buildInfo(
+                                    label: '수위', controller: _liquidLevCon)),
+                            buildInput(
+                                label1: '    조도     ',
+                                label2: '일조 시간',
+                                widget1: buildInfo(
+                                    label: '조도', controller: _lightCon),
+                                widget2: buildInfo(
+                                    label: '일조 시간', controller: _lightTimeCon)),
+                            Text(
+                              '재식 거리',
+                              style: connectFont,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                buildShortInput(
+                                    widget: buildDistance(
+                                        controller: _minPlantDistanceWidth)),
+                                Text(' X '),
+                                buildShortInput(
+                                    widget: buildDistance(
+                                        controller: _minPlantDistanceHeight)),
+                                Text('    ~    '),
+                                buildShortInput(
+                                    widget: buildDistance(
+                                        controller: _maxPlantDistanceWidth)),
+                                Text(' X '),
+                                buildShortInput(
+                                    widget: buildDistance(
+                                        controller: _maxPlantDistanceHeight)),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    buildSaveBtn(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding buildSaveBtn() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 40),
+      child: MaterialButton(
+        minWidth: 160,
+        height: 40,
+        onPressed: () {
+          if (_formKey.currentState.validate()) {
+            print("gd");
+            _registerDevice();
+          }
+        },
+        color: Colors.greenAccent,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Text(
+          '저장',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'NotoSans-Medium',
+            fontSize: 18.0,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildShortInput({Widget widget}) {
+    return Container(
+      width: 66,
+      height: 30,
+      child: widget,
+    );
+  }
+
+  Widget buildInput({label1, label2, Widget widget1, Widget widget2}) {
     return Column(
       children: <Widget>[
         Row(
           children: <Widget>[
             Text(
-              label,
+              label1,
               style: connectFont,
             ),
             SizedBox(
@@ -279,21 +378,22 @@ class _CropEditWidgetState extends State<CropEditWidget> {
             Container(
               width: 100,
               height: 30,
-              child: TextFormField(
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return '값을 입력해주세요.';
-                  } else {
-                    return null;
-                  }
-                },
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  WhitelistingTextInputFormatter(RegExp('[0-9]')),
-                ],
-                controller: editingController,
-                decoration: cropTextInputDeco,
-              ),
+              child: widget1,
+            ),
+            SizedBox(
+              width: 15,
+            ),
+            Text(
+              label2,
+              style: connectFont,
+            ),
+            SizedBox(
+              width: 15,
+            ),
+            Container(
+              width: 100,
+              height: 30,
+              child: widget2,
             ),
           ],
         ),

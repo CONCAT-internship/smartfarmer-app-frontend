@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:smartfarm/firebase/db_data/farmer.dart';
-import 'package:smartfarm/firebase/db_data/sensor_data.dart';
+import 'package:smartfarm/model/farmer.dart';
+import 'package:smartfarm/model/sensor_data.dart';
 
 class Transfomer {
 //  final transSensorData =
