@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartfarm/firebase/db_data/sensor_data.dart';
+import 'package:smartfarm/model/sensor_data.dart';
 
 class MineSensorData extends ChangeNotifier{
   SensorData _mineSensorData;

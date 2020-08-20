@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smartfarm/firebase/db_data/farmer.dart';
+import 'package:smartfarm/model/farmer.dart';
 
 class MineFarmerData extends ChangeNotifier {
   Farmer _mineFarmerData;

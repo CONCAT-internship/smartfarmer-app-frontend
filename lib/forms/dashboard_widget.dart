@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:smartfarm/forms/chart_widget.dart';
-import 'package:smartfarm/json/sensor.dart';
+import 'package:smartfarm/model/sensor.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:http/http.dart' as http;
 

@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smartfarm/shared/db_key.dart';
-import 'package:smartfarm/firebase/db_data/sensor_data.dart';
+import 'package:smartfarm/model/sensor_data.dart';
 import 'package:smartfarm/firebase/db_data/transfomer.dart';
 
-import '../farmer.dart';
+import '../../../model/farmer.dart';
 
 DatabaseProvider databaseProvider = DatabaseProvider();
 
