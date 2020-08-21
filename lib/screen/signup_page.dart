@@ -66,7 +66,9 @@ class _SignUpPageState extends State<SignUpPage> {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  FadeAnimation(1, Text(
+                  FadeAnimation(
+                    1,
+                    Text(
                       "가입하기",
                       style: TextStyle(
                         fontFamily: 'NotoSans-Bold',
@@ -77,7 +79,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  FadeAnimation(1.2, Text(
+                  FadeAnimation(
+                    1.2,
+                    Text(
                       "스마트팜 세계에 오신 것을 환영합니다",
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -91,15 +95,29 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               Column(
                 children: <Widget>[
-                  FadeAnimation(1.2, makeInput(label: '이메일', editingController: _mailCon)),
-                  FadeAnimation(1.3, makeInput(label: '닉네임', editingController: _nickCon)),
-                  FadeAnimation(1.4, makeInput(label: '비밀번호', obscureText: true, editingController: _pwCon)),
-                  FadeAnimation(1.5, makeInput(label: '비밀번호 확인', obscureText: true, editingController: _cpwCon)),
+                  FadeAnimation(1.2,
+                      makeInput(label: '이메일', editingController: _mailCon)),
+                  FadeAnimation(1.3,
+                      makeInput(label: '닉네임', editingController: _nickCon)),
+                  FadeAnimation(
+                      1.4,
+                      makeInput(
+                          label: '비밀번호',
+                          obscureText: true,
+                          editingController: _pwCon)),
+                  FadeAnimation(
+                      1.5,
+                      makeInput(
+                          label: '비밀번호 확인',
+                          obscureText: true,
+                          editingController: _cpwCon)),
                 ],
               ),
               Column(
                 children: <Widget>[
-                  FadeAnimation(1.6, Container(
+                  FadeAnimation(
+                    1.6,
+                    Container(
                       padding: EdgeInsets.only(top: 3, left: 3),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
@@ -134,7 +152,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ],
               ),
-              FadeAnimation(1.7, Row(
+              FadeAnimation(
+                1.7,
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
@@ -142,8 +162,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       style: TextStyle(fontFamily: 'Notosans-Regular'),
                     ),
                     InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()));
                       },
                       child: Text(
                         "로그인하기",
@@ -162,7 +185,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  _signUp() async{
+  _signUp() async {
     _scaffoldKey.currentState
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(
@@ -174,13 +197,22 @@ class _SignUpPageState extends State<SignUpPage> {
           ],
         ),
       ));
-    final result = await fp.signUpWithEmail(_mailCon.text, _pwCon.text, _nickCon.text);
-    _scaffoldKey.currentState.hideCurrentSnackBar();
-    if (result == AuthResultStatus.successful) {
-      Navigator.pop(context);
+    if (_cpwCon.text != _pwCon.text) {
+      showLastFBMessage('입력한 비밀번호가 서로 다릅니다.');
+      _pwCon.text = '';
+      _cpwCon.text = '';
+    } else if (_nickCon.text == '') {
+      showLastFBMessage('닉네임을 입력해주세요.');
     } else {
-      final errorMsg = AuthExceptionHandler.generateExceptionMessage(result);
-      showLastFBMessage(errorMsg);
+      final result =
+          await fp.signUpWithEmail(_mailCon.text, _pwCon.text, _nickCon.text);
+      _scaffoldKey.currentState.hideCurrentSnackBar();
+      if (result == AuthResultStatus.successful) {
+        Navigator.pop(context);
+      } else {
+        final errorMsg = AuthExceptionHandler.generateExceptionMessage(result);
+        showLastFBMessage(errorMsg);
+      }
     }
   }
 
@@ -200,7 +232,8 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 }
 
-Widget makeInput({label, obscureText = false, TextEditingController editingController}) {
+Widget makeInput(
+    {label, obscureText = false, TextEditingController editingController}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -219,18 +252,17 @@ Widget makeInput({label, obscureText = false, TextEditingController editingContr
         maxLines: 1,
         controller: editingController,
         obscureText: obscureText,
-//        validator: (String value){
-//          if(label == '비밀번호 확인'){
-//
-//          }
-//        },
         decoration: InputDecoration(
-          hintText: label == '이메일' ? '이메일을 입력해주세요' : label == '닉네임' ? '닉네임을 입력해주세요' : '비밀번호를 입력해주세요',
+          hintText: label == '이메일'
+              ? '이메일을 입력해주세요'
+              : label == '닉네임' ? '닉네임을 입력해주세요' : '비밀번호를 입력해주세요',
           hintStyle: TextStyle(
             fontFamily: 'NotoSans-Regular',
             fontSize: 13,
           ),
-          prefixIcon: label == '이메일' ? Icon(Icons.mail) : label == '닉네임' ? Icon(Icons.account_circle) : Icon(Icons.lock),
+          prefixIcon: label == '이메일'
+              ? Icon(Icons.mail)
+              : label == '닉네임' ? Icon(Icons.account_circle) : Icon(Icons.lock),
           contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey[400]),
