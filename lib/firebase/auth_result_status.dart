@@ -9,4 +9,5 @@ enum AuthResultStatus {
   tooManyRequests,
   weakPassword,
   undefined,
+  missingEmail,
 }

@@ -76,22 +76,32 @@ class FirebaseProvider with ChangeNotifier {
     setUser(null);
   }
 
-  // 사용자에게 비밀번호 재설정 메일을 영어로 전송 시도
-  sendPasswordResetEmailByEnglish() async {
-    await fAuth.setLanguageCode("en");
-    sendPasswordResetEmail();
-  }
-
-  // 사용자에게 비밀번호 재설정 메일을 한글로 전송 시도
-  sendPasswordResetEmailByKorean() async {
-    await fAuth.setLanguageCode("ko");
-    sendPasswordResetEmail();
-  }
-
   // 사용자에게 비밀번호 재설정 메일을 전송
-  sendPasswordResetEmail() async {
-    fAuth.sendPasswordResetEmail(email: getUser().email);
+  Future<AuthResultStatus> sendPasswordResetEmail(String email) async {
+    try{
+      await fAuth.setLanguageCode("ko");
+      await fAuth.sendPasswordResetEmail(email: email);
+      _status = AuthResultStatus.successful;
+      print('현재상태 $_status');
+    } catch (e){
+      print(e);
+      _status = AuthExceptionHandler.handleException(e);
+      print('현재상태 $_status');
+    }
+    return _status;
   }
+
+//  // 사용자에게 비밀번호 재설정 메일을 영어로 전송 시도
+//  sendPasswordResetEmailByEnglish(String email) async {
+//    await fAuth.setLanguageCode("en");
+//    sendPasswordResetEmail(email);
+//  }
+//
+//  // 사용자에게 비밀번호 재설정 메일을 한글로 전송 시도
+//  sendPasswordResetEmailByKorean(String email) async {
+//    await fAuth.setLanguageCode("ko");
+//    sendPasswordResetEmail(email);
+//  }
 
   // Firebase로부터 회원 탈퇴
   withdrawalAccount() async {
