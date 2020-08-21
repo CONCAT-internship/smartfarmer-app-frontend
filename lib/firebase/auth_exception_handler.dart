@@ -2,7 +2,6 @@ import 'package:smartfarm/firebase/auth_result_status.dart';
 
 class AuthExceptionHandler {
   static handleException(e) {
-    print(e.code);
     var status;
     switch (e.code) {
       case "ERROR_INVALID_EMAIL":
@@ -26,6 +25,9 @@ class AuthExceptionHandler {
       case "ERROR_EMAIL_ALREADY_IN_USE":
         status = AuthResultStatus.emailAlreadyExists;
         break;
+      case "ERROR_WEAK_PASSWORD":
+        status = AuthResultStatus.weakPassword;
+        break;
       default:
         status = AuthResultStatus.undefined;
     }
@@ -38,27 +40,29 @@ class AuthExceptionHandler {
       case AuthResultStatus.invalidEmail:
         errorMessage = "이메일 형식이 잘못되었습니다. 다시 입력해주세요.";
         break;
-      case AuthResultStatus.wrongPassword:
-        errorMessage = "Your password is wrong.";
+      case AuthResultStatus.wrongPassword: //비번 틀림
+        errorMessage = "아이디 혹은 패스워드가 틀립니다.";
         break;
-      case AuthResultStatus.userNotFound:
-        errorMessage = "User with this email doesn't exist.";
+      case AuthResultStatus.userNotFound: //아이디 없음
+        errorMessage = "아이디 혹은 패스워드가 틀립니다.";
         break;
       case AuthResultStatus.userDisabled:
-        errorMessage = "User with this email has been disabled.";
+        errorMessage = "아이디 비활성화 상태입니다 고객센터에 문의바랍니다.";
         break;
       case AuthResultStatus.tooManyRequests:
-        errorMessage = "Too many requests. Try again later.";
+        errorMessage = "서버에 너무 많은 요청이 있습니다. 잠시 후 다시 시도해주세요.";
         break;
       case AuthResultStatus.operationNotAllowed:
-        errorMessage = "Signing in with Email and Password is not enabled.";
+        errorMessage = "이메일 가입이 중지되었습니다.";
         break;
       case AuthResultStatus.emailAlreadyExists:
-        errorMessage =
-        "The email has already been registered. Please login or reset your password.";
+        errorMessage = "이 이메일로 이미 가입처리가 되었습니다.";
+        break;
+      case AuthResultStatus.weakPassword:
+        errorMessage = "비밀번호를 6자리 이상 입력해주세요.";
         break;
       default:
-        errorMessage = "An undefined Error happened.";
+        errorMessage = "알 수 없는 에러입니다. 잠시 후 다시 시도해주세요.";
     }
 
     return errorMessage;

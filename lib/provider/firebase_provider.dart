@@ -36,22 +36,20 @@ class FirebaseProvider with ChangeNotifier {
   }
 
   // 이메일/비밀번호로 Firebase에 로그인
-  Future<bool> signInWithEmail(String email, String password) async {
+  Future<AuthResultStatus> signInWithEmail(String email, String password) async {
     try {
-      var result = await fAuth.signInWithEmailAndPassword(
+      AuthResult result = await fAuth.signInWithEmailAndPassword(
           email: email, password: password);
-      if (result != null) {
+      if (result.user != null) {
         setUser(result.user);
-        logger.d(getUser());
-        return true;
+        _status = AuthResultStatus.successful;
+      }else{
+        _status = AuthResultStatus.undefined;
       }
-      return false;
-    } on Exception catch (e) {
-      logger.e(e.toString());
-      List<String> result = e.toString().split(", ");
-      setLastFBMessage(result[1]);
-      return false;
+    } catch (e) {
+      _status = AuthExceptionHandler.handleException(e);
     }
+    return _status;
   }
 
   // 이메일/비밀번호로 Firebase에 회원가입
@@ -66,22 +64,10 @@ class FirebaseProvider with ChangeNotifier {
         _status = AuthResultStatus.successful;
       }
     } catch (e) {
-      print(e);
+      print(e.code);
       _status = AuthExceptionHandler.handleException(e);
     }
     return _status;
-  }
-
-  // Firebase로부터 수신한 메시지 설정
-  setLastFBMessage(String msg) {
-    _lastFirebaseResponse = msg;
-  }
-
-  // Firebase로부터 수신한 메시지를 반환하고 삭제
-  getLastFBMessage() {
-    String returnValue = _lastFirebaseResponse;
-    _lastFirebaseResponse = null;
-    return returnValue;
   }
 
   // Firebase로부터 로그아웃

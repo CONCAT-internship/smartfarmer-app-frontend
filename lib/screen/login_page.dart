@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/animation/fade_animation.dart';
+import 'package:smartfarm/firebase/auth_exception_handler.dart';
+import 'package:smartfarm/firebase/auth_result_status.dart';
 import 'package:smartfarm/provider/firebase_provider.dart';
 import 'package:smartfarm/screen/signup_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
@@ -183,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _logIn() async{
+  _logIn() async{
     _scaffoldKey.currentState
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(
@@ -195,23 +197,24 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       ));
-    bool result = await fp.signInWithEmail(_mailCon.text, _pwCon.text);
+    final result = await fp.signInWithEmail(_mailCon.text, _pwCon.text);
     _scaffoldKey.currentState.hideCurrentSnackBar();
-    if (result == false){
-      showLastFBMessage();
-      _pwCon.text = '';
-    }else{
+    if (result == AuthResultStatus.successful){
       Navigator.pop(context);
+    }else{
+      final errorMsg = AuthExceptionHandler.generateExceptionMessage(result);
+      showLastFBMessage(errorMsg);
+      _pwCon.text = '';
     }
   }
 
-  showLastFBMessage() {
+  showLastFBMessage(String error) {
     _scaffoldKey.currentState
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(
         backgroundColor: Colors.red[400],
         duration: Duration(seconds: 10),
-        content: Text(fp.getLastFBMessage()),
+        content: Text(error),
         action: SnackBarAction(
           label: "Done",
           textColor: Colors.white,
