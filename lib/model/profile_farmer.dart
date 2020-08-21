@@ -6,7 +6,7 @@ part 'profile_farmer.g.dart';
 
 @JsonSerializable()
 class ProfileFarmer {
-  @JsonKey(name: 'nick_name')
+  @JsonKey(name: 'nickname')
   final String nickName;
   @JsonKey(name: 'farm_info')
   final List<FarmInfo> farmInfo;

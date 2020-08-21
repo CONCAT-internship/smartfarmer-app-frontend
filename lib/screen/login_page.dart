@@ -29,7 +29,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     fp = Provider.of<FirebaseProvider>(context);
-    logger.d(fp.getUser());
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,

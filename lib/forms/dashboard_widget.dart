@@ -2,20 +2,23 @@ import 'dart:convert';
 
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smartfarm/forms/chart_widget.dart';
 import 'package:smartfarm/model/sensor.dart';
+import 'package:smartfarm/provider/scan_data.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:http/http.dart' as http;
 
 class DashBoardWidget extends StatefulWidget {
   @override
   _DashBoardWidgetState createState() => _DashBoardWidgetState();
+
 }
 
-Future<Sensor> getSensor() async {
+Future<Sensor> getSensor(String deviceUUID) async {
+
   try {
-    String url = '$API/RecentStatus?uuid=756e6b776f000c04';
-    //'$API/RecentStatus?uuid=${widget.sensorUUID}';
+    String url = '$API/RecentStatus?uuid=$deviceUUID';
     final http.Response response = await http.get(url);
     final responseData = jsonDecode(response.body);
     final Sensor sensor = Sensor.fromJson(responseData);
@@ -26,8 +29,10 @@ Future<Sensor> getSensor() async {
 }
 
 class _DashBoardWidgetState extends State<DashBoardWidget> {
+
   @override
   Widget build(BuildContext context) {
+    var scanData = Provider.of<ScanData>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.all(30),
       child: Column(
@@ -45,7 +50,7 @@ class _DashBoardWidgetState extends State<DashBoardWidget> {
             height: 20,
           ),
           FutureBuilder(
-            future: getSensor(),
+            future: getSensor(scanData.deviceUUID),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Center(
@@ -164,8 +169,10 @@ class _DashBoardWidgetState extends State<DashBoardWidget> {
                 ),
               ),
               FutureBuilder(
-                future: getSensor(),
+
+                future: getSensor(scanData.deviceUUID),
                 builder: (context, snapshot) {
+
                   if (!snapshot.hasData) {
                     return Center(
                       child: CircularProgressIndicator(),

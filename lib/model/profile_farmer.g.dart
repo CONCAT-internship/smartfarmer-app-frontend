@@ -8,7 +8,7 @@ part of 'profile_farmer.dart';
 
 ProfileFarmer _$ProfileFarmerFromJson(Map<String, dynamic> json) {
   return ProfileFarmer(
-    nickName: json['nick_name'] as String,
+    nickName: json['nickname'] as String,
     farmInfo: (json['farm_info'] as List)
         ?.map((e) =>
             e == null ? null : FarmInfo.fromJson(e as Map<String, dynamic>))
@@ -18,6 +18,6 @@ ProfileFarmer _$ProfileFarmerFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$ProfileFarmerToJson(ProfileFarmer instance) =>
     <String, dynamic>{
-      'nick_name': instance.nickName,
+      'nickname': instance.nickName,
       'farm_info': instance.farmInfo,
     };

@@ -1,13 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/provider/firebase_provider.dart';
 import 'package:smartfarm/provider/scan_data.dart';
-import 'package:smartfarm/screen/auth_page.dart';
 import 'package:smartfarm/screen/farm_list_page.dart';
-import 'package:smartfarm/screen/login_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:http/http.dart' as http;
 

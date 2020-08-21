@@ -1,11 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:logger/logger.dart';
 import 'package:smartfarm/firebase/auth_exception_handler.dart';
 import 'package:smartfarm/firebase/auth_result_status.dart';
 import 'package:smartfarm/provider/database_provider.dart';
-
-Logger logger = Logger();
 
 class FirebaseProvider with ChangeNotifier {
   final FirebaseAuth fAuth = FirebaseAuth.instance; // Firebase 인증 플러그인의 인스턴스
@@ -13,7 +10,6 @@ class FirebaseProvider with ChangeNotifier {
   AuthResultStatus _status; // Firebase 메시지(에러 처리용)
 
   FirebaseProvider() {
-    logger.d("init FirebaseProvider");
     _prepareUser();
   }
 
