@@ -12,8 +12,6 @@ class FirebaseProvider with ChangeNotifier {
   FirebaseUser _user; // Firebase에 로그인 된 사용자
   AuthResultStatus _status; // Firebase 메시지(에러 처리용)
 
-  String _lastFirebaseResponse = ""; // Firebase로부터 받은 최신 메시지(에러 처리용)
-
   FirebaseProvider() {
     logger.d("init FirebaseProvider");
     _prepareUser();

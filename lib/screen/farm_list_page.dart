@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
+import 'package:smartfarm/model/sensor.dart';
 import 'package:smartfarm/screen/connect_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:smartfarm/provider/mine_farmer_data.dart';
@@ -8,6 +9,20 @@ import 'package:smartfarm/provider/mine_farmer_data.dart';
 import 'info_page.dart';
 
 class FarmListPage extends StatelessWidget {
+
+//  Future<Sensor> getSensor() async {
+//    try {
+//      String url = '$API/RecentStatus?uuid=756e6b776f000c04';
+//      //'$API/RecentStatus?uuid=${widget.sensorUUID}';
+//      final http.Response response = await http.get(url);
+//      final responseData = jsonDecode(response.body);
+//      final Sensor sensor = Sensor.fromJson(responseData);
+//      return sensor;
+//    } catch (err) {
+//      throw err;
+//    }
+//  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,11 +115,12 @@ class FarmListPage extends StatelessWidget {
                                         Row(
                                           children: <Widget>[
                                             GestureDetector(
-                                              onTap: (){
+                                              onTap: () {
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                    builder: (context) => ConnectPage(),
+                                                    builder: (context) =>
+                                                        ConnectPage(),
                                                     //builder: (context) => InfoPage(sensorUUID: Provider.of<MineFarmerData>(context).data.sensorUUID[index]),
                                                   ),
                                                 );

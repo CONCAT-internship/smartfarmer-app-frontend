@@ -2,6 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:smartfarm/provider/firebase_provider.dart';
+import 'package:smartfarm/provider/scan_data.dart';
+import 'package:smartfarm/screen/auth_page.dart';
+import 'package:smartfarm/screen/farm_list_page.dart';
+import 'package:smartfarm/screen/login_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,26 +18,30 @@ class CropEditWidget extends StatefulWidget {
 
 class _CropEditWidgetState extends State<CropEditWidget> {
   void _registerDevice() async {
+    FirebaseProvider fp = Provider.of<FirebaseProvider>(context, listen: false);
+    final scanData = Provider.of<ScanData>(context, listen: false);
+    print('user uid: ${fp.getUser().uid}');
+    print('device uuid: ${scanData.deviceUUID}');
     final response = await http.post(
       '$API/RegisterDevice',
       body: jsonEncode(
-        {"uid": "Xecm2PHp7QNfCmb0MQOFdJdy5af2", "uuid": "testtesttest"},
+        {"uid": fp.getUser().uid, "uuid": scanData.deviceUUID},
       ),
       headers: {'Content-Type': "application/json"},
     );
 
     if (response.statusCode == 200) {
-      _createFarm();
+      _createFarm(uid: fp.getUser().uid, uuid: scanData.deviceUUID);
     }
   }
 
-  void _createFarm() async {
+  void _createFarm({String uid, String uuid}) async {
     final response = await http.post(
       '$API/RegisterRecipe',
       body: jsonEncode(
         {
-          "uid": "Xecm2PHp7QNfCmb0MQOFdJdy5af2",
-          "uuid": "testtesttest",
+          "uid": uid,
+          "uuid": uuid,
           "recipe": {
             "crop": "basil",
             "farm_name": _farmName.text,
@@ -47,10 +57,14 @@ class _CropEditWidgetState extends State<CropEditWidget> {
             "pH_max": int.parse(_maxPHCon.text),
             "ec_min": int.parse(_minECCon.text),
             "ec_max": int.parse(_maxECCon.text),
-            "planting_distance_min_width": int.parse(_minPlantDistanceWidth.text),
-            "planting_distance_min_height": int.parse(_minPlantDistanceHeight.text),
-            "planting_distance_max_width": int.parse(_maxPlantDistanceWidth.text),
-            "planting_distance_max_height": int.parse(_maxPlantDistanceHeight.text)
+            "planting_distance_min_width":
+                int.parse(_minPlantDistanceWidth.text),
+            "planting_distance_min_height":
+                int.parse(_minPlantDistanceHeight.text),
+            "planting_distance_max_width":
+                int.parse(_maxPlantDistanceWidth.text),
+            "planting_distance_max_height":
+                int.parse(_maxPlantDistanceHeight.text)
           }
         },
       ),
@@ -58,7 +72,10 @@ class _CropEditWidgetState extends State<CropEditWidget> {
     );
 
     if (response.statusCode == 200) {
-      return null;
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => FarmListPage()));
     }
   }
 
