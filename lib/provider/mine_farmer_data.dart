@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartfarm/model/farmer.dart';
 
 class MineFarmerData extends ChangeNotifier {
