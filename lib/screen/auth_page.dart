@@ -5,6 +5,7 @@ import 'package:smartfarm/provider/database_provider.dart';
 import 'package:smartfarm/provider/firebase_provider.dart';
 import 'package:smartfarm/provider/mine_farmer_data.dart';
 import 'package:smartfarm/screen/connect_page.dart';
+import 'package:smartfarm/screen/farm_list_page.dart';
 import 'package:smartfarm/screen/info_page.dart';
 import 'package:smartfarm/screen/login_page.dart';
 import 'package:smartfarm/screen/signup_page.dart';
@@ -16,10 +17,10 @@ class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     fp = Provider.of<FirebaseProvider>(context);
-    logger.d("user: ${fp.getUser()}");
 
     if (fp.getUser() != null) {
-      return ConnectPage();
+      return FarmListPage();
+      //return ConnectPage();
       //return InfoPage();
     }
     return Scaffold(

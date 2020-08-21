@@ -166,7 +166,7 @@ class _ConnectPageState extends State<ConnectPage> {
             ],
           ),
           child: IndexedStack(
-            index: 0,//scanData.isScan ? 1 : 0,
+            index: scanData.isScan ? 1 : 0,
             children: <Widget>[
               ScannerWidget(),
               CropEditWidget(),

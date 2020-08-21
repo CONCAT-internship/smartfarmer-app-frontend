@@ -32,8 +32,5 @@ class Sensor {
 
   factory Sensor.fromJson(Map<String, dynamic> json) => _$SensorFromJson(json);
 
-  
-
-
   Map<String, dynamic> toJson() => _$SensorToJson(this);
 }
