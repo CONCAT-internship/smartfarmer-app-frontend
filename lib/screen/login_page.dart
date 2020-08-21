@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/animation/fade_animation.dart';
-import 'package:smartfarm/firebase/db_data/provider/firebase_provider.dart';
+import 'package:smartfarm/provider/firebase_provider.dart';
 import 'package:smartfarm/screen/signup_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 

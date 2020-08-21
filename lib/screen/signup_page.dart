@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/animation/fade_animation.dart';
-import 'package:smartfarm/firebase/db_data/provider/database_provider.dart';
-import 'package:smartfarm/firebase/db_data/provider/firebase_provider.dart';
+import 'package:smartfarm/firebase/auth_exception_handler.dart';
+import 'package:smartfarm/firebase/auth_result_status.dart';
+import 'package:smartfarm/provider/database_provider.dart';
+import 'package:smartfarm/provider/firebase_provider.dart';
 import 'package:smartfarm/screen/login_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
@@ -160,7 +162,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  void _signUp() async{
+  _signUp() async{
     _scaffoldKey.currentState
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(
@@ -172,24 +174,25 @@ class _SignUpPageState extends State<SignUpPage> {
           ],
         ),
       ));
-    bool result = await fp.signUpWithEmail(_mailCon.text, _pwCon.text, _nickCon.text);
+    final result = await fp.signUpWithEmail(_mailCon.text, _pwCon.text, _nickCon.text);
     _scaffoldKey.currentState.hideCurrentSnackBar();
-    if (result) {
+    if (result == AuthResultStatus.successful) {
       Navigator.pop(context);
     } else {
-      showLastFBMessage();
+      final errorMsg = AuthExceptionHandler.generateExceptionMessage(result);
+      showLastFBMessage(errorMsg);
     }
   }
 
-  showLastFBMessage() {
+  showLastFBMessage(String error) {
     _scaffoldKey.currentState
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(
         backgroundColor: Colors.red[400],
         duration: Duration(seconds: 10),
-        content: Text(fp.getLastFBMessage()),
+        content: Text(error),
         action: SnackBarAction(
-          label: "Done",
+          label: "확인",
           textColor: Colors.white,
           onPressed: () {},
         ),
@@ -212,10 +215,15 @@ Widget makeInput({label, obscureText = false, TextEditingController editingContr
       SizedBox(
         height: 5,
       ),
-      TextField(
+      TextFormField(
         maxLines: 1,
         controller: editingController,
         obscureText: obscureText,
+//        validator: (String value){
+//          if(label == '비밀번호 확인'){
+//
+//          }
+//        },
         decoration: InputDecoration(
           hintText: label == '이메일' ? '이메일을 입력해주세요' : label == '닉네임' ? '닉네임을 입력해주세요' : '비밀번호를 입력해주세요',
           hintStyle: TextStyle(

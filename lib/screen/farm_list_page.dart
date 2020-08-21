@@ -3,7 +3,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/screen/connect_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
-import 'package:smartfarm/firebase/db_data/provider/mine_farmer_data.dart';
+import 'package:smartfarm/provider/mine_farmer_data.dart';
 
 import 'info_page.dart';
 

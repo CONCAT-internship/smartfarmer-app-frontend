@@ -1,14 +1,16 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
-import 'package:smartfarm/firebase/db_data/provider/database_provider.dart';
+import 'package:smartfarm/firebase/auth_exception_handler.dart';
+import 'package:smartfarm/firebase/auth_result_status.dart';
+import 'package:smartfarm/provider/database_provider.dart';
 
 Logger logger = Logger();
 
 class FirebaseProvider with ChangeNotifier {
   final FirebaseAuth fAuth = FirebaseAuth.instance; // Firebase 인증 플러그인의 인스턴스
   FirebaseUser _user; // Firebase에 로그인 된 사용자
+  AuthResultStatus _status; // Firebase 메시지(에러 처리용)
 
   String _lastFirebaseResponse = ""; // Firebase로부터 받은 최신 메시지(에러 처리용)
 
@@ -33,25 +35,6 @@ class FirebaseProvider with ChangeNotifier {
     });
   }
 
-  // 이메일/비밀번호로 Firebase에 회원가입
-  Future<bool> signUpWithEmail(String email, String password, String nickName) async {
-    try {
-      AuthResult result = await fAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      if (result.user != null) {
-        signOut();
-        await databaseProvider.createFarmer(farmerKey: result.user.uid, nickName: nickName);
-        _user = result.user;
-        return true;
-      }
-    } on Exception catch (e) {
-      logger.e(e.toString());
-      List<String> result = e.toString().split(", ");
-      setLastFBMessage(result[1]);
-      return false;
-    }
-  }
-
   // 이메일/비밀번호로 Firebase에 로그인
   Future<bool> signInWithEmail(String email, String password) async {
     try {
@@ -69,6 +52,36 @@ class FirebaseProvider with ChangeNotifier {
       setLastFBMessage(result[1]);
       return false;
     }
+  }
+
+  // 이메일/비밀번호로 Firebase에 회원가입
+  Future<AuthResultStatus> signUpWithEmail(String email, String password, String nickName) async {
+    try {
+      AuthResult result = await fAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      if (result.user != null) {
+        signOut();
+        await databaseProvider.createFarmer(farmerKey: result.user.uid, nickName: nickName);
+        _user = result.user;
+        _status = AuthResultStatus.successful;
+      }
+    } catch (e) {
+      print(e);
+      _status = AuthExceptionHandler.handleException(e);
+    }
+    return _status;
+  }
+
+  // Firebase로부터 수신한 메시지 설정
+  setLastFBMessage(String msg) {
+    _lastFirebaseResponse = msg;
+  }
+
+  // Firebase로부터 수신한 메시지를 반환하고 삭제
+  getLastFBMessage() {
+    String returnValue = _lastFirebaseResponse;
+    _lastFirebaseResponse = null;
+    return returnValue;
   }
 
   // Firebase로부터 로그아웃
@@ -99,16 +112,5 @@ class FirebaseProvider with ChangeNotifier {
     await getUser().delete();
     setUser(null);
   }
-
-  // Firebase로부터 수신한 메시지 설정
-  setLastFBMessage(String msg) {
-    _lastFirebaseResponse = msg;
-  }
-
-  // Firebase로부터 수신한 메시지를 반환하고 삭제
-  getLastFBMessage() {
-    String returnValue = _lastFirebaseResponse;
-    _lastFirebaseResponse = null;
-    return returnValue;
-  }
 }
+

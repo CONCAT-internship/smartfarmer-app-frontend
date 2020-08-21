@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smartfarm/firebase/db_data/provider/firebase_provider.dart';
-import 'package:smartfarm/firebase/db_data/provider/scan_data.dart';
+import 'package:smartfarm/provider/firebase_provider.dart';
+import 'package:smartfarm/provider/scan_data.dart';
 import 'package:smartfarm/forms/crop_edit_widget.dart';
 import 'package:smartfarm/forms/scanner_widget.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
@@ -166,7 +166,7 @@ class _ConnectPageState extends State<ConnectPage> {
             ],
           ),
           child: IndexedStack(
-            index: 1,//scanData.isScan ? 1 : 0,
+            index: 0,//scanData.isScan ? 1 : 0,
             children: <Widget>[
               ScannerWidget(),
               CropEditWidget(),
