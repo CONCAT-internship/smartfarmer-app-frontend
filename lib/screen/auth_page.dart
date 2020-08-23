@@ -6,7 +6,6 @@ import 'package:smartfarm/provider/firebase_provider.dart';
 import 'package:smartfarm/provider/mine_farmer_data.dart';
 import 'package:smartfarm/screen/connect_page.dart';
 import 'package:smartfarm/screen/farm_list_page.dart';
-import 'package:smartfarm/screen/info_page.dart';
 import 'package:smartfarm/screen/login_page.dart';
 import 'package:smartfarm/screen/signup_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
@@ -16,14 +15,25 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+//    fp = Provider.of<FirebaseProvider>(context);
+//    if (fp.getUser() != null) {
+//      MineFarmerData farmerData = Provider.of<MineFarmerData>(context);
+//      databaseProvider.linkFarmerData(fp.getUser().uid).listen((farmer) {
+//        farmerData.setFarmerData(farmer);
+//      });
+//      if(farmerData.data.deviceUUID.length > 0){
+//        return FarmListPage();
+//      }else{
+//        return ConnectPage();
+//      }
+//    }
     fp = Provider.of<FirebaseProvider>(context);
-
     if (fp.getUser() != null) {
+
       return FarmListPage();
-      //return ConnectPage();
-      //return InfoPage();
     }
     return Scaffold(
+
       body: SafeArea(
         child: Container(
           width: double.infinity,

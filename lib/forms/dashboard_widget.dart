@@ -16,7 +16,6 @@ class DashBoardWidget extends StatefulWidget {
 }
 
 Future<Sensor> getSensor(String deviceUUID) async {
-
   try {
     String url = '$API/RecentStatus?uuid=$deviceUUID';
     final http.Response response = await http.get(url);

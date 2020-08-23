@@ -3,11 +3,13 @@ import 'package:smartfarm/shared/db_key.dart';
 
 class Farmer {
   final String farmerKey;
+  final String nickName;
   final List<dynamic> deviceUUID;
   final DocumentReference reference;
 
   Farmer.fromMap(Map<String, dynamic> map, this.farmerKey, {this.reference})
-      : deviceUUID = map[KEY_SENSOR_UUID];
+      : deviceUUID = map[KEY_SENSOR_UUID],
+        nickName = map[KEY_NICKNAME];
 
   Farmer.fromSnapshot(DocumentSnapshot ds)
       : this.fromMap(

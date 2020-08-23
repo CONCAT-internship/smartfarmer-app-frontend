@@ -25,6 +25,5 @@ class Transfomer {
   final transFarmerData = StreamTransformer<DocumentSnapshot, Farmer>.fromHandlers(
       handleData: (snapshot, sink) async {
         sink.add(Farmer.fromSnapshot(snapshot));
-    //snapshot을 SensorData로 변환
   });
 }

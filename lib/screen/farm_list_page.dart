@@ -4,20 +4,19 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/model/profile_farmer.dart';
 import 'package:http/http.dart' as http;
+import 'package:smartfarm/provider/firebase_provider.dart';
+import 'package:smartfarm/provider/mine_farmer_data.dart';
 import 'package:smartfarm/provider/scan_data.dart';
 import 'package:smartfarm/screen/connect_page.dart';
 import 'package:smartfarm/screen/info_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
 class FarmListPage extends StatelessWidget {
-  Future<ProfileFarmer> getProfile() async {
+  Future<ProfileFarmer> getProfile(String uid) async {
     try {
-
-      String url = '$API/ProfileFarmer?uid=Xecm2PHp7QNfCmb0MQOFdJdy5af2';
+      String url = '$API/ProfileFarmer?uid=$uid';
       final http.Response response = await http.get(url);
-      print(response.statusCode);
       final responseData = jsonDecode(utf8.decode(response.bodyBytes));
-      print(responseData);
       final ProfileFarmer profileFarmer = ProfileFarmer.fromJson(responseData);
       return profileFarmer;
     } catch (err) {
@@ -27,6 +26,7 @@ class FarmListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
     return Scaffold(
         backgroundColor: blueGradient2,
         body: Container(
@@ -43,15 +43,17 @@ class FarmListPage extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(32.0),
-                  child: Column(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
                         "당신의 농장",
                         style: TextStyle(
-                            fontSize: 44,
+                            fontSize: 40,
+                            fontFamily: 'NotoSans-Medium',
                             color: const Color(0xffffffff),
                             fontWeight: FontWeight.w900),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -59,7 +61,7 @@ class FarmListPage extends StatelessWidget {
                     height: 500,
                     padding: const EdgeInsets.only(left: 32),
                     child: FutureBuilder(
-                      future: getProfile(),
+                      future: getProfile(fp.getUser().uid),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           final farmerProfile = snapshot.data;
