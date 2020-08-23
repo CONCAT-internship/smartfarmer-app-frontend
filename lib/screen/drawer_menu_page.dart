@@ -1,4 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:smartfarm/provider/scan_data.dart';
+import 'package:smartfarm/shared/smartfarmer_constants.dart';
+import 'package:http/http.dart' as http;
 
 class DrawerMenuPage extends StatefulWidget {
   @override
@@ -7,6 +14,23 @@ class DrawerMenuPage extends StatefulWidget {
 
 class _DrawerMenuPageState extends State<DrawerMenuPage> {
   bool toggleValue = false;
+
+  void setFan() async {
+    String url = '$API/Control?uuid=756e6b776f000c04';
+    //String url = '$API/Control?uuid=$deviceUUID';
+    final http.Response response = await http.post(
+      url,
+      body: jsonEncode({
+        "uuid": "756e6b776f000c04",
+        "status": {"led": false, "fan": toggleValue}
+      }),
+      headers: {'Content-Type': "application/json"},
+    );
+
+    if(response.statusCode == 200){
+      print(toggleValue);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +85,8 @@ class _DrawerMenuPageState extends State<DrawerMenuPage> {
                               onTap: toggleButton,
                               child: AnimatedSwitcher(
                                 duration: Duration(milliseconds: 200),
-                                transitionBuilder:
-                                    (Widget child, Animation<double> animation) {
+                                transitionBuilder: (Widget child,
+                                    Animation<double> animation) {
                                   return RotationTransition(
                                     child: child,
                                     turns: animation,
@@ -115,6 +139,7 @@ class _DrawerMenuPageState extends State<DrawerMenuPage> {
   toggleButton() {
     setState(() {
       toggleValue = !toggleValue;
+      setFan();
     });
   }
 }

@@ -56,6 +56,7 @@ class _DashBoardWidgetState extends State<DashBoardWidget> {
                 );
               } else {
                 final sensor = snapshot.data;
+                scanData.setFan(sensor.fan);
                 return Wrap(
                   spacing: 10,
                   runSpacing: 10,

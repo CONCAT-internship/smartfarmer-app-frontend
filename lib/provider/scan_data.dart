@@ -15,4 +15,10 @@ class ScanData with ChangeNotifier{
     notifyListeners();
   }
 
+  bool _isFan = false;
+  bool get isFan => _isFan;
+  void setFan(bool value){
+    _isFan = value;
+    notifyListeners();
+  }
 }
