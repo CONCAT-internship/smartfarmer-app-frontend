@@ -2,10 +2,13 @@ import 'dart:convert';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:smartfarm/model/sensor.dart';
+
+import 'package:intl/intl.dart';
+
 import 'package:smartfarm/model/sensor_chart.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:http/http.dart' as http;
+
 
 class ChartWidget extends StatefulWidget {
   @override
@@ -62,8 +65,6 @@ class _ChartWidgetState extends State<ChartWidget> {
   }
 
   LineChartData mainData() {
-    print(this._sensorChart[0].localTime);
-
     return LineChartData(
       gridData: FlGridData(
         show: false,
@@ -93,19 +94,19 @@ class _ChartWidgetState extends State<ChartWidget> {
           getTitles: (value) {
             switch (value.toInt()) {
               case 0:
-                return '3:10';
+                return this._sensorChart[0].localTime;
               case 2:
-                return '3:13';
+                return this._sensorChart[1].localTime;
               case 4:
-                return '3:16';
+                return this._sensorChart[2].localTime;
               case 6:
-                return '3:19';
+                return this._sensorChart[3].localTime;
               case 8:
-                return '3:22';
+                return this._sensorChart[4].localTime;
               case 10:
-                return '3:25';
+                return this._sensorChart[5].localTime;
               case 12:
-                return '3:28';
+                return this._sensorChart[6].localTime;
             }
             return '';
           },
@@ -152,13 +153,6 @@ class _ChartWidgetState extends State<ChartWidget> {
             FlSpot(8, this._sensorChart[4].value),
             FlSpot(10, this._sensorChart[5].value),
             FlSpot(12, this._sensorChart[6].value),
-//            FlSpot(0, 10.2),
-//            FlSpot(2, 15.1),
-//            FlSpot(4, 25.2),
-//            FlSpot(6, 25.1),
-//            FlSpot(8, 24.9),
-//            FlSpot(10, 25.0),
-//            FlSpot(12, 26.0),
           ],
           isCurved: true,
           colors: gradientColors,
