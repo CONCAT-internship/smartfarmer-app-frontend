@@ -2,8 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:smartfarm/forms/dashboard_widget.dart';
+import 'package:smartfarm/screen/drawer_menu_page.dart';
 
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
+
+import 'connect_page.dart';
 
 
 class InfoPage extends StatefulWidget {
@@ -25,9 +28,7 @@ class _InfoPageState extends State<InfoPage> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       key: _drawerKey,
-      endDrawer: Drawer(
-          child: SafeArea(
-              child: ListView(padding: EdgeInsets.zero, children: <Widget>[]))),
+      endDrawer: DrawerMenuPage(),
       //backgroundColor: backgroundColor,
       bottomNavigationBar: _buildBottomAppBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -100,6 +101,10 @@ class _InfoPageState extends State<InfoPage> {
       backgroundColor: infoButtonColor,
       child: Icon(Icons.add),
       onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ConnectPage()));
       },
     );
   }

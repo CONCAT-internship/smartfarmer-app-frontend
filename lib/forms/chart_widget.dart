@@ -40,7 +40,6 @@ class _ChartWidgetState extends State<ChartWidget> {
   void initState() {
     super.initState();
     _getChartSensor();
-
   }
 
   List<Color> gradientColors = [
@@ -66,11 +65,6 @@ class _ChartWidgetState extends State<ChartWidget> {
   }
 
   LineChartData mainData() {
-    //DateTime tempDate = new DateFormat("yyyy-MM-dd hh:mm:ss").parse(this._sensorChart[0].localTime);
-    //String date = DateFormat('yyyy-MM-dd hh:mm:ss').format(tempDate);
-    //print(tempDate);
-    //print(this._sensorChart[0].localTime);
-
     return LineChartData(
       gridData: FlGridData(
         show: false,
@@ -159,13 +153,6 @@ class _ChartWidgetState extends State<ChartWidget> {
             FlSpot(8, this._sensorChart[4].value),
             FlSpot(10, this._sensorChart[5].value),
             FlSpot(12, this._sensorChart[6].value),
-//            FlSpot(0, 10.2),
-//            FlSpot(2, 15.1),
-//            FlSpot(4, 25.2),
-//            FlSpot(6, 25.1),
-//            FlSpot(8, 24.9),
-//            FlSpot(10, 25.0),
-//            FlSpot(12, 26.0),
           ],
           isCurved: true,
           colors: gradientColors,
