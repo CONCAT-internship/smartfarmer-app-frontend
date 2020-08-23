@@ -13,6 +13,8 @@
 //  }
 //}
 
+import 'package:intl/intl.dart';
+
 class SensorChart {
   final String localTime;
   final num value;
@@ -24,7 +26,7 @@ class SensorChart {
 
   factory SensorChart.fromJSON(Map<String, dynamic> json) {
     return SensorChart(
-      localTime: json['local_time'],
+      localTime: DateFormat('kk:mm').format(DateTime.parse(json['local_time'])),
       value: json['temperature'].toDouble(),
     );
   }

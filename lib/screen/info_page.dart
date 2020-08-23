@@ -74,7 +74,7 @@ class _InfoPageState extends State<InfoPage> {
               IconButton(
                 icon: Icon(Icons.home),
                 onPressed: () {
-                  _drawerKey.currentState.openEndDrawer();
+
                 },
                 color: infoButtonColor,
                 iconSize: 32.0,
@@ -154,7 +154,9 @@ class _InfoPageState extends State<InfoPage> {
                   icon: Icon(Icons.menu),
                   iconSize: 25,
                   color: Colors.white,
-                  onPressed: () {},
+                  onPressed: () {
+                    _drawerKey.currentState.openEndDrawer();
+                  },
                 ),
               ],
             ),
