@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/provider/firebase_provider.dart';
+import 'package:smartfarm/provider/mine_farmer_data.dart';
 import 'package:smartfarm/provider/scan_data.dart';
 import 'package:smartfarm/forms/crop_edit_widget.dart';
 import 'package:smartfarm/forms/scanner_widget.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
+import 'farm_list_page.dart';
 
 class ConnectPage extends StatefulWidget {
   @override
@@ -115,13 +117,17 @@ class _ConnectPageState extends State<ConnectPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      "김태훈님",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'NotoSans-Bold',
-                        fontSize: 19.0,
-                      ),
+                    Consumer<MineFarmerData>(
+                      builder: (context, farmerData, child){
+                        return Text(
+                          farmerData.data.nickName,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'NotoSans-Bold',
+                            fontSize: 19.0,
+                          ),
+                        );
+                      },
                     ),
                     Text(
                       "당신의 농장은 잘 관리되고 있습니다.",

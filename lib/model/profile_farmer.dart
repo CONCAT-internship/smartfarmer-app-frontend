@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-
 import 'farm_info.dart';
 
 part 'profile_farmer.g.dart';

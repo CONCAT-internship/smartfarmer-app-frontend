@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:smartfarm/model/sensor.dart';
+import 'package:smartfarm/model/sensor_chart.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
+import 'package:http/http.dart' as http;
 
 class ChartWidget extends StatefulWidget {
   @override
@@ -8,6 +13,32 @@ class ChartWidget extends StatefulWidget {
 }
 
 class _ChartWidgetState extends State<ChartWidget> {
+  List<SensorChart> _sensorChart = [];
+
+  void _getChartSensor() async {
+    final response = await http.post(
+      '$API/LookupByNumber',
+      body: jsonEncode({"uuid": "756e6b776f000c04", "key": "temperature", "number": 7}),
+      headers: {'Content-Type': "application/json"},
+    );
+
+    if (response.statusCode == 200) {
+      final List<SensorChart> parseResponse = jsonDecode(response.body)
+          .map<SensorChart>((json) => SensorChart.fromJSON(json))
+          .toList();
+      setState(() {
+        _sensorChart.clear();
+        _sensorChart.addAll(parseResponse);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getChartSensor();
+  }
+
   List<Color> gradientColors = [
     const Color(0xff23b6e6),
     const Color(0xff02d39a),
@@ -20,12 +51,9 @@ class _ChartWidgetState extends State<ChartWidget> {
         AspectRatio(
           aspectRatio: 1.70,
           child: Container(
-
             child: Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 20),
-              child: LineChart(
-                mainData(),
-              ),
+              child: LineChart(mainData()),
             ),
           ),
         ),
@@ -34,6 +62,8 @@ class _ChartWidgetState extends State<ChartWidget> {
   }
 
   LineChartData mainData() {
+    print(this._sensorChart[0].localTime);
+
     return LineChartData(
       gridData: FlGridData(
         show: false,
@@ -98,7 +128,6 @@ class _ChartWidgetState extends State<ChartWidget> {
                 return '25';
               case 30:
                 return '30';
-
             }
             return '';
           },
@@ -116,14 +145,20 @@ class _ChartWidgetState extends State<ChartWidget> {
       lineBarsData: [
         LineChartBarData(
           spots: [
-            FlSpot(0, 10.2),
-            FlSpot(2, 15.1),
-            FlSpot(4, 25.2),
-            FlSpot(6, 25.1),
-            FlSpot(8, 24.9),
-            FlSpot(10, 25.0),
-            FlSpot(12, 26.0),
-
+            FlSpot(0, this._sensorChart[0].value),
+            FlSpot(2, this._sensorChart[1].value),
+            FlSpot(4, this._sensorChart[2].value),
+            FlSpot(6, this._sensorChart[3].value),
+            FlSpot(8, this._sensorChart[4].value),
+            FlSpot(10, this._sensorChart[5].value),
+            FlSpot(12, this._sensorChart[6].value),
+//            FlSpot(0, 10.2),
+//            FlSpot(2, 15.1),
+//            FlSpot(4, 25.2),
+//            FlSpot(6, 25.1),
+//            FlSpot(8, 24.9),
+//            FlSpot(10, 25.0),
+//            FlSpot(12, 26.0),
           ],
           isCurved: true,
           colors: gradientColors,

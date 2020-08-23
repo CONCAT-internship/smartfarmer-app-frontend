@@ -17,13 +17,22 @@ class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     fp = Provider.of<FirebaseProvider>(context);
-
     if (fp.getUser() != null) {
-      return FarmListPage();
-      //return ConnectPage();
-      //return InfoPage();
+      print("dd");
+      return InfoPage();
+//      MineFarmerData farmerData = Provider.of<MineFarmerData>(context);
+//      databaseProvider.linkFarmerData(fp.getUser().uid).listen((farmer) {
+//        farmerData.setFarmerData(farmer);
+//      });
+//      if(farmerData.data.deviceUUID.length > 0){
+//        return FarmListPage();
+//      }else{
+//        return ConnectPage();
+//      }
     }
+
     return Scaffold(
+
       body: SafeArea(
         child: Container(
           width: double.infinity,

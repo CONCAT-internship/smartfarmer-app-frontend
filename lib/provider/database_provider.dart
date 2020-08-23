@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smartfarm/model/farmer.dart';
 import 'package:smartfarm/shared/db_key.dart';
-import 'package:smartfarm/model/sensor_data.dart';
 import 'package:smartfarm/provider/transfomer.dart';
 
 
@@ -17,14 +16,6 @@ class DatabaseProvider with Transfomer {
 //        .snapshots()
 //        .transform(transSensorData);
 //  }
-
-  // documents 모두 갖고옴
-  Stream<List<SensorData>> linkSensorUUID() {
-    return _firestore
-        .collection(COLLECTION_NAME)
-        .snapshots()
-        .transform(transSensorUUID);
-  }
 
   Stream<Farmer> linkFarmerData(String farmerKey) {
     return _firestore

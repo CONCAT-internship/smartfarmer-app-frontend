@@ -17,8 +17,6 @@ class _CropEditWidgetState extends State<CropEditWidget> {
   void _registerDevice() async {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context, listen: false);
     final scanData = Provider.of<ScanData>(context, listen: false);
-    print('user uid: ${fp.getUser().uid}');
-    print('device uuid: ${scanData.deviceUUID}');
     final response = await http.post(
       '$API/RegisterDevice',
       body: jsonEncode(
@@ -348,7 +346,6 @@ class _CropEditWidgetState extends State<CropEditWidget> {
         height: 40,
         onPressed: () {
           if (_formKey.currentState.validate()) {
-            print("gd");
             _registerDevice();
           }
         },
