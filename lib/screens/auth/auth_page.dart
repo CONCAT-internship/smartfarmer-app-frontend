@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/animation/fade_animation.dart';
-import 'package:smartfarm/forms/crop_edit_widget.dart';
-import 'package:smartfarm/provider/database_provider.dart';
-import 'package:smartfarm/provider/firebase_provider.dart';
-import 'package:smartfarm/screen/connect_page.dart';
-import 'package:smartfarm/screen/farm_list_page.dart';
-import 'package:smartfarm/screen/info_page.dart';
-import 'package:smartfarm/screen/login_page.dart';
-import 'package:smartfarm/screen/signup_page.dart';
+import 'package:smartfarm/model/farmer_model/profile_farmer.dart';
+import 'package:smartfarm/screens/auth/signup_page.dart';
+import 'package:smartfarm/screens/devices_connect/forms/crop_edit_widget.dart';
+import 'package:smartfarm/services/database_provider.dart';
+import 'package:smartfarm/screens/devices_connect/connect_page.dart';
+import 'package:smartfarm/screens/farm_list/farm_list_page.dart';
+import 'package:smartfarm/screens/farm_dashboard/info_page.dart';
+import 'package:smartfarm/screens/auth/login_page.dart';
+import 'package:smartfarm/services/api/farmer_profile.dart';
+import 'package:smartfarm/services/firebase_provider.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,38 +23,15 @@ class _AuthPageState extends State<AuthPage> {
   bool isLogin;
   FirebaseProvider fp;
 
-//  void initState() {
-//    // TODO: implement initState
-//    super.initState();
-//    checkLogin();
-//  }
-//
-//  void checkLogin() async {
-//    SharedPreferences _prefs = await SharedPreferences.getInstance();
-//    isLogin = (_prefs.getBool('isLogin') ?? false);
-//  }
+
 
   @override
   Widget build(BuildContext context) {
     fp = Provider.of<FirebaseProvider>(context);
 
-    if(fp.getUser() != null){
+    if(fp.getUser() != null) {
       return ConnectPage();
     }
-
-//    if(isLogin){
-//      ConnectPage();
-//      print("dd");
-//      MineFarmerData farmerData = Provider.of<MineFarmerData>(context);
-//      databaseProvider.linkFarmerData(fp.getUser().uid).listen((farmer) {
-//        farmerData.setFarmerData(farmer);
-//      });
-//      if(farmerData.data.deviceUUID.length > 0){
-//        return FarmListPage();
-//      }else{
-//        return ConnectPage();
-//      }
-//    }
 
     return Scaffold(
 

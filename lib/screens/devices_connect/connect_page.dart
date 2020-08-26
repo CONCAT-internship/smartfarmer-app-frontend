@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smartfarm/model/profile_farmer.dart';
-import 'package:smartfarm/provider/firebase_provider.dart';
+import 'package:smartfarm/model/farmer_model/profile_farmer.dart';
 import 'package:http/http.dart' as http;
-import 'package:smartfarm/provider/scan_data.dart';
-import 'package:smartfarm/forms/crop_edit_widget.dart';
-import 'package:smartfarm/forms/scanner_widget.dart';
+import 'package:smartfarm/services/firebase_provider.dart';
+import 'package:smartfarm/services/scan_data.dart';
+import 'package:smartfarm/screens/devices_connect/forms/crop_edit_widget.dart';
+import 'package:smartfarm/screens/devices_connect/forms/scanner_widget.dart';
+import 'package:smartfarm/services/api/farmer_profile.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
 class ConnectPage extends StatefulWidget {
@@ -15,22 +16,13 @@ class ConnectPage extends StatefulWidget {
 }
 
 class _ConnectPageState extends State<ConnectPage> {
-  Future<ProfileFarmer> getProfile() async {
-    try {
-      String url = '$API/ProfileFarmer?uid=Xecm2PHp7QNfCmb0MQOFdJdy5af2';
-      final http.Response response = await http.get(url);
-      final responseData = jsonDecode(utf8.decode(response.bodyBytes));
-      final ProfileFarmer profileFarmer = ProfileFarmer.fromJson(responseData);
-      return profileFarmer;
-    } catch (err) {
-      throw err;
-    }
-  }
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      key: _scaffoldKey,
       resizeToAvoidBottomInset: true,
       body: Stack(
         children: <Widget>[
@@ -51,10 +43,6 @@ class _ConnectPageState extends State<ConnectPage> {
           ),
           Container(
             height: double.infinity,
-//            foregroundDecoration: BoxDecoration(
-//              color: Colors.grey,
-//              backgroundBlendMode: BlendMode.darken,
-//            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -75,6 +63,7 @@ class _ConnectPageState extends State<ConnectPage> {
   }
 
   Widget _headerContents(Size size) {
+    FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
     return Container(
         padding: EdgeInsets.only(
           left: 25.0,
@@ -130,9 +119,9 @@ class _ConnectPageState extends State<ConnectPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     FutureBuilder(
-                      future: getProfile(),
-                      builder: (context, snapshot){
-                        if(snapshot.hasData){
+                      future: farmerInfo.getProfile(fp.getUser().uid),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
                           final farmerProfile = snapshot.data;
                           return Text(
                             farmerProfile.nickName,
@@ -155,7 +144,6 @@ class _ConnectPageState extends State<ConnectPage> {
                           );
                         }
                       },
-
                     ),
                     Text(
                       "당신의 농장은 잘 관리되고 있습니다.",
@@ -202,8 +190,12 @@ class _ConnectPageState extends State<ConnectPage> {
           child: IndexedStack(
             index: scanData.isScan ? 1 : 0,
             children: <Widget>[
-              ScannerWidget(),
-              CropEditWidget(),
+              ScannerWidget(
+                scaffoldKey: _scaffoldKey,
+              ),
+              CropEditWidget(
+                scaffoldKey: _scaffoldKey,
+              ),
             ],
           ),
         ),

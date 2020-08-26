@@ -1,11 +1,9 @@
 import 'dart:convert';
-
-import 'package:smartfarm/services/api_response.dart';
+import 'package:smartfarm/model/api_response.dart';
 import 'package:http/http.dart' as http;
+import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
 class CheckDeviceOverlap {
-  static const API = 'https://asia-northeast1-superfarmers.cloudfunctions.net';
-  static const headers = {'Content-Type': "application/json"};
 
   Future<APIResponse> checkDevice(String uuid) {
     String errorMessage;

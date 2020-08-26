@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 const API = 'https://asia-northeast1-superfarmers.cloudfunctions.net';
+const headers = {'Content-Type': "application/json"};
 
 final connectFont = TextStyle(
   fontSize: 12,

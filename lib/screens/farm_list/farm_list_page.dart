@@ -2,27 +2,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
-import 'package:smartfarm/model/profile_farmer.dart';
+import 'package:smartfarm/model/farmer_model/profile_farmer.dart';
+
 import 'package:http/http.dart' as http;
-import 'package:smartfarm/provider/firebase_provider.dart';
-import 'package:smartfarm/provider/scan_data.dart';
-import 'package:smartfarm/screen/connect_page.dart';
-import 'package:smartfarm/screen/info_page.dart';
+import 'package:smartfarm/services/firebase_provider.dart';
+import 'package:smartfarm/services/scan_data.dart';
+import 'package:smartfarm/screens/devices_connect/connect_page.dart';
+import 'package:smartfarm/screens/farm_dashboard/info_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
 class FarmListPage extends StatelessWidget {
-  Future<ProfileFarmer> getProfile(String uid) async {
-    try {
-      String url = '$API/ProfileFarmer?uid=$uid';
-      final http.Response response = await http.get(url);
-      final responseData = jsonDecode(utf8.decode(response.bodyBytes));
-      final ProfileFarmer profileFarmer = ProfileFarmer.fromJson(responseData);
-      return profileFarmer;
-    } catch (err) {
-      throw err;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
@@ -116,10 +105,7 @@ class FarmListPage extends StatelessWidget {
                                                               context,
                                                               listen: false)
                                                           .setDeviceUUID(
-                                                              farmerProfile
-                                                                  .farmInfo[
-                                                                      index]
-                                                                  .deviceUUID);
+                                                              farmerProfile.farmInfo[index].deviceUUID);
                                                       Navigator.push(
                                                         context,
                                                         MaterialPageRoute(

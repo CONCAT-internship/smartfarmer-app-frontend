@@ -3,9 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:smartfarm/animation/fade_animation.dart';
 import 'package:smartfarm/firebase/auth_exception_handler.dart';
 import 'package:smartfarm/firebase/auth_result_status.dart';
-import 'package:smartfarm/provider/database_provider.dart';
-import 'package:smartfarm/provider/firebase_provider.dart';
-import 'package:smartfarm/screen/login_page.dart';
+import 'package:smartfarm/services/database_provider.dart';
+
+import 'package:smartfarm/screens/auth/login_page.dart';
+import 'package:smartfarm/services/firebase_provider.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
 class SignUpPage extends StatefulWidget {

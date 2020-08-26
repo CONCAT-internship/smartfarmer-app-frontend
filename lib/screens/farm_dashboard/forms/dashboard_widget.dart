@@ -4,9 +4,9 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:smartfarm/forms/chart_widget.dart';
-import 'package:smartfarm/model/sensor.dart';
-import 'package:smartfarm/provider/scan_data.dart';
+import 'package:smartfarm/screens/farm_dashboard/forms/chart_widget.dart';
+import 'package:smartfarm/model/sensor_model/sensor.dart';
+import 'package:smartfarm/services/scan_data.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
 class DashBoardWidget extends StatefulWidget {

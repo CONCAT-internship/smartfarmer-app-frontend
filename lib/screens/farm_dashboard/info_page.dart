@@ -1,12 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:smartfarm/forms/dashboard_widget.dart';
-import 'package:smartfarm/screen/drawer_menu_page.dart';
+import 'package:smartfarm/screens/farm_dashboard/forms/dashboard_widget.dart';
+import 'package:smartfarm/screens/drawer/drawer_menu_page.dart';
 
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
-import 'connect_page.dart';
+import '../devices_connect/connect_page.dart';
 
 
 class InfoPage extends StatefulWidget {
