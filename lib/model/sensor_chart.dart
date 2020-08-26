@@ -19,10 +19,7 @@ class SensorChart {
   final String localTime;
   final num value;
 
-  SensorChart({
-    this.localTime,
-    this.value,
-  });
+  SensorChart({this.localTime, this.value,});
 
   factory SensorChart.fromJSON(Map<String, dynamic> json) {
     return SensorChart(

@@ -1,25 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/animation/fade_animation.dart';
+import 'package:smartfarm/forms/crop_edit_widget.dart';
 import 'package:smartfarm/provider/database_provider.dart';
 import 'package:smartfarm/provider/firebase_provider.dart';
-import 'package:smartfarm/provider/mine_farmer_data.dart';
 import 'package:smartfarm/screen/connect_page.dart';
 import 'package:smartfarm/screen/farm_list_page.dart';
 import 'package:smartfarm/screen/info_page.dart';
 import 'package:smartfarm/screen/login_page.dart';
 import 'package:smartfarm/screen/signup_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthPage extends StatelessWidget {
+class AuthPage extends StatefulWidget {
+  @override
+  _AuthPageState createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> {
+  bool isLogin;
   FirebaseProvider fp;
+
+//  void initState() {
+//    // TODO: implement initState
+//    super.initState();
+//    checkLogin();
+//  }
+//
+//  void checkLogin() async {
+//    SharedPreferences _prefs = await SharedPreferences.getInstance();
+//    isLogin = (_prefs.getBool('isLogin') ?? false);
+//  }
 
   @override
   Widget build(BuildContext context) {
     fp = Provider.of<FirebaseProvider>(context);
-    if (fp.getUser() != null) {
-      print("dd");
-      return InfoPage();
+
+    if(fp.getUser() != null){
+      return ConnectPage();
+    }
+
+//    if(isLogin){
+//      ConnectPage();
+//      print("dd");
 //      MineFarmerData farmerData = Provider.of<MineFarmerData>(context);
 //      databaseProvider.linkFarmerData(fp.getUser().uid).listen((farmer) {
 //        farmerData.setFarmerData(farmer);
@@ -29,7 +52,7 @@ class AuthPage extends StatelessWidget {
 //      }else{
 //        return ConnectPage();
 //      }
-    }
+//    }
 
     return Scaffold(
 
@@ -157,5 +180,4 @@ class AuthPage extends StatelessWidget {
       ),
     );
   }
-//}
 }

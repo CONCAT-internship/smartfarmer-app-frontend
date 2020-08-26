@@ -12,5 +12,4 @@ class FarmInfo {
   FarmInfo(this.deviceUUID, this.farmName);
 
   factory FarmInfo.fromJson(Map<String, dynamic> json) => _$FarmInfoFromJson(json);
-
 }
