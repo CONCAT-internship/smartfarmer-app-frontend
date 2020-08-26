@@ -71,6 +71,7 @@ var wPh = 'assets/images/ph_w.png';
 var wWaterTemp = 'assets/images/water_temp_w.png';
 
 var qrCodeImg = 'assets/images/QRcode.png';
+var farmImg = 'assets/images/Farm.png';
 var farmName = 'assets/images/farm_name.png';
 
 var cropTextInputDeco = InputDecoration(

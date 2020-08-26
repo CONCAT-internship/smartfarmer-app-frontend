@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/animation/fade_animation.dart';
+import 'package:smartfarm/model/api_response.dart';
 import 'package:smartfarm/model/farmer_model/profile_farmer.dart';
 import 'package:smartfarm/screens/auth/signup_page.dart';
 import 'package:smartfarm/screens/devices_connect/forms/crop_edit_widget.dart';
@@ -22,15 +23,11 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   bool isLogin;
   FirebaseProvider fp;
-
-
-
   @override
   Widget build(BuildContext context) {
     fp = Provider.of<FirebaseProvider>(context);
-
-    if(fp.getUser() != null) {
-      return ConnectPage();
+    if(fp.getUser() != null){
+      return ConnectPage(uid: fp.getUser().uid,);
     }
 
     return Scaffold(

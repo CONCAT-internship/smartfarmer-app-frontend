@@ -5,7 +5,6 @@ import 'package:smartfarm/services/firebase_provider.dart';
 import 'package:smartfarm/services/scan_data.dart';
 import 'package:smartfarm/screens/auth/auth_page.dart';
 
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -16,6 +15,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<FirebaseProvider>(
           create: (_) => FirebaseProvider(),
         ),
+        ChangeNotifierProvider<FarmerProfile>.value(value: FarmerProfile()),
         ChangeNotifierProvider<ScanData>(
           create: (_) => ScanData(),
         ),
@@ -27,4 +27,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
