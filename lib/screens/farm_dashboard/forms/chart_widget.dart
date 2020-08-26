@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 
-import 'package:smartfarm/model/sensor_chart.dart';
+import 'package:smartfarm/model/sensor_model/sensor_chart.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:http/http.dart' as http;
 

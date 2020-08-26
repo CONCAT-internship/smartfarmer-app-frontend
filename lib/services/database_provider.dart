@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:smartfarm/model/farmer.dart';
+import 'package:smartfarm/model/farmer_model/farmer.dart';
 import 'package:smartfarm/shared/db_key.dart';
 import 'package:smartfarm/utils/transfomer.dart';
 

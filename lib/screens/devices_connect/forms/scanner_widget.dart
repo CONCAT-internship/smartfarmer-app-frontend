@@ -1,6 +1,8 @@
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
-import 'package:smartfarm/services/check_device_overlap.dart';
+import 'package:provider/provider.dart';
+import 'package:smartfarm/services/scan_data.dart';
+import 'package:smartfarm/services/api/check_device_overlap.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:smartfarm/utils/snack_bar.dart';
 
@@ -22,7 +24,9 @@ class _ScannerWidgetState extends State<ScannerWidget> {
     if(result.error){
       alertSnackbar(context, result.errorMessage);
     }else{
-      print('QR코드 스캔 성공~!');
+      final scanData = Provider.of<ScanData>(context, listen: false);
+      scanData.setScan(true);
+      scanData.setDeviceUUID(qrCodeResult);
     }
   }
 

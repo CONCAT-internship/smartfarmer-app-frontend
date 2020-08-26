@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smartfarm/provider/scan_data.dart';
-import 'package:smartfarm/screen/auth_page.dart';
-import 'package:smartfarm/provider/firebase_provider.dart';
+import 'package:smartfarm/services/api/farmer_profile.dart';
+import 'package:smartfarm/services/firebase_provider.dart';
+import 'package:smartfarm/services/scan_data.dart';
+import 'package:smartfarm/screens/auth/auth_page.dart';
+
 
 void main() => runApp(MyApp());
 

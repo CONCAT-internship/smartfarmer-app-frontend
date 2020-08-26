@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:smartfarm/provider/firebase_provider.dart';
-import 'package:smartfarm/provider/scan_data.dart';
-import 'package:smartfarm/screen/farm_list_page.dart';
+import 'package:smartfarm/services/firebase_provider.dart';
+import 'package:smartfarm/services/scan_data.dart';
+import 'package:smartfarm/screens/farm_list/farm_list_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,6 +17,7 @@ class _CropEditWidgetState extends State<CropEditWidget> {
   void _registerDevice() async {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context, listen: false);
     final scanData = Provider.of<ScanData>(context, listen: false);
+    print(fp.getUser().uid);
     final response = await http.post(
       '$API/RegisterDevice',
       body: jsonEncode(
@@ -329,7 +330,13 @@ class _CropEditWidgetState extends State<CropEditWidget> {
                         ),
                       ],
                     ),
-                    buildSaveBtn(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        buildSaveBtn(),
+                        buildSaveBtn(),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -344,7 +351,7 @@ class _CropEditWidgetState extends State<CropEditWidget> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 40),
       child: MaterialButton(
-        minWidth: 160,
+        minWidth: 120,
         height: 40,
         onPressed: () {
           if (_formKey.currentState.validate()) {
