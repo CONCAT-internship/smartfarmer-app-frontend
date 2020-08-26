@@ -1,19 +1,11 @@
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:smartfarm/screens/auth/auth_page.dart';
 import 'package:smartfarm/screens/farm_dashboard/forms/dashboard_widget.dart';
 import 'package:smartfarm/screens/drawer/drawer_menu_page.dart';
-
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
-
 import '../devices_connect/connect_page.dart';
 
-
 class InfoPage extends StatefulWidget {
-  String sensorUUID;
-
-  InfoPage({Key key, this.sensorUUID}) : super(key: key);
-
   @override
   _InfoPageState createState() => _InfoPageState();
 }
@@ -29,7 +21,6 @@ class _InfoPageState extends State<InfoPage> {
     return Scaffold(
       key: _drawerKey,
       endDrawer: DrawerMenuPage(),
-      //backgroundColor: backgroundColor,
       bottomNavigationBar: _buildBottomAppBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: _buildFloatingActionButton(context),
@@ -38,10 +29,6 @@ class _InfoPageState extends State<InfoPage> {
           _headerGradient(size), // HEAD 그라디언트 색상
           Container(
             height: double.infinity,
-//            foregroundDecoration: BoxDecoration(
-//              color: Colors.grey,
-//              backgroundBlendMode: BlendMode.darken,
-//            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -64,7 +51,6 @@ class _InfoPageState extends State<InfoPage> {
   BottomAppBar _buildBottomAppBar() {
     return BottomAppBar(
       color: backgroundColor,
-      //notchMargin: 12.0,
       child: Container(
         height: 50.0,
         child: Padding(
@@ -74,17 +60,14 @@ class _InfoPageState extends State<InfoPage> {
             children: <Widget>[
               IconButton(
                 icon: Icon(Icons.home),
-                onPressed: () {
-
-                },
+                onPressed: () {},
                 color: infoButtonColor,
                 iconSize: 32.0,
-                //size: 32.0,
               ),
               IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: () {
-                  //databaseProvider.recv();
+                  print("setting btn click!!");
                 },
                 color: Colors.grey,
                 iconSize: 32.0,
@@ -102,9 +85,7 @@ class _InfoPageState extends State<InfoPage> {
       child: Icon(Icons.add),
       onPressed: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ConnectPage()));
+            context, MaterialPageRoute(builder: (context) => AuthPage()));
       },
     );
   }
@@ -129,80 +110,81 @@ class _InfoPageState extends State<InfoPage> {
 
   Container _headerContents(Size size) {
     return Container(
-        padding: EdgeInsets.only(
-          left: 25.0,
-          right: 10.0,
-        ),
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "슈퍼파머스",
+      padding: EdgeInsets.only(
+        left: 25.0,
+        right: 10.0,
+      ),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "슈퍼파머스",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'NotoSans-Bold',
+                    fontSize: 18.0,
+                  ),
+                ),
+              ),
+              Spacer(),
+              IconButton(
+                icon: Icon(Icons.notifications_none),
+                iconSize: 25,
+                color: Colors.white,
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: Icon(Icons.menu),
+                iconSize: 25,
+                color: Colors.white,
+                onPressed: () {
+                  _drawerKey.currentState.openEndDrawer();
+                },
+              ),
+            ],
+          ),
+          SizedBox(
+            height: size.height * 0.04,
+          ),
+          Row(
+            children: <Widget>[
+              CircleAvatar(
+                backgroundImage: AssetImage('assets/images/ogu.png'),
+                radius: 25.0,
+                backgroundColor: Colors.white,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "김태훈님",
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'NotoSans-Bold',
-                      fontSize: 18.0,
+                      fontSize: 19.0,
                     ),
                   ),
-                ),
-                Spacer(),
-                IconButton(
-                  icon: Icon(Icons.notifications_none),
-                  iconSize: 25,
-                  color: Colors.white,
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: Icon(Icons.menu),
-                  iconSize: 25,
-                  color: Colors.white,
-                  onPressed: () {
-                    _drawerKey.currentState.openEndDrawer();
-                  },
-                ),
-              ],
-            ),
-            SizedBox(
-              height: size.height * 0.04,
-            ),
-            Row(
-              children: <Widget>[
-                CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/ogu.png'),
-                  radius: 25.0,
-                  backgroundColor: Colors.white,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "김태훈님",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'NotoSans-Bold',
-                        fontSize: 19.0,
-                      ),
+                  Text(
+                    "당신의 농장은 잘 관리되고 있습니다.",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'NotoSans-Thin',
+                      fontSize: 14.0,
                     ),
-                    Text(
-                      "당신의 농장은 잘 관리되고 있습니다.",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'NotoSans-Thin',
-                        fontSize: 14.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ));
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Expanded infoBox() {

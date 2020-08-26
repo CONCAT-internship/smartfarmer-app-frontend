@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartfarm/animation/fade_animation.dart';
-import 'package:smartfarm/model/api_response.dart';
-import 'package:smartfarm/model/farmer_model/profile_farmer.dart';
 import 'package:smartfarm/screens/auth/signup_page.dart';
-import 'package:smartfarm/screens/devices_connect/forms/crop_edit_widget.dart';
-import 'package:smartfarm/services/database_provider.dart';
 import 'package:smartfarm/screens/devices_connect/connect_page.dart';
-import 'package:smartfarm/screens/farm_list/farm_list_page.dart';
-import 'package:smartfarm/screens/farm_dashboard/info_page.dart';
 import 'package:smartfarm/screens/auth/login_page.dart';
-import 'package:smartfarm/services/api/farmer_profile.dart';
+import 'package:smartfarm/screens/farm_dashboard/info_page.dart';
 import 'package:smartfarm/services/firebase_provider.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthPage extends StatefulWidget {
   @override
@@ -23,15 +16,18 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   bool isLogin;
   FirebaseProvider fp;
+
   @override
   Widget build(BuildContext context) {
     fp = Provider.of<FirebaseProvider>(context);
-    if(fp.getUser() != null){
-      return ConnectPage(uid: fp.getUser().uid,);
+    if (fp.getUser() != null) {
+//      return ConnectPage(
+//        uid: fp.getUser().uid,
+//      );
+      return InfoPage();
     }
 
     return Scaffold(
-
       body: SafeArea(
         child: Container(
           width: double.infinity,

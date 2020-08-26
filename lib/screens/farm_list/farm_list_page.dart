@@ -1,15 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
-import 'package:smartfarm/model/farmer_model/profile_farmer.dart';
-
-import 'package:http/http.dart' as http;
 import 'package:smartfarm/services/api/farmer_profile.dart';
-import 'package:smartfarm/services/firebase_provider.dart';
-import 'package:smartfarm/services/scan_data.dart';
-import 'package:smartfarm/screens/devices_connect/connect_page.dart';
 import 'package:smartfarm/screens/farm_dashboard/info_page.dart';
+import 'package:smartfarm/services/scan_data.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
 class FarmListPage extends StatelessWidget {
@@ -49,14 +43,14 @@ class FarmListPage extends StatelessWidget {
                 height: 500,
                 padding: const EdgeInsets.only(left: 32),
                 child: Consumer<FarmerProfile>(
-                  builder: (context, farmerData, child){
+                  builder: (context, farmerData, child) {
                     return Swiper(
                       itemCount: farmerData.getFarmerProfile().farmInfo.length,
                       itemWidth: MediaQuery.of(context).size.width - 2 * 64,
                       layout: SwiperLayout.STACK,
                       pagination: SwiperPagination(
-                        builder:
-                        DotSwiperPaginationBuilder(activeSize: 20, space: 8),
+                        builder: DotSwiperPaginationBuilder(
+                            activeSize: 20, space: 8),
                       ),
                       itemBuilder: (context, index) {
                         return Stack(
@@ -75,18 +69,17 @@ class FarmListPage extends StatelessWidget {
                                   child: Padding(
                                     padding: const EdgeInsets.all(32.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: <Widget>[
                                         SizedBox(
                                           height: 140,
                                         ),
                                         Text(
-                                          farmerData.getFarmerProfile().farmInfo[index].farmName,
-
-//                                        profileFarmer
-//                                            .getProfileFarmer()
-//                                            .farmInfo[index]
-//                                            .farmName,
+                                          farmerData
+                                              .getFarmerProfile()
+                                              .farmInfo[index]
+                                              .farmName,
                                           style: TextStyle(
                                             fontSize: 30,
                                             color: const Color(0xff47455f),
@@ -98,19 +91,17 @@ class FarmListPage extends StatelessWidget {
                                           children: <Widget>[
                                             GestureDetector(
                                               onTap: () {
-//                                              Provider.of<ScanData>(context,
-//                                                      listen: false)
-//                                                  .setDeviceUUID(profileFarmer
-//                                                      .getProfileFarmer()
-//                                                      .farmInfo[index]
-//                                                      .deviceUUID);
-                                                Navigator.push(
+                                                Provider.of<ScanData>(context,
+                                                        listen: false)
+                                                    .setDeviceUUID(
+                                                  farmerData
+                                                      .getFarmerProfile()
+                                                      .farmInfo[index]
+                                                      .deviceUUID,
+                                                ); // 스캔 데이터 프로바이더 재사용해서 디바이스 uuid 저장
+                                                Navigator.pushAndRemoveUntil(
                                                   context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        InfoPage(),
-                                                  ),
-                                                );
+                                                  MaterialPageRoute(builder: (context) => InfoPage()), (Route<dynamic> route) => false);
                                               },
                                               child: Text(
                                                 "밭으로 이동",

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:smartfarm/model/api_response.dart';
 import 'package:smartfarm/model/farmer_model/profile_farmer.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
