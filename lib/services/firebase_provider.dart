@@ -107,4 +107,3 @@ class FirebaseProvider with ChangeNotifier {
     setUser(null);
   }
 }
-

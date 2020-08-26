@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class Progress_Indicator extends StatelessWidget {
+class ProgressIndicator extends StatelessWidget {
   final double containerSize;
   final double progressSize;
 
-  const Progress_Indicator({
+  const ProgressIndicator({
     Key key, this.containerSize, this.progressSize = 60,
   }) : super(key: key);
 

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:smartfarm/model/farmer_model/profile_farmer.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:smartfarm/services/api/farmer_profile.dart';
 import 'package:smartfarm/services/firebase_provider.dart';
 import 'package:smartfarm/services/scan_data.dart';
 import 'package:smartfarm/screens/devices_connect/connect_page.dart';
@@ -15,6 +16,7 @@ class FarmListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
+
     return Scaffold(
         backgroundColor: blueGradient2,
         body: Container(
@@ -49,11 +51,12 @@ class FarmListPage extends StatelessWidget {
                     height: 500,
                     padding: const EdgeInsets.only(left: 32),
                     child: FutureBuilder(
-                      future: getProfile(fp.getUser().uid),
+                      //future: farmerInfo.getProfile(fp.getUser().uid),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           final farmerProfile = snapshot.data;
                           return Swiper(
+
                             itemCount: farmerProfile.farmInfo.length,
                             itemWidth:
                                 MediaQuery.of(context).size.width - 2 * 64,

@@ -16,6 +16,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<FirebaseProvider>(
           create: (_) => FirebaseProvider(),
         ),
+        ChangeNotifierProvider<FarmerProfile>(
+          create: (_) => FarmerProfile(),
+        ),
         ChangeNotifierProvider<ScanData>(
           create: (_) => ScanData(),
         ),

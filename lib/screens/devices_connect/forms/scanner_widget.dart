@@ -19,12 +19,24 @@ class _ScannerWidgetState extends State<ScannerWidget> {
 
   Future _scanQR() async {
     final qrResult = await BarcodeScanner.scan();
+    widget.scaffoldKey.currentState
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        duration: Duration(seconds: 10),
+        content: Row(
+          children: <Widget>[
+            CircularProgressIndicator(),
+            Text("   기기와 연결 중입니다.")
+          ],
+        ),
+      ));
     qrCodeResult = qrResult.rawContent;
 
     final result = await checkDevice
         .checkDevice(qrCodeResult); // 스마트팜 기기 체크 CheckDeviceOverlap
 
     if(result.error){
+      widget.scaffoldKey.currentState..hideCurrentSnackBar();
       alertSnackbar(context, result.errorMessage);
     }else{
       final scanData = Provider.of<ScanData>(context, listen: false);
@@ -46,17 +58,6 @@ class _ScannerWidgetState extends State<ScannerWidget> {
               InkWell(
                 onTap: () {
                   _scanQR(); // QR CODE 스캐너 실행
-                  widget.scaffoldKey.currentState
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(SnackBar(
-                      duration: Duration(seconds: 10),
-                      content: Row(
-                        children: <Widget>[
-                          CircularProgressIndicator(),
-                          Text("   기기와 연결 중입니다.")
-                        ],
-                      ),
-                    ));
                 },
                 child: Image.asset(
                   qrCodeImg,
