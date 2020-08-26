@@ -19,8 +19,7 @@ class Sensor {
   final bool fan;
 
   Sensor(
-      {
-      this.temperature,
+      {this.temperature,
       this.humidity,
       this.pH,
       this.ec,

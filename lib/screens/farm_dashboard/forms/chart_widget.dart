@@ -9,7 +9,6 @@ import 'package:smartfarm/model/sensor_model/sensor_chart.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:http/http.dart' as http;
 
-
 class ChartWidget extends StatefulWidget {
   @override
   _ChartWidgetState createState() => _ChartWidgetState();
@@ -19,20 +18,24 @@ class _ChartWidgetState extends State<ChartWidget> {
   List<SensorChart> _sensorChart = [];
 
   void _getChartSensor() async {
-    final response = await http.post(
-      '$API/LookupByNumber',
-      body: jsonEncode({"uuid": "756e6b776f000c04", "key": "temperature", "number": 7}),
-      headers: {'Content-Type': "application/json"},
-    );
+    try {
+      final response = await http.post(
+        '$API/LookupByNumber',
+        body: jsonEncode({"uuid": "756e6b776f000c04", "number": 7}),
+        headers: {'Content-Type': "application/json"},
+      );
 
-    if (response.statusCode == 200) {
-      final List<SensorChart> parseResponse = jsonDecode(response.body)
-          .map<SensorChart>((json) => SensorChart.fromJSON(json))
-          .toList();
-      setState(() {
-        _sensorChart.clear();
-        _sensorChart.addAll(parseResponse);
-      });
+      if (response.statusCode == 200) {
+        final List<SensorChart> parseResponse = jsonDecode(response.body)
+            .map<SensorChart>((json) => SensorChart.fromJson(json))
+            .toList();
+        setState(() {
+          _sensorChart.clear();
+          _sensorChart.addAll(parseResponse);
+        });
+      }
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -94,19 +97,19 @@ class _ChartWidgetState extends State<ChartWidget> {
           getTitles: (value) {
             switch (value.toInt()) {
               case 0:
-                return this._sensorChart[0].localTime;
+                return this._sensorChart[0].localTime ?? '';
               case 2:
-                return this._sensorChart[1].localTime;
+                return this._sensorChart[1].localTime ?? '';
               case 4:
-                return this._sensorChart[2].localTime;
+                return this._sensorChart[2].localTime ?? '';
               case 6:
-                return this._sensorChart[3].localTime;
+                return this._sensorChart[3].localTime ?? '';
               case 8:
-                return this._sensorChart[4].localTime;
+                return this._sensorChart[4].localTime ?? '';
               case 10:
-                return this._sensorChart[5].localTime;
+                return this._sensorChart[5].localTime ?? '';
               case 12:
-                return this._sensorChart[6].localTime;
+                return this._sensorChart[6].localTime ?? '';
             }
             return '';
           },
@@ -146,13 +149,13 @@ class _ChartWidgetState extends State<ChartWidget> {
       lineBarsData: [
         LineChartBarData(
           spots: [
-            FlSpot(0, this._sensorChart[0].value),
-            FlSpot(2, this._sensorChart[1].value),
-            FlSpot(4, this._sensorChart[2].value),
-            FlSpot(6, this._sensorChart[3].value),
-            FlSpot(8, this._sensorChart[4].value),
-            FlSpot(10, this._sensorChart[5].value),
-            FlSpot(12, this._sensorChart[6].value),
+            FlSpot(0, this._sensorChart[0].data.temperature) ?? 0,
+            FlSpot(2, this._sensorChart[1].data.temperature) ?? 0,
+            FlSpot(4, this._sensorChart[2].data.temperature) ?? 0,
+            FlSpot(6, this._sensorChart[3].data.temperature) ?? 0,
+            FlSpot(8, this._sensorChart[4].data.temperature) ?? 0,
+            FlSpot(10, this._sensorChart[5].data.temperature) ?? 0,
+            FlSpot(12, this._sensorChart[6].data.temperature) ?? 0,
           ],
           isCurved: true,
           colors: gradientColors,
