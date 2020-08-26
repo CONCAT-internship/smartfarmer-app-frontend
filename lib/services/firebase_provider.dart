@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartfarm/firebase/auth_exception_handler.dart';
 import 'package:smartfarm/firebase/auth_result_status.dart';
 import 'package:smartfarm/services/database_provider.dart';
@@ -9,7 +8,7 @@ class FirebaseProvider with ChangeNotifier {
   final FirebaseAuth fAuth = FirebaseAuth.instance; // Firebase 인증 플러그인의 인스턴스
   FirebaseUser _user; // Firebase에 로그인 된 사용자
   AuthResultStatus _status; // Firebase 메시지(에러 처리용)
-  SharedPreferences _prefs; // 로그인 했었는지 확인용
+
 
   FirebaseProvider() {
     _prepareUser();
@@ -38,8 +37,6 @@ class FirebaseProvider with ChangeNotifier {
           email: email, password: password);
       if (result.user != null) {
         setUser(result.user);
-        _prefs = await SharedPreferences.getInstance();
-        _prefs.setBool('isLogin', true);
         _status = AuthResultStatus.successful;
       }else{
         _status = AuthResultStatus.undefined;

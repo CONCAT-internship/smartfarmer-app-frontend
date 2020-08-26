@@ -22,25 +22,18 @@ class ConnectPage extends StatefulWidget {
 
 class _ConnectPageState extends State<ConnectPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  APIResponse<ProfileFarmer> _profileResponse;
-  bool _isLoading = false;
+
+  fetchProfileFarmer() async {
+    ProfileFarmer data =
+        await Provider.of<FarmerProfile>(context, listen: false)
+            .getProfile(widget.uid);
+    Provider.of<FarmerProfile>(context, listen: false).setFarmerProfile(data);
+  }
 
   @override
   void initState() {
-    _fetchProfileFarmer();
+    fetchProfileFarmer();
     super.initState();
-  }
-
-  _fetchProfileFarmer() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    _profileResponse = await farmerInfo.getProfile(widget.uid);
-
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
@@ -139,35 +132,40 @@ class _ConnectPageState extends State<ConnectPage> {
               SizedBox(
                 width: 10,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _isLoading
-                      ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: 15,
-                            height: 15,
-                            child: CircularProgressIndicator(),
-                          ),
-                        )
-                      : Text(
-                          '${_profileResponse.data.nickName}님',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'NotoSans-Bold',
-                            fontSize: 19.0,
-                          ),
+              Consumer<FarmerProfile>(
+                builder: (context, farmerData, child) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      farmerData.isLoading
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: 15,
+                                height: 15,
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                          : Text(
+                              '${farmerData.getFarmerProfile().nickName}님' ??
+                                  '고객님',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'NotoSans-Bold',
+                                fontSize: 19.0,
+                              ),
+                            ),
+                      Text(
+                        "스마트팜에 오신 것을 환영합니다.",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'NotoSans-Regular',
+                          fontSize: 14.0,
                         ),
-                  Text(
-                    "스마트팜에 오신 것을 환영합니다.",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'NotoSans-Regular',
-                      fontSize: 14.0,
-                    ),
-                  ),
-                ],
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           ),

@@ -6,29 +6,35 @@ import 'package:smartfarm/model/farmer_model/profile_farmer.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
 class FarmerProfile with ChangeNotifier {
-  ProfileFarmer _profileFarmer;
 
-  ProfileFarmer getProfileFarmer() {
-    return _profileFarmer;
+  bool isLoading = true;
+
+  ProfileFarmer _profileFarmer = new ProfileFarmer();
+  List<FarmInfo> list = new List();
+
+  FarmerProfile(){
+    _profileFarmer.farmInfo = list;
   }
 
-  void setProfileFarmer(ProfileFarmer profileFarmer) {
-    _profileFarmer = profileFarmer;
+  setFarmerProfile(ProfileFarmer data){
+    _profileFarmer = data;
+    isLoading = false;
     notifyListeners();
   }
 
-  Future<APIResponse<ProfileFarmer>> getProfile(String uid) {
+  ProfileFarmer getFarmerProfile(){
+    return _profileFarmer;
+  }
+
+  Future<ProfileFarmer> getProfile(String uid) {
     return http.get(API + '/ProfileFarmer?uid=$uid').then((data) {
       if (data.statusCode == 200) {
         final jsonData = jsonDecode(utf8.decode(data.bodyBytes));
         final ProfileFarmer profileFarmer = ProfileFarmer.fromJson(jsonData);
-        setProfileFarmer(profileFarmer);
-        return APIResponse(data: profileFarmer, error: false);
+        return profileFarmer;
       } else {
-        return APIResponse(error: true, errorMessage: '알 수 없는 에러입니다. 잠시 뒤 시도해주세요.');
+        return null;
       }
     });
   }
 }
-
-final farmerInfo = FarmerProfile();
