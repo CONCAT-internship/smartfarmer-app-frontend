@@ -56,7 +56,9 @@ class _DrawerMenuPageState extends State<DrawerMenuPage> {
                 decoration: BoxDecoration(color: Colors.blueAccent),
               ),
               ListTile(
-                title: InkWell(onTap: () {}, child: Text("로그아웃")),
+                title: InkWell(onTap: () {
+
+                }, child: Text("로그아웃")),
               ),
               ListTile(
                 title: Row(

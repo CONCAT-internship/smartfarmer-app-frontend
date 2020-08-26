@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:smartfarm/forms/chart_widget.dart';
 import 'package:smartfarm/model/sensor.dart';
 import 'package:smartfarm/provider/scan_data.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
-import 'package:http/http.dart' as http;
 
 class DashBoardWidget extends StatefulWidget {
   @override
@@ -28,6 +28,7 @@ Future<Sensor> getSensor(String deviceUUID) async {
 }
 
 class _DashBoardWidgetState extends State<DashBoardWidget> {
+
   @override
   Widget build(BuildContext context) {
     var scanData = Provider.of<ScanData>(context, listen: false);

@@ -25,6 +25,8 @@ class _CropEditWidgetState extends State<CropEditWidget> {
       headers: {'Content-Type': "application/json"},
     );
 
+    print(response.statusCode);
+
     if (response.statusCode == 200) {
       _createFarm(uid: fp.getUser().uid, uuid: scanData.deviceUUID);
     }

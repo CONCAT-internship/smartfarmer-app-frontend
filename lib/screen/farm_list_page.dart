@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:smartfarm/model/profile_farmer.dart';
 import 'package:http/http.dart' as http;
 import 'package:smartfarm/provider/firebase_provider.dart';
-import 'package:smartfarm/provider/mine_farmer_data.dart';
 import 'package:smartfarm/provider/scan_data.dart';
 import 'package:smartfarm/screen/connect_page.dart';
 import 'package:smartfarm/screen/info_page.dart';
@@ -99,24 +98,33 @@ class FarmListPage extends StatelessWidget {
                                                 height: 140,
                                               ),
                                               Text(
-                                                farmerProfile.farmInfo[index].farmName,
+                                                farmerProfile
+                                                    .farmInfo[index].farmName,
                                                 style: TextStyle(
                                                   fontSize: 30,
-                                                  color: const Color(0xff47455f),
+                                                  color:
+                                                      const Color(0xff47455f),
                                                   fontFamily: 'NotoSans-Bold',
                                                 ),
                                                 textAlign: TextAlign.left,
                                               ),
-
                                               Row(
                                                 children: <Widget>[
                                                   GestureDetector(
                                                     onTap: () {
-                                                      Provider.of<ScanData>(context, listen: false).setDeviceUUID(farmerProfile.farmInfo[index].deviceUUID);
+                                                      Provider.of<ScanData>(
+                                                              context,
+                                                              listen: false)
+                                                          .setDeviceUUID(
+                                                              farmerProfile
+                                                                  .farmInfo[
+                                                                      index]
+                                                                  .deviceUUID);
                                                       Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                          builder: (context) => InfoPage(),
+                                                          builder: (context) =>
+                                                              InfoPage(),
                                                         ),
                                                       );
                                                     },
