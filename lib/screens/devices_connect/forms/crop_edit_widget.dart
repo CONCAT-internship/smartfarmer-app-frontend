@@ -2,81 +2,24 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:smartfarm/services/api/register_device.dart';
 import 'package:smartfarm/services/firebase_provider.dart';
 import 'package:smartfarm/services/scan_data.dart';
 import 'package:smartfarm/screens/farm_list/farm_list_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:smartfarm/utils/snack_bar.dart';
 
 class CropEditWidget extends StatefulWidget {
+  final GlobalKey<ScaffoldState> scaffoldKey;
+
+  const CropEditWidget({Key key, this.scaffoldKey}) : super(key: key);
+
   @override
   _CropEditWidgetState createState() => _CropEditWidgetState();
 }
 
 class _CropEditWidgetState extends State<CropEditWidget> {
-  void _registerDevice() async {
-    FirebaseProvider fp = Provider.of<FirebaseProvider>(context, listen: false);
-    final scanData = Provider.of<ScanData>(context, listen: false);
-    print(fp.getUser().uid);
-    final response = await http.post(
-      '$API/RegisterDevice',
-      body: jsonEncode(
-        {"uid": fp.getUser().uid, "uuid": scanData.deviceUUID},
-      ),
-      headers: {'Content-Type': "application/json"},
-    );
-
-    print(response.statusCode);
-
-    if (response.statusCode == 200) {
-      _createFarm(uid: fp.getUser().uid, uuid: scanData.deviceUUID);
-    }
-  }
-
-  void _createFarm({String uid, String uuid}) async {
-    final response = await http.post(
-      '$API/RegisterRecipe',
-      body: jsonEncode(
-        {
-          "uid": uid,
-          "uuid": uuid,
-          "recipe": {
-            "crop": "basil",
-            "farm_name": _farmName.text,
-            "temperature_min": int.parse(_minTemperatureCon.text),
-            "temperature_max": int.parse(_maxTemperatureCon.text),
-            "humidity_min": int.parse(_minHumidityCon.text),
-            "humidity_max": int.parse(_maxHumidityCon.text),
-            "liquid_temperature": int.parse(_liquidTempCon.text),
-            "tray_liquid_level": int.parse(_liquidLevCon.text),
-            "light": int.parse(_lightCon.text),
-            "light_time": int.parse(_lightTimeCon.text),
-            "pH_min": int.parse(_minPHCon.text),
-            "pH_max": int.parse(_maxPHCon.text),
-            "ec_min": int.parse(_minECCon.text),
-            "ec_max": int.parse(_maxECCon.text),
-            "planting_distance_min_width":
-                int.parse(_minPlantDistanceWidth.text),
-            "planting_distance_min_height":
-                int.parse(_minPlantDistanceHeight.text),
-            "planting_distance_max_width":
-                int.parse(_maxPlantDistanceWidth.text),
-            "planting_distance_max_height":
-                int.parse(_maxPlantDistanceHeight.text)
-          }
-        },
-      ),
-      headers: {'Content-Type': "application/json"},
-    );
-
-    if (response.statusCode == 200) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => FarmListPage()));
-    }
-  }
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController _farmName = TextEditingController();
@@ -121,81 +64,10 @@ class _CropEditWidgetState extends State<CropEditWidget> {
     super.dispose();
   }
 
-  Widget buildFarmName({TextEditingController controller}) {
-    return TextFormField(
-      controller: controller,
-      validator: (value) {
-        Pattern nickNamePattern = r'^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]{2,10}$';
-        RegExp nickNameRegex = RegExp(nickNamePattern);
-        if (value.isEmpty) {
-          return '농장 이름을 입력해주세요.';
-        } else if (!nickNameRegex.hasMatch(value)) {
-          return '영문 및 특수기호 입력은 제한됩니다.';
-        } else {
-          return null;
-        }
-      },
-      textAlign: TextAlign.center,
-      maxLength: 10,
-      decoration: InputDecoration(
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: fieldLineColor, width: 2.5),
-        ),
-        hintText: '농장 이름을 입력해주세요',
-        hintStyle: TextStyle(
-          fontSize: 15.0,
-          fontFamily: 'NotoSans-Medium',
-          color: tutorialFontColor,
-        ),
-      ),
-      onSaved: (String value) {
-        //_farmName = value;
-      },
-    );
-  }
-
-  Widget buildInfo({label, TextEditingController controller}) {
-    return TextFormField(
-      controller: controller,
-      validator: (value) {
-        if (value.isEmpty) {
-          return '$label(을)를 입력해주세요..';
-        } else {
-          return null;
-        }
-      },
-      keyboardType: TextInputType.number,
-      inputFormatters: [
-        WhitelistingTextInputFormatter(RegExp('[0-9]')),
-      ],
-      decoration: cropTextInputDeco,
-    );
-  }
-
-  Widget buildDistance({TextEditingController controller}) {
-    return Container(
-      width: 58,
-      height: 30,
-      child: TextFormField(
-        controller: controller,
-        keyboardType: TextInputType.number,
-        inputFormatters: [
-          WhitelistingTextInputFormatter(RegExp('[0-9]')),
-        ],
-        validator: (value) {
-          if (value.isEmpty) {
-            return '값을 입력해주세요.';
-          } else {
-            return null;
-          }
-        },
-        decoration: cropTextInputDeco,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    widget.scaffoldKey.currentState
+      ..hideCurrentSnackBar();
     _cropCon.text = '바질';
     return Container(
       height: MediaQuery.of(context).size.height,
@@ -257,48 +129,48 @@ class _CropEditWidgetState extends State<CropEditWidget> {
                               }),
                             ),
                             buildInput(
-                                label1: '최저 온도',
-                                label2: '최고 온도',
-                                widget1: buildInfo(
+                                leftLabel: '최저 온도',
+                                rightLabel: '최고 온도',
+                                leftTF: buildInfo(
                                     label: '온도',
                                     controller: _minTemperatureCon),
-                                widget2: buildInfo(
+                                rightTF: buildInfo(
                                     label: '온도',
                                     controller: _maxTemperatureCon)),
                             buildInput(
-                                label1: '최저 습도',
-                                label2: '최고 습도',
-                                widget1: buildInfo(
+                                leftLabel: '최저 습도',
+                                rightLabel: '최고 습도',
+                                leftTF: buildInfo(
                                     label: '습도', controller: _minHumidityCon),
-                                widget2: buildInfo(
+                                rightTF: buildInfo(
                                     label: '습도', controller: _maxHumidityCon)),
                             buildInput(
-                                label1: ' 최저 pH ',
-                                label2: ' 최고 pH ',
-                                widget1: buildInfo(
+                                leftLabel: ' 최저 pH ',
+                                rightLabel: ' 최고 pH ',
+                                leftTF: buildInfo(
                                     label: 'pH', controller: _minPHCon),
-                                widget2: buildInfo(
+                                rightTF: buildInfo(
                                     label: 'pH', controller: _maxPHCon)),
                             buildInput(
-                                label1: ' 최저 EC ',
-                                label2: ' 최고 EC ',
-                                widget1: buildInfo(
+                                leftLabel: ' 최저 EC ',
+                                rightLabel: ' 최고 EC ',
+                                leftTF: buildInfo(
                                     label: 'EC', controller: _minECCon),
-                                widget2: buildInfo(
+                                rightTF: buildInfo(
                                     label: 'EC', controller: _maxECCon)),
                             buildInput(
-                                label1: '    수온     ',
-                                label2: '    수위     ',
-                                widget1: buildInfo(
+                                leftLabel: '    수온     ',
+                                rightLabel: '    수위     ',
+                                leftTF: buildInfo(
                                     label: '수온', controller: _liquidTempCon),
-                                widget2: buildInfo(
+                                rightTF: buildInfo(
                                     label: '수위', controller: _liquidLevCon)),
                             buildInput(
-                                label1: '    조도     ',
-                                label2: '일조 시간',
-                                widget1: buildInfo(
+                                leftLabel: '    조도     ',
+                                rightLabel: '일조 시간',
+                                leftTF: buildInfo(
                                     label: '조도', controller: _lightCon),
-                                widget2: buildInfo(
+                                rightTF: buildInfo(
                                     label: '일조 시간', controller: _lightTimeCon)),
                             Text(
                               '재식 거리',
@@ -333,8 +205,8 @@ class _CropEditWidgetState extends State<CropEditWidget> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        buildSaveBtn(),
-                        buildSaveBtn(),
+                        buildSaveBtn(widget.scaffoldKey),
+                        defaultBtn(widget.scaffoldKey),
                       ],
                     ),
                   ],
@@ -347,15 +219,113 @@ class _CropEditWidgetState extends State<CropEditWidget> {
     );
   }
 
-  Padding buildSaveBtn() {
+  Widget buildFarmName({TextEditingController controller}) {
+    return TextFormField(
+      controller: controller,
+      validator: (value) {
+        Pattern nickNamePattern = r'^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{1,10}$';
+        RegExp nickNameRegex = RegExp(nickNamePattern);
+        if (value.isEmpty) {
+          return '농장 이름을 입력해주세요.';
+        } else if (!nickNameRegex.hasMatch(value)) {
+          return '한글로 입력해주세요.';
+        } else {
+          return null;
+        }
+      },
+      textAlign: TextAlign.center,
+      maxLength: 10,
+      decoration: InputDecoration(
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: fieldLineColor, width: 2.5),
+        ),
+        hintText: '농장 이름을 입력해주세요',
+        hintStyle: TextStyle(
+          fontSize: 15.0,
+          fontFamily: 'NotoSans-Medium',
+          color: tutorialFontColor,
+        ),
+      ),
+      onSaved: (String value) {
+        //_farmName = value;
+      },
+    );
+  }
+
+  Widget buildInfo({label, TextEditingController controller}) {
+    return TextFormField(
+      controller: controller,
+      validator: (value) {
+        if (value.isEmpty) {
+          return '$label(을)를 입력해주세요..';
+        } else {
+          return null;
+        }
+      },
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        WhitelistingTextInputFormatter(RegExp(r'(^\d*\.?\d*)')),
+      ],
+      decoration: cropTextInputDeco,
+    );
+  }
+
+  Widget buildDistance({TextEditingController controller}) {
+    return Container(
+      width: 58,
+      height: 30,
+      child: TextFormField(
+        controller: controller,
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          WhitelistingTextInputFormatter(RegExp(r'(^\d*\.?\d*)')),
+        ],
+        validator: (value) {
+          if (value.isEmpty) {
+            return '값을 입력해주세요.';
+          } else {
+            return null;
+          }
+        },
+        decoration: cropTextInputDeco,
+      ),
+    );
+  }
+
+  Padding buildSaveBtn(GlobalKey<ScaffoldState> key) {
+    final fp = Provider.of<FirebaseProvider>(context, listen: false);
+    final scanData = Provider.of<ScanData>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 40),
       child: MaterialButton(
         minWidth: 120,
         height: 40,
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState.validate()) {
-            _registerDevice();
+            key.currentState
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(
+                duration: Duration(seconds: 10),
+                content: Row(
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    Text("   농장과 연결 중입니다.")
+                  ],
+                ),
+              ));
+
+            final uid = fp.getUser().uid; // 현재 로그인 한 사용자 uid
+            final uuid = scanData.deviceUUID; // scanner_widget에서 스캔한 QR코드 값
+
+            final result =
+                await registerFarm.registerDevice(uid: uid, uuid: uuid);
+            if (!result.error) {
+              _createFarm(uid: uid, uuid: uuid);
+            } else {
+              alertSnackbar(context, result.errorMessage);
+            }
+          } else {
+            alertSnackbar(context, '입력란을 제대로 작성해주세요.');
           }
         },
         color: Colors.greenAccent,
@@ -375,6 +345,55 @@ class _CropEditWidgetState extends State<CropEditWidget> {
     );
   }
 
+  Padding defaultBtn(GlobalKey<ScaffoldState> key) {
+    final fp = Provider.of<FirebaseProvider>(context, listen: false);
+    final scanData = Provider.of<ScanData>(context, listen: false);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 40),
+      child: MaterialButton(
+        minWidth: 120,
+        height: 40,
+        onPressed: () async {
+          key.currentState
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(
+              duration: Duration(seconds: 10),
+              content: Row(
+                children: <Widget>[
+                  CircularProgressIndicator(),
+                  Text("   농장과 연결 중입니다.")
+                ],
+              ),
+            ));
+
+          final uid = fp.getUser().uid; // 현재 로그인 한 사용자 uid
+          final uuid = scanData.deviceUUID; // scanner_widget에서 스캔한 QR코드 값
+
+          final result =
+              await registerFarm.registerDevice(uid: uid, uuid: uuid);
+          if (!result.error) {
+            _defaultCreateFarm(uid: uid, uuid: uuid);
+          } else {
+            alertSnackbar(context, result.errorMessage);
+          }
+        },
+        color: infoBoxHumidityColor,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Text(
+          '기본값',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'NotoSans-Medium',
+            fontSize: 18.0,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget buildShortInput({Widget widget}) {
     return Container(
       width: 66,
@@ -383,13 +402,13 @@ class _CropEditWidgetState extends State<CropEditWidget> {
     );
   }
 
-  Widget buildInput({label1, label2, Widget widget1, Widget widget2}) {
+  Widget buildInput({leftLabel, rightLabel, Widget leftTF, Widget rightTF}) {
     return Column(
       children: <Widget>[
         Row(
           children: <Widget>[
             Text(
-              label1,
+              leftLabel,
               style: connectFont,
             ),
             SizedBox(
@@ -398,13 +417,13 @@ class _CropEditWidgetState extends State<CropEditWidget> {
             Container(
               width: 100,
               height: 30,
-              child: widget1,
+              child: leftTF,
             ),
             SizedBox(
               width: 15,
             ),
             Text(
-              label2,
+              rightLabel,
               style: connectFont,
             ),
             SizedBox(
@@ -413,7 +432,7 @@ class _CropEditWidgetState extends State<CropEditWidget> {
             Container(
               width: 100,
               height: 30,
-              child: widget2,
+              child: rightTF,
             ),
           ],
         ),
@@ -422,5 +441,91 @@ class _CropEditWidgetState extends State<CropEditWidget> {
         ),
       ],
     );
+  }
+
+  void _createFarm({String uid, String uuid}) async {
+    final response = await http.post(
+      '$API/RegisterRecipe',
+      body: jsonEncode(
+        {
+          "uid": uid,
+          "uuid": uuid,
+          "recipe": {
+            "crop": "basil",
+            "farm_name": _farmName.text,
+            "temperature_min": num.parse(_minTemperatureCon.text),
+            "temperature_max": num.parse(_maxTemperatureCon.text),
+            "humidity_min": num.parse(_minHumidityCon.text),
+            "humidity_max": num.parse(_maxHumidityCon.text),
+            "liquid_temperature": num.parse(_liquidTempCon.text),
+            "tray_liquid_level": num.parse(_liquidLevCon.text),
+            "light": num.parse(_lightCon.text),
+            "light_time": num.parse(_lightTimeCon.text),
+            "pH_min": num.parse(_minPHCon.text),
+            "pH_max": num.parse(_maxPHCon.text),
+            "ec_min": num.parse(_minECCon.text),
+            "ec_max": num.parse(_maxECCon.text),
+            "planting_distance_min_width":
+                num.parse(_minPlantDistanceWidth.text),
+            "planting_distance_min_height":
+                num.parse(_minPlantDistanceHeight.text),
+            "planting_distance_max_width":
+                num.parse(_maxPlantDistanceWidth.text),
+            "planting_distance_max_height":
+                num.parse(_maxPlantDistanceHeight.text)
+          }
+        },
+      ),
+      headers: {'Content-Type': "application/json"},
+    );
+
+    if (response.statusCode == 200) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => FarmListPage()));
+      final scanData = Provider.of<ScanData>(context, listen: false);
+      scanData.setDeviceUUID('');
+      scanData.setScan(false);
+    }
+  }
+
+  void _defaultCreateFarm({String uid, String uuid}) async {
+    final response = await http.post(
+      '$API/RegisterRecipe',
+      body: jsonEncode(
+        {
+          "uid": uid,
+          "uuid": uuid,
+          "recipe": {
+            "crop": "basil",
+            "farm_name": '농장',
+            "temperature_min": 25,
+            "temperature_max": 30,
+            "humidity_min": 50,
+            "humidity_max": 60,
+            "liquid_temperature": 20,
+            "tray_liquid_level": 10,
+            "light": 70,
+            "light_time": 16,
+            "pH_min": 6.0,
+            "pH_max": 6.5,
+            "ec_min": 1.0,
+            "ec_max": 1.5,
+            "planting_distance_min_width": 20,
+            "planting_distance_min_height": 20,
+            "planting_distance_max_width": 25,
+            "planting_distance_max_height": 25
+          }
+        },
+      ),
+      headers: {'Content-Type': "application/json"},
+    );
+
+    if (response.statusCode == 200) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => FarmListPage()));
+      final scanData = Provider.of<ScanData>(context, listen: false);
+      scanData.setDeviceUUID('');
+      scanData.setScan(false);
+    }
   }
 }

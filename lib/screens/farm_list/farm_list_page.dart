@@ -12,18 +12,6 @@ import 'package:smartfarm/screens/farm_dashboard/info_page.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
 class FarmListPage extends StatelessWidget {
-  Future<ProfileFarmer> getProfile(String uid) async {
-    try {
-      String url = '$API/ProfileFarmer?uid=$uid';
-      final http.Response response = await http.get(url);
-      final responseData = jsonDecode(utf8.decode(response.bodyBytes));
-      final ProfileFarmer profileFarmer = ProfileFarmer.fromJson(responseData);
-      return profileFarmer;
-    } catch (err) {
-      throw err;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);

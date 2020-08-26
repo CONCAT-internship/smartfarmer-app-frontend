@@ -7,6 +7,9 @@ import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:smartfarm/utils/snack_bar.dart';
 
 class ScannerWidget extends StatefulWidget {
+  final GlobalKey<ScaffoldState> scaffoldKey;
+
+  const ScannerWidget({Key key, this.scaffoldKey}) : super(key: key);
   @override
   _ScannerWidgetState createState() => _ScannerWidgetState();
 }
@@ -43,6 +46,17 @@ class _ScannerWidgetState extends State<ScannerWidget> {
               InkWell(
                 onTap: () {
                   _scanQR(); // QR CODE 스캐너 실행
+                  widget.scaffoldKey.currentState
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(SnackBar(
+                      duration: Duration(seconds: 10),
+                      content: Row(
+                        children: <Widget>[
+                          CircularProgressIndicator(),
+                          Text("   기기와 연결 중입니다.")
+                        ],
+                      ),
+                    ));
                 },
                 child: Image.asset(
                   qrCodeImg,

@@ -16,10 +16,13 @@ class ConnectPage extends StatefulWidget {
 }
 
 class _ConnectPageState extends State<ConnectPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      key: _scaffoldKey,
       resizeToAvoidBottomInset: true,
       body: Stack(
         children: <Widget>[
@@ -117,8 +120,8 @@ class _ConnectPageState extends State<ConnectPage> {
                   children: <Widget>[
                     FutureBuilder(
                       future: farmerInfo.getProfile(fp.getUser().uid),
-                      builder: (context, snapshot){
-                        if(snapshot.hasData){
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
                           final farmerProfile = snapshot.data;
                           return Text(
                             farmerProfile.nickName,
@@ -187,8 +190,12 @@ class _ConnectPageState extends State<ConnectPage> {
           child: IndexedStack(
             index: scanData.isScan ? 1 : 0,
             children: <Widget>[
-              ScannerWidget(),
-              CropEditWidget(),
+              ScannerWidget(
+                scaffoldKey: _scaffoldKey,
+              ),
+              CropEditWidget(
+                scaffoldKey: _scaffoldKey,
+              ),
             ],
           ),
         ),

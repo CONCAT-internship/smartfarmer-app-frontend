@@ -6,7 +6,7 @@ void alertSnackbar(BuildContext context, String txt){
     duration: Duration(seconds: 10),
     content: Text(txt),
     action: SnackBarAction(
-      label: "Done",
+      label: "확인",
       textColor: Colors.white,
       onPressed: () {},
     ),
@@ -14,3 +14,4 @@ void alertSnackbar(BuildContext context, String txt){
 
   Scaffold.of(context).showSnackBar(snackBar);
 }
+
