@@ -13,175 +13,182 @@ class DashBoardWidget extends StatefulWidget {
 }
 
 class _DashBoardWidgetState extends State<DashBoardWidget> {
-
   @override
   Widget build(BuildContext context) {
     final scanData = Provider.of<ScanData>(context, listen: false);
-    return ChangeNotifierProvider<GetChartSensorData>(
-      create: (_) => GetChartSensorData(),
-      child: Padding(
-        padding: const EdgeInsets.all(30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              "장치 제어",
-              style: TextStyle(
-                color: infoBoxTextColor,
-                fontFamily: 'NotoSans-Bold',
-                fontSize: 15.0,
-              ),
+    final chartData = Provider.of<GetChartSensorData>(context, listen: false);
+    return Padding(
+      padding: const EdgeInsets.all(30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            "장치 제어",
+            style: TextStyle(
+              color: infoBoxTextColor,
+              fontFamily: 'NotoSans-Bold',
+              fontSize: 15.0,
             ),
-            SizedBox(
-              height: 20,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          FutureBuilder(
+            future: sensorData.getSensor(scanData.deviceUUID),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                final sensor = snapshot.data;
+                scanData.setFan(sensor.fan);
+                return Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: <Widget>[
+                    InfoSession(
+                      isClicked: true,
+                      name: '온도',
+                      subName: 'Temperature',
+                      image: temperature,
+                      clickImg: wTemperature,
+                      value: sensor.temperature.toString(),
+                      color: infoBoxTempColor,
+                      unit: '℃',
+                      onPressed: () {
+                        chartData.setSensorInfo('temperature');
+                      },
+                    ),
+                    InfoSession(
+                      isClicked: false,
+                      name: '습도',
+                      subName: 'humidity',
+                      image: humidity,
+                      clickImg: wHumidity,
+                      value: sensor.humidity.toString(),
+                      color: infoBoxHumidityColor,
+                      unit: '%',
+                      onPressed: () {
+                        chartData.setSensorInfo('humidity');
+                      },
+                    ),
+                    InfoSession(
+                      isClicked: false,
+                      name: '일조시간',
+                      subName: 'Led Duration',
+                      image: sun,
+                      clickImg: wSun,
+                      value: sensor.light.toString(),
+                      color: infoBoxLedColor,
+                      unit: 'h',
+                      onPressed: () {
+                        chartData.setSensorInfo('lightTime');
+                      },
+                    ),
+                    InfoSession(
+                      isClicked: false,
+                      name: '산성도',
+                      subName: 'pH',
+                      image: ph,
+                      clickImg: wPh,
+                      value: sensor.pH.toString(),
+                      color: infoBoxHumidityColor,
+                      unit: '%',
+                      onPressed: () {
+                        chartData.setSensorInfo('pH');
+                      },
+                    ),
+                    InfoSession(
+                      isClicked: false,
+                      name: '양액농도',
+                      subName: 'EC',
+                      image: ion,
+                      clickImg: wIon,
+                      value: sensor.ec.toString(),
+                      color: infoBoxTempColor,
+                      unit: 'dS/m',
+                      onPressed: () {
+                        chartData.setSensorInfo('ec');
+                      },
+                    ),
+                    InfoSession(
+                      isClicked: false,
+                      name: '수온',
+                      subName: 'Liquid temp',
+                      image: waterTemp,
+                      clickImg: wWaterTemp,
+                      value: sensor.liquidTemp.toString(),
+                      color: infoBoxLedColor,
+                      unit: '℃',
+                      onPressed: () {
+                        chartData.setSensorInfo('liquidTemp');
+                      },
+                    ),
+                  ],
+                );
+              }
+            },
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          DottedLine(
+            direction: Axis.horizontal,
+            lineLength: double.infinity,
+            lineThickness: 2.0,
+            dashLength: 4.0,
+            dashColor: deviderColor,
+            dashRadius: 0.0,
+            dashGapLength: 4.0,
+            dashGapColor: Colors.transparent,
+            dashGapRadius: 0.0,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            "실시간 온도상황",
+            style: TextStyle(
+              color: infoBoxTextColor,
+              fontFamily: 'NotoSans-Bold',
+              fontSize: 15.0,
             ),
-            FutureBuilder(
-              future: sensorData.getSensor(scanData.deviceUUID),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  final sensor = snapshot.data;
-                  scanData.setFan(sensor.fan);
-                  return Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
-                    children: <Widget>[
-                      InfoSession(
-                        isClicked: true,
-                        name: '온도',
-                        subName: 'Temperature',
-                        image: temperature,
-                        clickImg: wTemperature,
-                        value: sensor.temperature.toString(),
-                        color: infoBoxTempColor,
-                        unit: '℃',
-                        onPressed: () {
-                          print('온도');
-                        },
-                      ),
-                      InfoSession(
-                        isClicked: false,
-                        name: '습도',
-                        subName: 'humidity',
-                        image: humidity,
-                        clickImg: wHumidity,
-                        value: sensor.humidity.toString(),
-                        color: infoBoxHumidityColor,
-                        unit: '%',
-                        onPressed: () {},
-                      ),
-                      InfoSession(
-                        isClicked: false,
-                        name: '일조시간',
-                        subName: 'Led Duration',
-                        image: sun,
-                        clickImg: wSun,
-                        value: sensor.light.toString(),
-                        color: infoBoxLedColor,
-                        unit: 'h',
-                        onPressed: () {},
-                      ),
-                      InfoSession(
-                        isClicked: false,
-                        name: '산성도',
-                        subName: 'pH',
-                        image: ph,
-                        clickImg: wPh,
-                        value: sensor.pH.toString(),
-                        color: infoBoxHumidityColor,
-                        unit: '%',
-                        onPressed: () {},
-                      ),
-                      InfoSession(
-                        isClicked: false,
-                        name: '양액농도',
-                        subName: 'EC',
-                        image: ion,
-                        clickImg: wIon,
-                        value: sensor.ec.toString(),
-                        color: infoBoxTempColor,
-                        unit: 'dS/m',
-                        onPressed: () {},
-                      ),
-                      InfoSession(
-                        isClicked: false,
-                        name: '수온',
-                        subName: 'Liquid temp',
-                        image: waterTemp,
-                        clickImg: wWaterTemp,
-                        value: sensor.liquidTemp.toString(),
-                        color: infoBoxLedColor,
-                        unit: '℃',
-                        onPressed: () {},
-                      ),
-                    ],
-                  );
-                }
-              },
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            DottedLine(
-              direction: Axis.horizontal,
-              lineLength: double.infinity,
-              lineThickness: 2.0,
-              dashLength: 4.0,
-              dashColor: deviderColor,
-              dashRadius: 0.0,
-              dashGapLength: 4.0,
-              dashGapColor: Colors.transparent,
-              dashGapRadius: 0.0,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              "실시간 온도상황",
-              style: TextStyle(
-                color: infoBoxTextColor,
-                fontFamily: 'NotoSans-Bold',
-                fontSize: 15.0,
-              ),
-            ),
-            Row(
-              children: <Widget>[
-                Text(
-                  "현재 온도 ",
-                  style: TextStyle(
-                    color: infoBoxTextColor,
-                    fontFamily: 'NotoSans-Medium',
-                    fontSize: 13.0,
-                  ),
+          ),
+          Row(
+            children: <Widget>[
+              Text(
+                "현재 온도 ",
+                style: TextStyle(
+                  color: infoBoxTextColor,
+                  fontFamily: 'NotoSans-Medium',
+                  fontSize: 13.0,
                 ),
-                FutureBuilder(
-                  future: sensorData.getSensor(scanData.deviceUUID),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      final sensor = snapshot.data;
-                      return Text(
-                        '${sensor.temperature}도',
-                        style: TextStyle(
-                          color: infoBoxResultColor,
-                          fontFamily: 'NotoSans-Bold',
-                          fontSize: 13.0,
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-            ChartWidget(),
-          ],
-        ),
+              ),
+              FutureBuilder(
+                future: sensorData.getSensor(scanData.deviceUUID),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    final sensor = snapshot.data;
+                    return Text(
+                      '${sensor.temperature}도',
+                      style: TextStyle(
+                        color: infoBoxResultColor,
+                        fontFamily: 'NotoSans-Bold',
+                        fontSize: 13.0,
+                      ),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+          ChartWidget(),
+        ],
       ),
     );
   }
@@ -267,7 +274,7 @@ class InfoSession extends StatelessWidget {
                                 subName,
                                 style: TextStyle(
                                   color:
-                                    isClicked ? Colors.white : cardFontColor,
+                                      isClicked ? Colors.white : cardFontColor,
                                   fontFamily: 'NotoSans-Regular',
                                   fontSize: 10.0,
                                 ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smartfarm/screens/auth/auth_page.dart';
 import 'package:smartfarm/screens/farm_dashboard/forms/dashboard_widget.dart';
 import 'package:smartfarm/screens/drawer/drawer_menu_page.dart';
+import 'package:smartfarm/services/api/get_chart_sensor_data.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import '../devices_connect/connect_page.dart';
 
@@ -214,7 +216,8 @@ class _InfoPageState extends State<InfoPage> {
                 ),
               ],
             ),
-            child: DashBoardWidget(),
+            child: ChangeNotifierProvider<GetChartSensorData>(
+                create: (_) => GetChartSensorData(), child: DashBoardWidget()),
           ),
         ),
       ),
