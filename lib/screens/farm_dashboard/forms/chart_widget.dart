@@ -1,13 +1,10 @@
 import 'dart:convert';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
 import 'package:smartfarm/model/sensor_model/sensor_chart.dart';
 import 'package:smartfarm/services/api/get_chart_sensor_data.dart';
+import 'package:smartfarm/services/scan_data.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,12 +15,14 @@ class ChartWidget extends StatefulWidget {
 
 class _ChartWidgetState extends State<ChartWidget> {
   List<SensorChart> _sensorChart = [];
+  bool isLoading = false;
 
-  void _getChartSensor() async {
+  void _getChartSensor(String uuid) async {
     try {
+      isLoading = true;
       final response = await http.post(
         '$API/LookupByNumber',
-        body: jsonEncode({"uuid": "756e6b776f000c04", "number": 7}),
+        body: jsonEncode({"uuid": uuid, "number": 7}),
         headers: {'Content-Type': "application/json"},
       );
 
@@ -35,6 +34,7 @@ class _ChartWidgetState extends State<ChartWidget> {
           _sensorChart.clear();
           _sensorChart.addAll(parseResponse);
         });
+        isLoading = false;
       }
     } catch (err) {
       throw err;
@@ -44,7 +44,7 @@ class _ChartWidgetState extends State<ChartWidget> {
   @override
   void initState() {
     super.initState();
-    _getChartSensor();
+    _getChartSensor(Provider.of<ScanData>(context, listen: false).deviceUUID);
   }
 
   List<Color> gradientColors = [
@@ -116,7 +116,7 @@ class _ChartWidgetState extends State<ChartWidget> {
         currentList = ecList;
         break;
       case 'liquidTemp':
-        minY = 10;
+        minY = 5;
         maxY = 30;
         currentList = liquidTempList;
         break;
@@ -126,7 +126,7 @@ class _ChartWidgetState extends State<ChartWidget> {
       children: <Widget>[
         AspectRatio(
           aspectRatio: 1.70,
-          child: Container(
+          child: !isLoading ? Container(
             child: Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 20),
               child: LineChart(
@@ -185,7 +185,6 @@ class _ChartWidgetState extends State<ChartWidget> {
                         fontSize: 10.0,
                       ),
                       getTitles: (value) {
-                        print('value?? $value');
                         switch (value.toInt()) {
                           case 0:
                             return '0';
@@ -255,7 +254,7 @@ class _ChartWidgetState extends State<ChartWidget> {
                 ),
               ),
             ),
-          ),
+          ) : Center(child: CircularProgressIndicator(),),
         ),
       ],
     );

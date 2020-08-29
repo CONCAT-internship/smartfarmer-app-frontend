@@ -20,6 +20,8 @@ class CropEditWidget extends StatefulWidget {
 }
 
 class _CropEditWidgetState extends State<CropEditWidget> {
+  bool isLoading = false;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController _farmName = TextEditingController();
@@ -354,10 +356,9 @@ class _CropEditWidgetState extends State<CropEditWidget> {
         minWidth: 120,
         height: 40,
         onPressed: () async {
-          key.currentState
+            key.currentState
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(
-              duration: Duration(seconds: 10),
               content: Row(
                 children: <Widget>[
                   CircularProgressIndicator(),
@@ -375,6 +376,10 @@ class _CropEditWidgetState extends State<CropEditWidget> {
             _defaultCreateFarm(uid: uid, uuid: uuid);
           } else {
             alertSnackbar(context, result.errorMessage);
+          }
+
+          if(!isLoading){
+            key.currentState.hideCurrentSnackBar();
           }
         },
         color: infoBoxHumidityColor,
@@ -480,8 +485,9 @@ class _CropEditWidgetState extends State<CropEditWidget> {
     );
 
     if (response.statusCode == 200) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => FarmListPage()));
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => FarmListPage()), (Route<dynamic> route) => false);
       final scanData = Provider.of<ScanData>(context, listen: false);
       scanData.setDeviceUUID('');
       scanData.setScan(false);
@@ -489,6 +495,7 @@ class _CropEditWidgetState extends State<CropEditWidget> {
   }
 
   void _defaultCreateFarm({String uid, String uuid}) async {
+    isLoading = true;
     final response = await http.post(
       '$API/RegisterRecipe',
       body: jsonEncode(
@@ -521,6 +528,7 @@ class _CropEditWidgetState extends State<CropEditWidget> {
     );
 
     if (response.statusCode == 200) {
+      isLoading = false;
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => FarmListPage()));
       final scanData = Provider.of<ScanData>(context, listen: false);

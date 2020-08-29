@@ -312,32 +312,32 @@ class InfoSession extends StatelessWidget {
                     ),
                   ),
                 ),
-//                snapshot.isClicked
-//                    ? Positioned(
-//                        top: 0.0,
-//                        right: 0.0,
-//                        child: Container(
-//                          height: 18.0,
-//                          width: 18.0,
-//                          decoration: BoxDecoration(
-//                            color: Colors.redAccent,
-//                            shape: BoxShape.circle,
-//                          ),
-//                          child: Center(
-//                            child: Text(
-//                              '!',
-//                              style: TextStyle(
-//                                fontSize: 13.0,
-//                                fontWeight: FontWeight.bold,
-//                                color: Colors.white,
-//                              ),
-//                            ),
-//                          ),
-//                        ),
-//                      )
-//                    : Padding(
-//                        padding: EdgeInsets.only(left: 0),
-//                      ),
+                isClicked
+                    ? Positioned(
+                        top: 0.0,
+                        right: 0.0,
+                        child: Container(
+                          height: 18.0,
+                          width: 18.0,
+                          decoration: BoxDecoration(
+                            color: Colors.redAccent,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '!',
+                              style: TextStyle(
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Padding(
+                        padding: EdgeInsets.only(left: 0),
+                      ),
               ],
             );
           },

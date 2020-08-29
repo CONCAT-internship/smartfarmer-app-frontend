@@ -45,7 +45,7 @@ class FarmListPage extends StatelessWidget {
                 child: Consumer<FarmerProfile>(
                   builder: (context, farmerData, child) {
                     return Swiper(
-                      itemCount: farmerData.getFarmerProfile().farmInfo.length,
+                      itemCount: farmerData.getFarmerProfile().farmInfo.length ?? 1,
                       itemWidth: MediaQuery.of(context).size.width - 2 * 64,
                       layout: SwiperLayout.STACK,
                       pagination: SwiperPagination(
@@ -99,9 +99,10 @@ class FarmListPage extends StatelessWidget {
                                                       .farmInfo[index]
                                                       .deviceUUID,
                                                 ); // 스캔 데이터 프로바이더 재사용해서 디바이스 uuid 저장
-                                                Navigator.pushAndRemoveUntil(
+                                                Navigator.push(
                                                   context,
-                                                  MaterialPageRoute(builder: (context) => InfoPage()), (Route<dynamic> route) => false);
+                                                  MaterialPageRoute(builder: (context) => InfoPage()));
+
                                               },
                                               child: Text(
                                                 "밭으로 이동",

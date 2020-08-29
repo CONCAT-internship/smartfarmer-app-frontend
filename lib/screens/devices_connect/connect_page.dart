@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:smartfarm/model/api_response.dart';
 import 'package:smartfarm/model/farmer_model/profile_farmer.dart';
-import 'package:http/http.dart' as http;
 import 'package:smartfarm/services/firebase_provider.dart';
 import 'package:smartfarm/services/scan_data.dart';
 import 'package:smartfarm/screens/devices_connect/forms/crop_edit_widget.dart';
@@ -22,6 +20,7 @@ class ConnectPage extends StatefulWidget {
 
 class _ConnectPageState extends State<ConnectPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  DateTime backBtnPressedTime;
 
   fetchProfileFarmer() async {
     ProfileFarmer data =
@@ -42,40 +41,43 @@ class _ConnectPageState extends State<ConnectPage> {
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: true,
-      body: Stack(
-        children: <Widget>[
-          Container(
-            height: size.height * 0.8,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  infoGradient1,
-                  infoGradient2,
-                ],
-                stops: [0.1, 0.5],
+      body: WillPopScope(
+        onWillPop: onWillPop,
+        child: Stack(
+          children: <Widget>[
+            Container(
+              height: size.height * 0.8,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    infoGradient1,
+                    infoGradient2,
+                  ],
+                  stops: [0.1, 0.5],
+                ),
               ),
             ),
-          ),
-          Container(
-            height: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: size.height * 0.066,
-                ),
-                _headerContents(size), // HEAD
-                SizedBox(
-                  height: 30,
-                ),
-                infoBox(),
-              ],
+            Container(
+              height: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: size.height * 0.066,
+                  ),
+                  _headerContents(size), // HEAD
+                  SizedBox(
+                    height: 30,
+                  ),
+                  infoBox(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -214,5 +216,22 @@ class _ConnectPageState extends State<ConnectPage> {
         ),
       ),
     );
+  }
+
+  Future<bool> onWillPop() async {
+    DateTime currentTime = DateTime.now();
+
+    bool backButton = backBtnPressedTime == null ||
+        currentTime.difference(backBtnPressedTime) > Duration(seconds: 3);
+
+    if (backButton) {
+      backBtnPressedTime = currentTime;
+      Fluttertoast.showToast(
+          msg: '한 번 더 클릭하여 앱을 종료해주세요.',
+          backgroundColor: Colors.black,
+          textColor: Colors.white);
+      return false;
+    }
+    return true;
   }
 }

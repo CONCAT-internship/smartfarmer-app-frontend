@@ -21,10 +21,9 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     fp = Provider.of<FirebaseProvider>(context);
     if (fp.getUser() != null) {
-//      return ConnectPage(
-//        uid: fp.getUser().uid,
-//      );
-      return InfoPage();
+      return ConnectPage(
+        uid: fp.getUser().uid,
+      );
     }
 
     return Scaffold(
@@ -55,7 +54,7 @@ class _AuthPageState extends State<AuthPage> {
                   FadeAnimation(
                     1.2,
                     Text(
-                      "스마트파머는 당신의 농작물을 24시간 지킵니다. 멋진 농작물을 심을 준비가 되셨나요?",
+                      "슈퍼파머스는 당신의 농작물을 24시간 지킵니다. 멋진 농작물을 심을 준비가 되셨나요?",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.grey[700],
