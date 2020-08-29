@@ -11,6 +11,8 @@ class GetChartSensorData with ChangeNotifier{
     _sensorInfo = value;
     notifyListeners();
   }
+
+
 }
 
 

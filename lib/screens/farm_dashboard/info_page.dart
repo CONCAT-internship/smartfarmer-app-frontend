@@ -8,6 +8,7 @@ import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import '../devices_connect/connect_page.dart';
 
 class InfoPage extends StatefulWidget {
+
   @override
   _InfoPageState createState() => _InfoPageState();
 }
