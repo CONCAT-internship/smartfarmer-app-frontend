@@ -5,14 +5,12 @@ import 'package:smartfarm/model/sensor_model/sensor.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 
 class GetChartSensorData with ChangeNotifier{
-  String _sensorInfo = '';
+  String _sensorInfo = 'temperature';
   String get sensorInfo => _sensorInfo;
   void setSensorInfo(String value){
     _sensorInfo = value;
     notifyListeners();
   }
-
-
 }
 
 
