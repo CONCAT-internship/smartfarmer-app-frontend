@@ -52,6 +52,7 @@ Color fieldTextColor = Color.fromRGBO(51, 51, 51, 1);
 var farmer = 'assets/images/farmer.png';
 var farmerWomen = 'assets/images/farmer_women.png';
 var seed = 'assets/images/seed.png';
+var photo = 'assets/images/photo.png';
 
 var temperature = 'assets/images/temperature.png';
 var humidity = 'assets/images/humidity.png';

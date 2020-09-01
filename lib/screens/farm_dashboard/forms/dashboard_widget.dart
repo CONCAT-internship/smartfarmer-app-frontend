@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,87 +44,104 @@ class _DashBoardWidgetState extends State<DashBoardWidget> {
               } else {
                 final sensor = snapshot.data;
                 scanData.setFan(sensor.fan);
+
                 return Wrap(
                   spacing: 10,
                   runSpacing: 10,
                   children: <Widget>[
                     InfoSession(
-                      isClicked: true,
                       name: '온도',
                       subName: 'Temperature',
-                      image: temperature,
-                      clickImg: wTemperature,
+                      image: chartData.sensorInfo == 'temperature'
+                          ? wTemperature
+                          : temperature,
                       value: sensor.temperature.toString(),
-                      color: infoBoxTempColor,
+                      color: chartData.sensorInfo == 'temperature'
+                          ? infoBoxTempColor
+                          : Colors.white,
+                      fontColor: chartData.sensorInfo == 'temperature'
+                          ? Colors.white
+                          : cardFontColor,
                       unit: '℃',
-                      onPressed: () {
-                        chartData.setSensorInfo('temperature');
-                      },
+                      onPressed: () => setState(
+                          () => chartData.setSensorInfo('temperature')),
                     ),
                     InfoSession(
-                      isClicked: false,
                       name: '습도',
                       subName: 'humidity',
-                      image: humidity,
-                      clickImg: wHumidity,
+                      image: chartData.sensorInfo == 'humidity'
+                          ? wHumidity
+                          : humidity,
                       value: sensor.humidity.toString(),
-                      color: infoBoxHumidityColor,
+                      color: chartData.sensorInfo == 'humidity'
+                          ? infoBoxHumidityColor
+                          : Colors.white,
+                      fontColor: chartData.sensorInfo == 'humidity'
+                          ? Colors.white
+                          : cardFontColor,
                       unit: '%',
-                      onPressed: () {
-                        chartData.setSensorInfo('humidity');
-                      },
+                      onPressed: () =>
+                          setState(() => chartData.setSensorInfo('humidity')),
                     ),
                     InfoSession(
-                      isClicked: false,
                       name: '일조시간',
                       subName: 'Led Duration',
-                      image: sun,
-                      clickImg: wSun,
+                      image: chartData.sensorInfo == 'lightTime' ? wSun : sun,
                       value: sensor.light.toString(),
-                      color: infoBoxLedColor,
+                      color: chartData.sensorInfo == 'lightTime'
+                          ? infoBoxLedColor
+                          : Colors.white,
+                      fontColor: chartData.sensorInfo == 'lightTime'
+                          ? Colors.white
+                          : cardFontColor,
                       unit: 'h',
-                      onPressed: () {
-                        chartData.setSensorInfo('lightTime');
-                      },
+                      onPressed: () =>
+                          setState(() => chartData.setSensorInfo('lightTime')),
                     ),
                     InfoSession(
-                      isClicked: false,
                       name: '산성도',
                       subName: 'pH',
-                      image: ph,
-                      clickImg: wPh,
+                      image: chartData.sensorInfo == 'pH' ? wPh : ph,
                       value: sensor.pH.toString(),
-                      color: infoBoxHumidityColor,
+                      color: chartData.sensorInfo == 'pH'
+                          ? infoBoxHumidityColor
+                          : Colors.white,
+                      fontColor: chartData.sensorInfo == 'pH'
+                          ? Colors.white
+                          : cardFontColor,
                       unit: '%',
-                      onPressed: () {
-                        chartData.setSensorInfo('pH');
-                      },
+                      onPressed: () =>
+                          setState(() => chartData.setSensorInfo('pH')),
                     ),
                     InfoSession(
-                      isClicked: false,
                       name: '양액농도',
                       subName: 'EC',
-                      image: ion,
-                      clickImg: wIon,
+                      image: chartData.sensorInfo == 'ec' ? wIon : ion,
                       value: sensor.ec.toString(),
-                      color: infoBoxTempColor,
+                      color: chartData.sensorInfo == 'ec'
+                          ? infoBoxTempColor
+                          : Colors.white,
+                      fontColor: chartData.sensorInfo == 'ec'
+                          ? Colors.white
+                          : cardFontColor,
                       unit: 'dS/m',
-                      onPressed: () {
-                        chartData.setSensorInfo('ec');
-                      },
+                      onPressed: () =>
+                          setState(() => chartData.setSensorInfo('ec')),
                     ),
                     InfoSession(
-                      isClicked: false,
                       name: '수온',
                       subName: 'Liquid temp',
-                      image: waterTemp,
-                      clickImg: wWaterTemp,
+                      image: chartData.sensorInfo == 'liquidTemp' ? wWaterTemp : waterTemp,
                       value: sensor.liquidTemp.toString(),
-                      color: infoBoxLedColor,
+                      color: chartData.sensorInfo == 'liquidTemp'
+                          ? infoBoxLedColor
+                          : Colors.white,
+                      fontColor: chartData.sensorInfo == 'liquidTemp'
+                          ? Colors.white
+                          : cardFontColor,
                       unit: '℃',
-                      onPressed: () {
-                        chartData.setSensorInfo('liquidTemp');
-                      },
+                      onPressed: () =>
+                          setState(() => chartData.setSensorInfo('liquidTemp')),
                     ),
                   ],
                 );
@@ -198,24 +216,22 @@ class InfoSession extends StatelessWidget {
   final name;
   final subName;
   final image;
-  final clickImg;
   final value;
-  final bool isClicked;
   final Function onPressed;
   final color;
+  final fontColor;
   final unit;
 
   const InfoSession(
       {Key key,
-      this.isClicked = false,
       this.name,
       this.onPressed,
       this.subName,
       this.image,
-      this.clickImg,
       this.value,
       this.color,
-      this.unit})
+      this.unit,
+      this.fontColor})
       : super(key: key);
 
   @override
@@ -233,10 +249,8 @@ class InfoSession extends StatelessWidget {
                         ? size.maxWidth / 2 - 66
                         : size.maxWidth / 2 - 60,
                     decoration: BoxDecoration(
-                      color: isClicked ? color : Colors.white,
-                      border: isClicked
-                          ? null
-                          : Border.all(width: 1.5, color: borderColor),
+                      color: color,
+                      border: Border.all(width: 1.5, color: borderColor),
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Material(
@@ -254,9 +268,7 @@ class InfoSession extends StatelessWidget {
                                   Text(
                                     name,
                                     style: TextStyle(
-                                      color: isClicked
-                                          ? Colors.white
-                                          : cardFontColor,
+                                      color: fontColor,
                                       fontFamily: 'NotoSans-Bold',
                                       fontSize: 13.0,
                                     ),
@@ -265,16 +277,14 @@ class InfoSession extends StatelessWidget {
                                   Container(
                                     width: 18.0,
                                     height: 18.0,
-                                    child: Image.asset(
-                                        isClicked ? clickImg : image),
+                                    child: Image.asset(image),
                                   ),
                                 ],
                               ),
                               Text(
                                 subName,
                                 style: TextStyle(
-                                  color:
-                                      isClicked ? Colors.white : cardFontColor,
+                                  color: fontColor,
                                   fontFamily: 'NotoSans-Regular',
                                   fontSize: 10.0,
                                 ),
@@ -287,9 +297,7 @@ class InfoSession extends StatelessWidget {
                                   Text(
                                     value,
                                     style: TextStyle(
-                                      color: isClicked
-                                          ? Colors.white
-                                          : cardFontColor,
+                                      color: fontColor,
                                       fontFamily: 'NotoSans-Bold',
                                       fontSize: 10.0,
                                     ),
@@ -297,9 +305,7 @@ class InfoSession extends StatelessWidget {
                                   Text(
                                     unit,
                                     style: TextStyle(
-                                        color: isClicked
-                                            ? Colors.white
-                                            : cardFontColor,
+                                        color: fontColor,
                                         fontFamily: 'NotoSans-Bold',
                                         fontSize: 10.0),
                                   ),
@@ -312,32 +318,32 @@ class InfoSession extends StatelessWidget {
                     ),
                   ),
                 ),
-                isClicked
-                    ? Positioned(
-                        top: 0.0,
-                        right: 0.0,
-                        child: Container(
-                          height: 18.0,
-                          width: 18.0,
-                          decoration: BoxDecoration(
-                            color: Colors.redAccent,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: Text(
-                              '!',
-                              style: TextStyle(
-                                fontSize: 13.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    : Padding(
-                        padding: EdgeInsets.only(left: 0),
-                      ),
+//                isClicked
+//                    ? Positioned(
+//                        top: 0.0,
+//                        right: 0.0,
+//                        child: Container(
+//                          height: 18.0,
+//                          width: 18.0,
+//                          decoration: BoxDecoration(
+//                            color: Colors.redAccent,
+//                            shape: BoxShape.circle,
+//                          ),
+//                          child: Center(
+//                            child: Text(
+//                              '!',
+//                              style: TextStyle(
+//                                fontSize: 13.0,
+//                                fontWeight: FontWeight.bold,
+//                                color: Colors.white,
+//                              ),
+//                            ),
+//                          ),
+//                        ),
+//                      )
+//                    : Padding(
+//                        padding: EdgeInsets.only(left: 0),
+//                      ),
               ],
             );
           },

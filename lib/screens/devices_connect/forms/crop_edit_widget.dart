@@ -88,7 +88,7 @@ class _CropEditWidgetState extends State<CropEditWidget> {
                           height: 30,
                         ),
                         Image.asset(
-                          farmName,
+                          photo,
                           width: 80,
                           height: 80,
                         ),
