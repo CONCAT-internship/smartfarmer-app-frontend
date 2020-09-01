@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smartfarm/screens/devices_connect/forms/crop_edit_widget.dart';
 import 'package:smartfarm/services/api/farmer_profile.dart';
 import 'package:smartfarm/services/firebase_provider.dart';
 import 'package:smartfarm/services/scan_data.dart';

@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,7 @@ class _DashBoardWidgetState extends State<DashBoardWidget> {
               } else {
                 final sensor = snapshot.data;
                 scanData.setFan(sensor.fan);
+
                 return Wrap(
                   spacing: 10,
                   runSpacing: 10,

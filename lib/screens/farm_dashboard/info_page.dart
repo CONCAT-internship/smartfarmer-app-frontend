@@ -4,6 +4,7 @@ import 'package:smartfarm/screens/auth/auth_page.dart';
 import 'package:smartfarm/screens/farm_dashboard/forms/dashboard_widget.dart';
 import 'package:smartfarm/screens/drawer/drawer_menu_page.dart';
 import 'package:smartfarm/services/api/get_chart_sensor_data.dart';
+import 'package:smartfarm/services/scan_data.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
 import '../devices_connect/connect_page.dart';
 

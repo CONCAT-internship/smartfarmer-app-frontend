@@ -109,8 +109,7 @@ class _ConnectPageState extends State<ConnectPage> {
                 iconSize: 25,
                 color: Colors.white,
                 onPressed: () {
-                  Provider.of<FirebaseProvider>(context, listen: false)
-                      .signOut();
+
                 },
               ),
               IconButton(
