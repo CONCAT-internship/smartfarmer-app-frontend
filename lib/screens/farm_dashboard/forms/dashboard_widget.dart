@@ -38,8 +38,108 @@ class _DashBoardWidgetState extends State<DashBoardWidget> {
             future: sensorData.getSensor(scanData.deviceUUID),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return Center(
-                  child: CircularProgressIndicator(),
+//                return Center(
+//                  child: CircularProgressIndicator(),
+//                );
+                return Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: <Widget>[
+                    InfoSession(
+                      name: '온도',
+                      subName: 'Temperature',
+                      image: chartData.sensorInfo == 'temperature'
+                          ? wTemperature
+                          : temperature,
+                      value: '0',
+                      color: chartData.sensorInfo == 'temperature'
+                          ? infoBoxTempColor
+                          : Colors.white,
+                      fontColor: chartData.sensorInfo == 'temperature'
+                          ? Colors.white
+                          : cardFontColor,
+                      unit: '℃',
+                      onPressed: () => setState(
+                              () => chartData.setSensorInfo('temperature')),
+                    ),
+                    InfoSession(
+                      name: '습도',
+                      subName: 'humidity',
+                      image: chartData.sensorInfo == 'humidity'
+                          ? wHumidity
+                          : humidity,
+                      value: '0',
+                      color: chartData.sensorInfo == 'humidity'
+                          ? infoBoxHumidityColor
+                          : Colors.white,
+                      fontColor: chartData.sensorInfo == 'humidity'
+                          ? Colors.white
+                          : cardFontColor,
+                      unit: '%',
+                      onPressed: () =>
+                          setState(() => chartData.setSensorInfo('humidity')),
+                    ),
+                    InfoSession(
+                      name: '일조시간',
+                      subName: 'Led Duration',
+                      image: chartData.sensorInfo == 'lightTime' ? wSun : sun,
+                      value: '0',
+                      color: chartData.sensorInfo == 'lightTime'
+                          ? infoBoxLedColor
+                          : Colors.white,
+                      fontColor: chartData.sensorInfo == 'lightTime'
+                          ? Colors.white
+                          : cardFontColor,
+                      unit: 'h',
+                      onPressed: () =>
+                          setState(() => chartData.setSensorInfo('lightTime')),
+                    ),
+                    InfoSession(
+                      name: '산성도',
+                      subName: 'pH',
+                      image: chartData.sensorInfo == 'pH' ? wPh : ph,
+                      value: '0',
+                      color: chartData.sensorInfo == 'pH'
+                          ? infoBoxHumidityColor
+                          : Colors.white,
+                      fontColor: chartData.sensorInfo == 'pH'
+                          ? Colors.white
+                          : cardFontColor,
+                      unit: '%',
+                      onPressed: () =>
+                          setState(() => chartData.setSensorInfo('pH')),
+                    ),
+                    InfoSession(
+                      name: '양액농도',
+                      subName: 'EC',
+                      image: chartData.sensorInfo == 'ec' ? wIon : ion,
+                      value: '0',
+                      color: chartData.sensorInfo == 'ec'
+                          ? infoBoxTempColor
+                          : Colors.white,
+                      fontColor: chartData.sensorInfo == 'ec'
+                          ? Colors.white
+                          : cardFontColor,
+                      unit: 'dS/m',
+                      onPressed: () =>
+                          setState(() => chartData.setSensorInfo('ec')),
+                    ),
+                    InfoSession(
+                      name: '수온',
+                      subName: 'Liquid temp',
+                      image: chartData.sensorInfo == 'liquidTemp' ? wWaterTemp : waterTemp,
+                      value: '0',
+                      color: chartData.sensorInfo == 'liquidTemp'
+                          ? infoBoxLedColor
+                          : Colors.white,
+                      fontColor: chartData.sensorInfo == 'liquidTemp'
+                          ? Colors.white
+                          : cardFontColor,
+                      unit: '℃',
+                      onPressed: () =>
+                          setState(() => chartData.setSensorInfo('liquidTemp')),
+                    ),
+                  ],
                 );
               } else {
                 final sensor = snapshot.data;
@@ -187,8 +287,13 @@ class _DashBoardWidgetState extends State<DashBoardWidget> {
                 future: sensorData.getSensor(scanData.deviceUUID),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
+                    return Text(
+                      '0도',
+                      style: TextStyle(
+                        color: infoBoxResultColor,
+                        fontFamily: 'NotoSans-Bold',
+                        fontSize: 13.0,
+                      ),
                     );
                   } else {
                     final sensor = snapshot.data;

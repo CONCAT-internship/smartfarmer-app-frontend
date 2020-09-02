@@ -55,6 +55,7 @@ class _ChartWidgetState extends State<ChartWidget> {
   @override
   Widget build(BuildContext context) {
     final chartData = Provider.of<GetChartSensorData>(context);
+    bool isEmptyChart = false;
     double minY = 10, maxY = 30;
 
     List<FlSpot> humidityList = [
@@ -89,6 +90,7 @@ class _ChartWidgetState extends State<ChartWidget> {
 
     List<FlSpot> currentList = temperatureList;
 
+
     switch (chartData.sensorInfo) {
       case 'temperature':
         minY = 5;
@@ -122,139 +124,151 @@ class _ChartWidgetState extends State<ChartWidget> {
         break;
     }
 
+    List<FlSpot> emptyList = [
+      for (int i = 0; i < 7; i++) FlSpot((i).toDouble(), 0),
+    ];
+
+    if (currentList.length == 0) {
+      isEmptyChart = true;
+      currentList = emptyList;
+    }
+
+
     return Stack(
       children: <Widget>[
         AspectRatio(
           aspectRatio: 1.70,
-          child: !isLoading ? Container(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 20),
-              child: LineChart(
-                LineChartData(
-                  gridData: FlGridData(
-                    show: false,
-                    getDrawingHorizontalLine: (value) {
-                      return FlLine(
-                        color: const Color(0xff37434d),
-                        strokeWidth: 1,
-                      );
-                    },
-                    getDrawingVerticalLine: (value) {
-                      return FlLine(
-                        color: const Color(0xff37434d),
-                        strokeWidth: 1,
-                      );
-                    },
+          child: !isLoading
+              ? Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 20),
+                    child: LineChart(
+                      LineChartData(
+                        gridData: FlGridData(
+                          show: false,
+                          getDrawingHorizontalLine: (value) {
+                            return FlLine(
+                              color: const Color(0xff37434d),
+                              strokeWidth: 1,
+                            );
+                          },
+                          getDrawingVerticalLine: (value) {
+                            return FlLine(
+                              color: const Color(0xff37434d),
+                              strokeWidth: 1,
+                            );
+                          },
+                        ),
+                        titlesData: FlTitlesData(
+                          show: true,
+                          bottomTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 25,
+                            textStyle: TextStyle(
+                              color: chartTextColor,
+                              fontFamily: 'NotoSans-Regular',
+                              fontSize: 13.0,
+                            ),
+                            getTitles: (value) {
+                              switch (value.toInt()) {
+                                case 0:
+                                  return this._sensorChart[0].localTime ?? '';
+                                case 1:
+                                  return this._sensorChart[1].localTime ?? '';
+                                case 2:
+                                  return this._sensorChart[2].localTime ?? '';
+                                case 3:
+                                  return this._sensorChart[3].localTime ?? '';
+                                case 4:
+                                  return this._sensorChart[4].localTime ?? '';
+                                case 5:
+                                  return this._sensorChart[5].localTime ?? '';
+                                case 6:
+                                  return this._sensorChart[6].localTime ?? '';
+                              }
+                              return '';
+                            },
+                            margin: 8,
+                          ),
+                          leftTitles: SideTitles(
+                            showTitles: true,
+                            textStyle: TextStyle(
+                              color: chartTextColor,
+                              fontFamily: 'NotoSans-Regular',
+                              fontSize: 10.0,
+                            ),
+                            getTitles: (value) {
+                              switch (value.toInt()) {
+                                case 0:
+                                  return '0';
+                                case 2:
+                                  return '2';
+                                case 4:
+                                  return '4';
+                                case 6:
+                                  return '6';
+                                case 8:
+                                  return '8';
+                                case 10:
+                                  return '10';
+                                case 15:
+                                  return '15';
+                                case 20:
+                                  return '20';
+                                case 24:
+                                  return '25';
+                                case 25:
+                                  return '25';
+                                case 30:
+                                  return '30';
+                                case 40:
+                                  return '40';
+                                case 50:
+                                  return '50';
+                                case 60:
+                                  return '60';
+                                case 70:
+                                  return '70';
+                                case 80:
+                                  return '80';
+                              }
+                              return '';
+                            },
+                            reservedSize: 12,
+                            margin: 12,
+                          ),
+                        ),
+                        borderData: FlBorderData(
+                            show: false,
+                            border: Border.all(
+                                color: const Color(0xff37434d), width: 1)),
+                        minX: 0,
+                        maxX: 6,
+                        minY: minY,
+                        maxY: maxY,
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: currentList,
+                            isCurved: true,
+                            colors: gradientColors,
+                            barWidth: 2,
+                            isStrokeCapRound: false,
+                            dotData: FlDotData(
+                              show: true,
+                            ),
+                            belowBarData: BarAreaData(
+                              show: true,
+                              colors: isEmptyChart ? gradientColors.map((color) => color.withOpacity(0)).toList() : gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  titlesData: FlTitlesData(
-                    show: true,
-                    bottomTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 25,
-                      textStyle: TextStyle(
-                        color: chartTextColor,
-                        fontFamily: 'NotoSans-Regular',
-                        fontSize: 13.0,
-                      ),
-                      getTitles: (value) {
-                        switch (value.toInt()) {
-                          case 0:
-                            return this._sensorChart[0].localTime ?? '';
-                          case 1:
-                            return this._sensorChart[1].localTime ?? '';
-                          case 2:
-                            return this._sensorChart[2].localTime ?? '';
-                          case 3:
-                            return this._sensorChart[3].localTime ?? '';
-                          case 4:
-                            return this._sensorChart[4].localTime ?? '';
-                          case 5:
-                            return this._sensorChart[5].localTime ?? '';
-                          case 6:
-                            return this._sensorChart[6].localTime ?? '';
-                        }
-                        return '';
-                      },
-                      margin: 8,
-                    ),
-                    leftTitles: SideTitles(
-                      showTitles: true,
-                      textStyle: TextStyle(
-                        color: chartTextColor,
-                        fontFamily: 'NotoSans-Regular',
-                        fontSize: 10.0,
-                      ),
-                      getTitles: (value) {
-                        switch (value.toInt()) {
-                          case 0:
-                            return '0';
-                          case 2:
-                            return '2';
-                          case 4:
-                            return '4';
-                          case 6:
-                            return '6';
-                          case 8:
-                            return '8';
-                          case 10:
-                            return '10';
-                          case 15:
-                            return '15';
-                          case 20:
-                            return '20';
-                          case 24:
-                            return '25';
-                          case 25:
-                            return '25';
-                          case 30:
-                            return '30';
-                          case 40:
-                            return '40';
-                          case 50:
-                            return '50';
-                          case 60:
-                            return '60';
-                          case 70:
-                            return '70';
-                          case 80:
-                            return '80';
-                        }
-                        return '';
-                      },
-                      reservedSize: 12,
-                      margin: 12,
-                    ),
-                  ),
-                  borderData: FlBorderData(
-                      show: false,
-                      border:
-                      Border.all(color: const Color(0xff37434d), width: 1)),
-                  minX: 0,
-                  maxX: 6,
-                  minY: minY,
-                  maxY: maxY,
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: currentList,
-                      isCurved: true,
-                      colors: gradientColors,
-                      barWidth: 2,
-                      isStrokeCapRound: false,
-                      dotData: FlDotData(
-                        show: true,
-                      ),
-                      belowBarData: BarAreaData(
-                        show: true,
-                        colors: gradientColors
-                            .map((color) => color.withOpacity(0.3))
-                            .toList(),
-                      ),
-                    ),
-                  ],
+                )
+              : Center(
+                  child: CircularProgressIndicator(),
                 ),
-              ),
-            ),
-          ) : Center(child: CircularProgressIndicator(),),
         ),
       ],
     );
