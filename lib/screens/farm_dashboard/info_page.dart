@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:smartfarm/screens/auth/auth_page.dart';
 import 'package:smartfarm/screens/farm_dashboard/forms/dashboard_widget.dart';
 import 'package:smartfarm/screens/drawer/drawer_menu_page.dart';
+import 'package:smartfarm/services/api/farmer_profile.dart';
 import 'package:smartfarm/services/api/get_chart_sensor_data.dart';
 import 'package:smartfarm/services/scan_data.dart';
 import 'package:smartfarm/shared/smartfarmer_constants.dart';
@@ -167,7 +168,8 @@ class _InfoPageState extends State<InfoPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "김태훈님",
+                    '${Provider.of<FarmerProfile>(context, listen: false).getFarmerProfile().nickName}님',
+                    //"김태훈님",
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'NotoSans-Bold',

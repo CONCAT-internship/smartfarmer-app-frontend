@@ -97,7 +97,7 @@ class _ScannerWidgetState extends State<ScannerWidget> {
                   height: 10,
                 ),
                 Text(
-                  '농장 선택 페이지로 이동',
+                  '내 농장 선택',
                   style: TextStyle(
                     fontSize: 15.0,
                     fontFamily: 'NotoSans-Medium',
