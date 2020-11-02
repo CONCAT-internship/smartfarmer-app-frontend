@@ -21,8 +21,7 @@
 - async: ^2.4.1 : 비동기식 프로그래밍을 위한 라이브러리
 
 
-# 패키지 
-
+#  Package Structure 
 - animation
     - fade_animation.dart : 페이드 애니메이션 구현 코드
 
@@ -52,7 +51,30 @@
   - drawer
     - drawer_menu_page.dart : Drawer 페이지입니다.
   - farm_dashboard
-    - drawer_menu_page.dart : Drawer 페이지입니다.
+    - info_page.dart : 측정된 정보를 시각화한 대시보드 페이지입니다.
+    - dashboard_widget.dart : 측정된 정보를 보여주는 카드뷰 위젯입니다.
+    - chart_widget.dart : 측정된 정보를 그래프로 보여주는 위젯입니다.
+  - farm_list
+    - farm_list_page.dart : 등록된 농장들을 보여주는 리스트 페이지입니다.
+  - services
+    - check_device_overlap.dart : 기기 중복 여부를 검사합니다. 
+    - farmer_profile.dart : 데이터베이스에서 사용자의 프로필(닉네임과 등록된 스마트팜 정보)을 조회합니다. 사용자 값에 변동에 생기면 구독하고 있는 옵저버들에게 값을 전달하는 역할도 합니다.
+    - get_chart_sensor_data : UI를 위한 Provider입니다. 클릭된 데이터의 종류를 파악합니다. 
+    - get_sensor_data : 데이터베이스에서 해당 기기의 최근 상태값을 찾아 반환합니다. 
+    - register_device.dart : 새로운 기기 정보를 등록합니다.
+    - database_provider.dart : 데이터베이스 사용자 정보에 관한 생성 및 삭제를 담당합니다.
+    - firebase_provider.dart : 파이어베이스에 등록된 사용자 계정을 관리합니다. 최근 로그인 사용자 정보, 로그인 기능, 회원가입 기능, 로그아웃 기능, 비밀번호 재설정 기능, 회원 탈퇴기능을 제공합니다.
+    - scan_data.dart : 제어 중인 기기 정보를 가지고 있습니다.
+  - shared
+    - smartfarmer_constants.dart : UI에 필요한 정보들을 가지고 있습니다.
+
+# 사용화면
+<img width="231" alt="스플" src="https://user-images.githubusercontent.com/25794831/97884827-e7a42d00-1d69-11eb-9c2b-0461bb4d1876.png"><img width="231" alt="로긴" src="https://user-images.githubusercontent.com/25794831/97884088-00601300-1d69-11eb-85fd-03a989a16e8e.png"><img width="231" alt="회원가입" src="https://user-images.githubusercontent.com/25794831/97884097-02c26d00-1d69-11eb-98dc-5d18fdb9a49d.png">
+<img width="231" alt="비번찾" src="https://user-images.githubusercontent.com/25794831/97884101-03f39a00-1d69-11eb-904d-de62028da981.png"><img width="250" alt="기기등록" src="https://user-images.githubusercontent.com/25794831/97884307-44ebae80-1d69-11eb-85de-7945a98f5a24.png">
+<img width="250" alt="농장선택페이지" src="https://user-images.githubusercontent.com/25794831/97884286-3b624680-1d69-11eb-83b4-59adade29d6f.png"><img width="250" alt="대시보드" src="https://user-images.githubusercontent.com/25794831/97884344-4f0dad00-1d69-11eb-996d-312940c0cce9.png">
+
+
+
 
 
 
